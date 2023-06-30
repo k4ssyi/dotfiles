@@ -1,0 +1,60 @@
+{
+  "explorer.position": "floating",
+  "explorer.floating.position": "left",
+  "explorer.floating.height": -2,
+  "explorer.floating.width": 60,
+  "explorer.tab.only": true,
+  "explorer.openAction.strategy:": "select",
+  "explorer.view.columns": [
+    ["filename", "diagnostics", "git", "branch", "icons"],
+    ["indent", "modified"]
+  ],
+  "explorer.width": 30,
+  "explorer.file.child.template": "[git | 2] [selection | clip | 1] [indent][icon | 1] [diagnosticError & 1][filename omitCenter 1][modified][readonly] [linkIcon & 1][link growRight 1 omitCenter 5]",
+  "explorer.file.root.template": "[icon & 1] ([root])[git][hidden & 1]",
+  "explorer.buffer.root.template": "[icon & 1] OPEN EDITORS [hidden & 1]",
+  "explorer.file.showHiddenFiles": true,
+  "explorer.icon.enableNerdfont": true,
+  "explorer.icon.source": "builtin",
+  "explorer.previewAction.onHover": false,
+  "languageserver": {
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.work", "go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "usePlaceholders": true
+      }
+    }
+  },
+  "go.useLanguageServer": true,
+  "go.gofumpt": true,
+  "suggest.triggerAfterInsertEnter": true,
+  "suggest.noselect": false,
+  "suggest.minTriggerInputLength": 2,
+  "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.snippetIndicator": " ►",
+  "suggest.enablePreview": true,
+  "coc.preferences.hoverTarget": "float",
+  "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "css",
+    "html",
+    "markdown",
+    "typescriptreact",
+    "typescript",
+    "javascriptreact",
+    "javascript",
+    "json",
+    "graphql",
+    "go"
+  ],
+  "tsserver.formatOnType": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.filetypes": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
+}
