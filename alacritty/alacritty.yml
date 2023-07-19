@@ -1,7 +1,6 @@
-# ref. https://sunnnychan.github.io/cheatsheet/linux/config/alacritty.yml.html
-
 import:
- - ~/.config/alacritty/themes/themes/one-dark.yaml
+  - ~/.config/alacritty/themes/themes/dracula.yaml
+  # - ~/.config/alacritty/themes/themes/one_dark.yaml
 
 env:
   TERM: xterm-256color
@@ -9,7 +8,7 @@ window:
   title: Alacritty
 
   # Window padding (changes require restart)
-  # 
+  #
   # Blank space added around the window in pixels. This padding is scaled
   # by DPI and the specified value is always added at both opposing sides.
   padding:
@@ -17,7 +16,7 @@ window:
     y: 6
 
   # Window size
-  dimensions: 
+  dimensions:
     columns: 180
     lines: 52
   # Window class (Linux/BSD only):
@@ -49,7 +48,7 @@ font:
     # The `style` can be specified to pick a specific face.
     style: Bold Italic
   # Point size
-  size: 12.5
+  size: 13
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
   offset:

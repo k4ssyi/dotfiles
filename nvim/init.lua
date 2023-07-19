@@ -1,0 +1,6 @@
+require("base")
+require("autocmds")
+require("options")
+require("keymaps")
+require("coc-plugins")
+-- require("lsp-plugins")

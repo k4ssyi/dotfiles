@@ -1,46 +1,14 @@
-# 手動対応内容
+# My Setting Files
 
-WIP...
+## Preview
 
-## VIM
+<img width="1796" alt="Screenshot 0005-07-19 19 19 31" src="https://github.com/k4ssyi/dotfiles/assets/36563045/6b309d22-f447-4401-9bee-7757f984c2a3">
 
-Vimのプラグイン管理にvim-plugを使っています。
-以下を見て初回セットアップしてください。
-
-https://github.com/junegunn/vim-plug
+<img width="1786" alt="Screenshot 0005-07-19 19 20 29" src="https://github.com/k4ssyi/dotfiles/assets/36563045/7a63cce3-82cd-4983-a77b-3c7cbb5be91e">
 
 
-Vimのファイルマネージャーに coc explorer を使っています。
-以下を見て初回セットアップしてください
-
-https://github.com/weirongxu/coc-explorer
-以下を参考にしてます。
-
-https://zenn.dev/hira/articles/940549483bf2da
-
-
-:CocConfig
-
+## setup
 
 ```
-{
-  "languageserver": {
-    "golang": {
-      "command": "gopls",
-      "rootPatterns": ["go.work", "go.mod", ".vim/", ".git/", ".hg/"],
-      "filetypes": ["go"],
-      "initializationOptions": {
-        "usePlaceholders": true
-      }
-    }
-  }
-}
-
+/bin/bash ./install.sh
 ```
-
-nvim と coc-settings.json の設定を共通化する
-
-```
-ln -s ~/.vim/coc-settings.json ~/.config/nvim/coc-settings.json
-```
-
