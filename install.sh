@@ -3,15 +3,19 @@
 ./scripts/setup-brew.sh
 
 ./scripts/install-brew-component.sh
-./scripts/setup-chsh.sh
 
 ./scripts/install-alacritty.sh
+./scripts/install-starship.sh
+
 ./scripts/uninstall-python27.sh
 
-./scripts/install-enhancd.sh
-./scripts/install-bash-conf.sh
+./scripts/install-asdf.sh
+
+./scripts/install-zsh-conf.sh
+./scripts/install-zinit.sh
+
 ./scripts/install-git-conf.sh
 ./scripts/install-vim-conf.sh
 ./scripts/install-tmux-conf.sh
-./scripts/install-go.sh
-./scripts/install-powerline.sh
+./scripts/install-hammerspoon.sh
+./scripts/install-karabiner.sh
