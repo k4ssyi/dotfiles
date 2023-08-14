@@ -8,7 +8,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 brew update && brew upgrade
 
 brew install git vim neovim tmux direnv jq wget ghq tree coreutils curl gpg gawk mas reattach-to-user-namespace lsd starship
-brew install --cask google-chrome vivaldi slack notion gyazo visual-studio-code figma bitwarden clipy appcleaner kindle postman discord zoom spotify karabiner-elements logi-options-plus hammerspoon alacritty
+brew install --cask google-chrome vivaldi slack notion gyazo visual-studio-code figma bitwarden clipy appcleaner kindle postman discord zoom spotify karabiner-elements logi-options-plus hammerspoon alacritty dbeaver-community docker
 
 # LINE
 brew install mas

@@ -60,3 +60,4 @@ zinit light asdf-vm/asdf
 fpath=(${ASDF_DIR}/completions $fpath)
 autoload -Uz compinit && compinit
 
+export PATH="/opt/homebrew/opt/jpeg/bin:$PATH"
