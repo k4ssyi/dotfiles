@@ -8,6 +8,7 @@
   "signature.floatConfig":{"winblend": 5},
   "hover.floatConfig":{"border":true,"winblend": 7},
   "eslint.enable":true,
+  "eslint.autoFixOnSave": true,
   "astro.enable": true,
   "diagnostic.separateRelatedInformationAsDiagnostics":true,
   "diagnostic.virtualText":false,

@@ -27,6 +27,7 @@ require('jetpack.packer').startup(function(use)
   -- use 'lambdalisue/nerdfont.vim'
   -- use 'lambdalisue/fern-renderer-nerdfont.vim' -- これでレンダリングするとアイコンのサイズが変？
   use 'lambdalisue/fern.vim'
+  use 'lambdalisue/fern-git-status.vim'
   use 'lambdalisue/glyph-palette.vim'
   use 'TheLeoP/fern-renderer-web-devicons.nvim'
 
@@ -86,14 +87,11 @@ require('jetpack.packer').startup(function(use)
   use {'prettier/vim-prettier',event = { "VimEnter" }}
 
   -- Git Integration
-  -- use 'dinhhuy258/git.nvim'
   use {'tpope/vim-fugitive' ,event = { "VimEnter" }}
   use 'lewis6991/gitsigns.nvim'
-  -- use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
+  use "sindrets/diffview.nvim"
 
   use 'github/copilot.vim'
 
-  -- terminal Integration
-  use { 'akinsho/toggleterm.nvim'}
 end)
 

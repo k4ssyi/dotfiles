@@ -134,4 +134,4 @@ keyset("n", "<leader>nn", ":Format<cr>", { silent = true })
 -- Daily Use Coc-Extensions
 vim.g.coc_global_extensions = { 'coc-spell-checker', 'coc-html', 'coc-emmet', 'coc-json', 'coc-css', 'coc-yaml', 'coc-yank', 'coc-vimlsp',
   'coc-tsserver', 'coc-eslint', '@yaegassy/coc-tailwindcss3', 'coc-lua', 'coc-sumneko-lua', '@yaegassy/coc-astro',
-  'coc-clangd', 'coc-docker' }
+  'coc-clangd', 'coc-docker', 'coc-prettier' }

@@ -1,14 +1,11 @@
---vim-fugitiveとNeogitを併用
-
-vim.cmd([[
-nnoremap <silent> <space>s :Git<CR><C-w>T
-nnoremap <silent> <space>b :Git blame<CR>
-nnoremap <silent> <space>d :Gvdiffsplit<CR>
-nnoremap <silent> <space>w :Gwrite<CR>
-]])
--- nnoremap <silent> <space>l :Git log --graph<CR><C-w>T
+vim.keymap.set('n', 'gs', ':Git<CR><C-w>T', { silent = true })
+vim.keymap.set('n', 'gb', ':Git blame<CR>', { silent = true })
+vim.keymap.set('n', 'gd', ':Gvdiffsplit<CR>', { silent = true })
+vim.keymap.set('n', 'gw', ':Gwrite<CR>', { silent = true })
+vim.keymap.set('n', 'gl', ':Git log --graph<CR><C-w>T', { silent = true })
 
 -- neogit
 -- local neogit = require('neogit')
 
 -- neogit.setup {}
+
