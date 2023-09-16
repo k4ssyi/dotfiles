@@ -9,7 +9,7 @@ telescope.setup({
       -- 巨大なProjectで固まることがあるためtreesitterを無効に
       -- @refer https://github.com/nvim-telescope/telescope.nvim/issues/1379
       treesitter = true,
-   	},
+    },
     sorting_strategy = "ascending",
     -- winblend = 4, -- everforestを透明にしているためオフにしておく
     -- layout_strategy = 'vertical',
@@ -29,13 +29,13 @@ telescope.setup({
   },
   extensions = {
     coc = {
-      prefer_locations = false,   -- always use Telescope locations to preview definitions/declarations/implementations etc
+      prefer_locations = false, -- always use Telescope locations to preview definitions/declarations/implementations etc
     },
   },
 })
 
 -- telescope.load_extension("frecency") --frecency search
-telescope.load_extension("coc")      -- coc integration
+telescope.load_extension("coc") -- coc integration
 
 -- file search
 vim.keymap.set('n', '<leader>f',
@@ -65,11 +65,12 @@ vim.keymap.set('n', '<leader>b',
 --定義ジャンプ
 vim.keymap.set("n", "fd", "<cmd>Telescope coc definitions<cr>", { noremap = true, silent = true })
 -- 型定義ジャンプ
-vim.keymap.set("n", "fy", "<cmd>Telescope coc type_definitions<cr>", { noremap = true, silent = true })
+vim.keymap.set("n", "ft", "<cmd>Telescope coc type_definitions<cr>", { noremap = true, silent = true })
 -- diagnostics
-vim.keymap.set("n", "fa", "<cmd>Telescope coc diagnostics<cr>", {noremap = true, silent = true })
+vim.keymap.set("n", "fa", "<cmd>Telescope coc diagnostics<cr>", { noremap = true, silent = true })
 -- 参照先一覧
-vim.keymap.set("n", "fr", "<Cmd>Telescope coc references<cr>", {noremap = true, silent = true})
+vim.keymap.set("n", "fr", "<Cmd>Telescope coc references<cr>", { noremap = true, silent = true })
+-- git status
+vim.keymap.set("n", "fg", "<Cmd>Telescope git_status<cr>", { noremap = true, silent = true })
 --頻度検索
 --vim.keymap.set("n", "gr", "<Cmd>lua require('telescope').extensions.frecency.frecency()<CR>", {noremap = true, silent = true})
-
