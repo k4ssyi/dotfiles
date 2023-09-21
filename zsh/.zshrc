@@ -5,11 +5,18 @@ HISTFILE=~/.zsh_history
 # 重複を記録しない
 setopt hist_ignore_dups
 
+# ヒストリに追加されるコマンド行が古いものと同じなら古いものを削除
+setopt hist_ignore_all_dups
+
+# 余分な空白は詰めて記録
+setopt hist_reduce_blanks 
+
 # 開始と終了を記録
 setopt EXTENDED_HISTORY
 
-export HISTSIZE=1000
-export SAVEHIST=10000
+export HISTSIZE=20000
+export SAVEHIST=20000
+export HISTTIMEFORMAT='%Y/%m/%d %H:%M:%S '
 
 alias ls='lsd'
 alias l='lsd -l'
