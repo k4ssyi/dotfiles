@@ -8,6 +8,7 @@ asdf plugin add aws-vault
 asdf plugin add golang
 asdf plugin add python
 asdf plugin add ruby
+asdf plugin add direnv
 
 # install Nodejs
 asdf install nodejs latest
@@ -17,6 +18,9 @@ asdf global nodejs latest
 asdf install python 2.7.18
 asdf install python latest
 asdf global python latest
+
+# direnv setup
+asdf direnv setup --shell zsh --version latest # or bash or fish
 
 echo 'install asdf plugins.... Done!'
 

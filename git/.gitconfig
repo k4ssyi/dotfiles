@@ -2,6 +2,6 @@
 	email = kasikasi00@gmail.com
 	name = k4ssyi
 [core]
-	editor = vim
+	editor = nvim
 [push]
 	default = current
