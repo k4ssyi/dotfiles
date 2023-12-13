@@ -1,5 +1,8 @@
 eval "$(starship init zsh)"
 
+export LANG=ja_JP.UTF-8
+export LC_ALL=ja_JP.UTF-8
+
 ### コマンド履歴の管理
 HISTFILE=~/.zsh_history
 # 重複を記録しない
@@ -27,6 +30,7 @@ alias grep='grep --color=auto'
 alias history='history -E -i 1'
 
 # vim alias
+export EDITOR=nvim
 alias vi='nvim'
 alias vim="nvim"
 
