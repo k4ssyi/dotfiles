@@ -5,3 +5,5 @@
 	editor = nvim
 [push]
 	default = current
+[mergetool]
+	keepBackup = false

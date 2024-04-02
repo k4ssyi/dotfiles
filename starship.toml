@@ -2,7 +2,7 @@
 add_newline = true
 
 # ファイルをスキャンする際のタイムアウト時間
-scan_timeout = 10
+scan_timeout = 20
 
 [package]
 disabled = true
