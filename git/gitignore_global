@@ -64,3 +64,7 @@ Temporary Items
 
 .tool-versions
 .envrc
+
+# python env
+
+.venv
