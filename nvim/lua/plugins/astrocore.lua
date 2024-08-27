@@ -76,6 +76,10 @@ return {
         },
         -- plugin mappings
         ["<leader>gnd"] = { "<cmd>DiffviewOpen<cr>", desc = "View Git diffviewOpen" },
+        ["gr"] = {
+          function() require("telescope.builtin").lsp_references() end,
+          desc = "Search References",
+        },
       },
       -- insert mode
       i = {
