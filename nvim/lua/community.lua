@@ -19,4 +19,5 @@ return {
   { import = "astrocommunity.scrolling.neoscroll-nvim" },
   { import = "astrocommunity.programming-language-support.csv-vim" },
   { import = "astrocommunity.utility.noice-nvim" },
+  { import = "astrocommunity.git.blame-nvim" },
 }
