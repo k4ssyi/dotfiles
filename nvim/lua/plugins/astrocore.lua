@@ -83,7 +83,7 @@ return {
         -- copilot chat mappings
         ["<leader>tc"] = { name = "CopilotChat" },
         ["<leader>tct"] = {
-          function() require("CopilotChat").toggle() end,
+          function() require("CopilotChat").toggle { buffer = vim.api.nvim_get_current_buf() } end,
           desc = "CopilotChat - Toggle Open",
         },
         ["<leader>tcq"] = {
