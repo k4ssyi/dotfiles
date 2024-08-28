@@ -31,7 +31,6 @@ alias history='history -E -i 1'
 
 # vim alias
 export EDITOR=nvim
-alias vi='nvim'
 alias vim="nvim"
 
 ### Added by Zinit's installer

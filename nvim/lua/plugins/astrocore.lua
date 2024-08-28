@@ -103,7 +103,6 @@ return {
           end,
           desc = "CopilotChat - Help actions",
         },
-
         ["<leader>tcp"] = {
           function()
             local actions = require "CopilotChat.actions"
@@ -114,6 +113,8 @@ return {
       },
       -- insert mode
       i = {
+        ["jj"] = { "<Esc>", desc = "Escape insert mode", silent = true, noremap = true },
+        ["ｊｊ"] = { "<Esc>", desc = "Escape insert mode", silent = true, noremap = true },
         -- カーソルを行の末尾に移動
         ["<C-e>"] = { "<Esc>A", desc = "Move to end of line" },
         -- カーソルを行の先頭に移動
@@ -124,6 +125,13 @@ return {
         x = { '"_x', desc = "do not yank with x" },
         ["<C-a>"] = { "^" },
         ["<C-e>"] = { "$" },
+        ["<leader>tcp"] = {
+          function()
+            local actions = require "CopilotChat.actions"
+            require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
+          end,
+          desc = "CopilotChat - Prompt actions",
+        },
       },
     },
   },
