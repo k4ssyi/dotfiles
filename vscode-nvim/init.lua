@@ -1,9 +1,9 @@
 if vim.g.vscode then
-	package.path = package.path .. ';/Users/k4ssyi/.config/vscode-nvim/lua/?.lua'
+	package.path = package.path .. ";/Users/k4ssyi/.config/vscode-nvim/lua/?.lua"
 	-- VSCode extension
 	-- require("plugins") -- プラグイン管理
-	require('option') -- シンタックスハイライトやインデントなどの各種設定
-	require('keymaps') -- キーマップ(キーバインド)の設定
+	require("option") -- シンタックスハイライトやインデントなどの各種設定
+	require("keymaps") -- キーマップ(キーバインド)の設定
 else
 	-- ordinary Neovim
 	-- errorメッセージを表示する
