@@ -3,37 +3,6 @@ return {
   opts = function(_, opts)
     local status = require "astroui.status"
 
-    local WorkDir = {
-      init = function(self)
-        self.icon = (vim.fn.haslocaldir(0) == 1 and "l" or "g") .. " " .. " "
-        local cwd = vim.fn.getcwd(0)
-        self.cwd = vim.fn.fnamemodify(cwd, ":~")
-      end,
-      hl = { fg = "fg", bold = true },
-
-      flexible = 1,
-
-      {
-        -- evaluates to the full-length path
-        provider = function(self)
-          local trail = self.cwd:sub(-1) == "/" and "" or "/"
-          return self.icon .. self.cwd .. trail .. " "
-        end,
-      },
-      {
-        -- evaluates to the shortened path
-        provider = function(self)
-          local cwd = vim.fn.pathshorten(self.cwd)
-          local trail = self.cwd:sub(-1) == "/" and "" or "/"
-          return self.icon .. cwd .. trail .. " "
-        end,
-      },
-      {
-        -- evaluates to "", hiding the component
-        provider = "",
-      },
-    }
-
     opts.winbar = { -- create custom winbar
       -- store the current buffer number
       init = function(self) self.bufnr = vim.api.nvim_get_current_buf() end,
@@ -116,17 +85,28 @@ return {
         },
       },
       -- add a section for the currently opened file information
-      WorkDir,
-      status.component.file_info {
-        -- enable the file_icon and disable the highlighting based on filetype
-        filename = { fallback = "Empty" },
-        -- disable some of the info
-        filetype = false,
-        file_read_only = false,
-        -- add padding
-        padding = { right = 1 },
-        -- define the section separator
-        surround = { separator = "left", condition = false },
+      status.component.builder {
+        {
+          -- Add a provider for the file icon
+          provider = function()
+            local icon = require("nvim-web-devicons").get_icon_by_filetype(vim.bo.filetype)
+            return icon and (icon .. " ") or ""
+          end,
+          hl = { fg = "fg", bg = "bg" },
+          padding = { right = 1 },
+        },
+        {
+          provider = function()
+            local fullpath = vim.fn.expand "%:p"
+            local relative_path = vim.fn.fnamemodify(fullpath, ":~:")
+            return relative_path
+          end,
+          hl = { fg = "fg", bg = "bg", bold = true },
+        },
+        surround = {
+          separator = "left",
+          color = { main = "file_info_bg", right = "file_info_bg" },
+        },
       },
       -- add a component for the current git branch if it exists and use no separator for the sections
       status.component.git_branch {
@@ -208,6 +188,7 @@ return {
             color = { main = "nav_icon_bg", left = "file_info_bg" },
           },
         },
+        status.component.treesitter(),
         -- add a navigation component and just display the percentage of progress in the file
         status.component.nav {
           -- add some padding for the percentage provider
