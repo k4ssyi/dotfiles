@@ -8,6 +8,8 @@ return {
   { import = "astrocommunity.pack.lua" },
   -- import/override with your plugins folder
   -- { import = "astrocommunity.colorscheme.nightfox-nvim" },
+  { import = "astrocommunity.colorscheme.catppuccin" },
+  { import = "astrocommunity.color.transparent-nvim" },
   { import = "astrocommunity.recipes.telescope-nvchad-theme" },
   { import = "astrocommunity.recipes.heirline-vscode-winbar" },
   { import = "astrocommunity.recipes.heirline-nvchad-statusline" },

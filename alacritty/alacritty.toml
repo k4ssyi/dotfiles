@@ -53,3 +53,8 @@ y = 1
 [colors.cursor]
 text = "CellBackground"
 cursor = "CellForeground"
+
+[debug]
+
+log_level = "Error" # Default: "Warn"
+

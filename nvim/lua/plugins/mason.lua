@@ -12,7 +12,7 @@ return {
         "typos_lsp",
         "bashls",
         "yamlls",
-        "tsserver",
+        "ts_ls",
         "docker_compose_language_service",
         "dockerls",
         "html",
@@ -27,7 +27,7 @@ return {
         ["pylsp"] = {
           codeLens = { enable = true },
         },
-        ["tsserver"] = {
+        ["ts_ls"] = {
           codeLens = { enable = true },
         },
       },

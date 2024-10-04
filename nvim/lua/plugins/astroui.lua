@@ -9,7 +9,7 @@ return {
   ---@type AstroUIOpts
   opts = {
     -- change colorscheme
-    colorscheme = "astrodark",
+    colorscheme = "catppuccin",
     -- add new user interface icon
     icons = {
       VimIcon = "",
