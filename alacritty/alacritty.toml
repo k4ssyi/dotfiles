@@ -56,5 +56,6 @@ cursor = "CellForeground"
 
 [debug]
 
-log_level = "Error" # Default: "Warn"
+# log_level = "Error" # Default: "Warn"
+log_level = "Warn" # Default: "Warn"
 

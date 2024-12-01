@@ -2,6 +2,11 @@
 -- Configuration documentation can be found with `:h astrolsp`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
+local function remember_cursor_position()
+  local pos = vim.api.nvim_win_get_cursor(0) -- 現在のカーソル位置を保存
+  vim.lsp.buf.formatting_sync(nil, 1000) -- 1000msのタイムアウトで同期フォーマットを実行
+  vim.api.nvim_win_set_cursor(0, pos) -- 保存した位置にカーソルを戻す
+end
 
 ---@type LazySpec
 return {
@@ -40,6 +45,12 @@ return {
     -- enable servers that you already have installed without mason
     servers = {
       -- "pyright"
+      typos_lsp = {
+        init_options = {
+          config = vim.fn.expand "~/.config/typos.toml",
+        },
+        cmd_env = { RUST_LOG = "error" }, -- 必要に応じてデバッグログを有効にする
+      },
     },
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
@@ -92,6 +103,37 @@ return {
           cond = function(client)
             return client.supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens ~= nil
           end,
+        },
+        gd = {
+          function() require("telescope.builtin").lsp_definitions { reuse_win = true } end,
+          desc = "Go to definition",
+        },
+        gI = {
+          function() require("telescope.builtin").lsp_implementations { reuse_win = true } end,
+          desc = "Go to implementation",
+        },
+        gy = {
+          function() require("telescope.builtin").lsp_type_definitions { reuse_win = true } end,
+          desc = "Go to type definition",
+        },
+        gr = {
+          function() require("telescope.builtin").lsp_references() end,
+          desc = "List references",
+        },
+        ["<Leader>lG"] = {
+          function()
+            vim.ui.input({ prompt = "Symbol Query: (leave empty for word under cursor)" }, function(query)
+              if query then
+                -- word under cursor if given query is empty
+                if query == "" then query = vim.fn.expand "<cword>" end
+                require("telescope.builtin").lsp_workspace_symbols {
+                  query = query,
+                  prompt_title = ("Find word (%s)"):format(query),
+                }
+              end
+            end)
+          end,
+          desc = "Search workspace symbols",
         },
       },
     },

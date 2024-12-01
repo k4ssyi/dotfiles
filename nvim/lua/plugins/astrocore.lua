@@ -10,7 +10,8 @@ return {
   opts = {
     -- Configure core features of AstroNvim
     features = {
-      large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
+      -- large_buf = { size = 1024 * 256, lines = 5000 }, -- set global limits for large files for disabling features like treesitter
+      large_buf = { size = 1024 * 256 }, -- set global limits for large files for disabling features like treesitter
       autopairs = true, -- enable autopairs at start
       cmp = true, -- enable completion at start
       diagnostics_mode = 3, -- diagnostic mode on start (0 = off, 1 = no signs/virtual text, 2 = no virtual text, 3 = on)
@@ -44,8 +45,8 @@ return {
       -- first key is the mode
       n = {
         -- 行の端に行く
-        ["<C-a>"] = { "^" },
-        ["<C-e>"] = { "$" },
+        ["<C-a>"] = { "^", noremap = true },
+        ["<C-e>"] = { "$", noremap = true, silent = true, desc = "Move to end of line" },
 
         -- split window resize
         -- Alt key
@@ -76,40 +77,6 @@ return {
         },
         -- plugin mappings
         ["<leader>gnd"] = { "<cmd>DiffviewOpen<cr>", desc = "View Git diffviewOpen" },
-        ["gr"] = {
-          function() require("telescope.builtin").lsp_references() end,
-          desc = "Search References",
-        },
-        -- copilot chat mappings
-        ["<leader>tc"] = { name = "CopilotChat" },
-        ["<leader>tct"] = {
-          function() require("CopilotChat").toggle { buffer = vim.api.nvim_get_current_buf() } end,
-          desc = "CopilotChat - Toggle Open",
-        },
-        ["<leader>tcq"] = {
-          function()
-            local input = vim.fn.input "Quick Chat: "
-            if input ~= "" then
-              require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
-            end
-          end,
-          desc = "CopilotChat - Quick chat",
-        },
-
-        ["<leader>tch"] = {
-          function()
-            local actions = require "CopilotChat.actions"
-            require("CopilotChat.integrations.telescope").pick(actions.help_actions())
-          end,
-          desc = "CopilotChat - Help actions",
-        },
-        ["<leader>tcp"] = {
-          function()
-            local actions = require "CopilotChat.actions"
-            require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
-          end,
-          desc = "CopilotChat - Prompt actions",
-        },
       },
       -- insert mode
       i = {
@@ -125,13 +92,6 @@ return {
         x = { '"_x', desc = "do not yank with x" },
         ["<C-a>"] = { "^" },
         ["<C-e>"] = { "$" },
-        ["<leader>tcp"] = {
-          function()
-            local actions = require "CopilotChat.actions"
-            require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
-          end,
-          desc = "CopilotChat - Prompt actions",
-        },
       },
     },
   },

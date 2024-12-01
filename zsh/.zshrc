@@ -72,3 +72,4 @@ autoload -Uz compinit && compinit
 
 export PATH="/opt/homebrew/opt/jpeg/bin:$PATH"
 source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+export PATH="/opt/homebrew/bin:$PATH"
