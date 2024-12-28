@@ -7,3 +7,5 @@
 	default = current
 [mergetool]
 	keepBackup = false
+[rebase]
+	autostash = true

@@ -73,3 +73,15 @@ autoload -Uz compinit && compinit
 export PATH="/opt/homebrew/opt/jpeg/bin:$PATH"
 source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 export PATH="/opt/homebrew/bin:$PATH"
+
+function auto_venv() {
+  if [ -e ".venv/bin/activate" ]; then
+      source .venv/bin/activate
+      echo "Activated virtual environment in $(pwd)"
+  fi
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd auto_venv
+
+# 初回読み込み時にも実行
+auto_venv

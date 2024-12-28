@@ -3,6 +3,10 @@
 ---@type LazySpec
 return {
   "nvim-treesitter/nvim-treesitter",
+  dependencies = {
+    "nvim-treesitter/playground",
+    "nvim-treesitter/nvim-treesitter-refactor",
+  },
   opts = {
     ensure_installed = {
       -- add more arguments for adding more treesitter parsers
