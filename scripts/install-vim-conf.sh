@@ -2,5 +2,6 @@
 
 echo "set nvim"
 
-rm -rf ${HOME}/.config/nvim
-ln -fsn ${PWD}/nvim ${HOME}/.config/nvim
+rm -rf "${HOME}/.config/nvim"
+ln -fsn "${PWD}/nvim ${HOME}/.config/nvim"
+ln -sf "${HOME}/.config/vscode-nvim/vscode-keybindings.json ${HOME}/Library/Application\ Support/Cursor/User/keybindings.json"

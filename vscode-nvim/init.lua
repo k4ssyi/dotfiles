@@ -3,7 +3,6 @@ if vim.g.vscode then
 	-- VSCode extension
 	-- require("plugins") -- プラグイン管理
 	require("option") -- シンタックスハイライトやインデントなどの各種設定
-	require("keymaps") -- キーマップ(キーバインド)の設定
 else
 	-- ordinary Neovim
 	-- errorメッセージを表示する

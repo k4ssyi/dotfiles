@@ -14,7 +14,7 @@ return {
   -- { import = "astrocommunity.recipes.heirline-vscode-winbar" },
   -- { import = "astrocommunity.recipes.heirline-nvchad-statusline" },
   -- { import = "astrocommunity.recipes.telescope-lsp-mappings" },
-  { import = "astrocommunity.completion.copilot-lua-cmp" },
+  -- { import = "astrocommunity.completion.copilot-lua-cmp" },
   -- { import = "astrocommunity.completion.avante-nvim" },
   { import = "astrocommunity.scrolling.nvim-scrollbar" },
   -- { import = "astrocommunity.search.nvim-hlslens" },

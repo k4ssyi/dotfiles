@@ -1,0 +1,99 @@
+[
+  {
+    "key": "shift+semicolon shift+semicolon",
+    "command": "vscode-neovim.send",
+    "args": "$",
+    "when": "editorTextFocus && neovim.init"
+  },
+  {
+    "key": "shift+h",
+    "command": "vscode-neovim.send",
+    "args": "0",
+    "when": "editorTextFocus && neovim.init"
+  },
+  {
+    "key": "shift+l",
+    "command": "vscode-neovim.send",
+    "args": "$",
+    "when": "editorTextFocus && neovim.init"
+  },
+  {
+    "key": "ctrl+e",
+    "command": "vscode-neovim.send",
+    "args": "$",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+a",
+    "command": "vscode-neovim.send",
+    "args": "0",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+e",
+    "command": "vscode-neovim.send",
+    "args": "<Esc>A",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "ctrl+a",
+    "command": "vscode-neovim.send",
+    "args": "<Esc>I",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "j j",
+    "command": "vscode-neovim.send",
+    "args": "<Esc>",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "vscode-neovim.send",
+    "args": "<Down>",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "vscode-neovim.send",
+    "args": "<Up>",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "ctrl+h",
+    "command": "vscode-neovim.send",
+    "args": "<Left>",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "vscode-neovim.send",
+    "args": "<Right>",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "space w",
+    "command": "workbench.action.files.save",
+    "when": "neovim.mode == normal && editorTextFocus"
+  },
+  {
+    "key": "\\",
+    "command": "workbench.action.splitEditorRight",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "-",
+    "command": "workbench.action.splitEditorDown",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "shift+h",
+    "command": "workbench.action.previousEditor",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "shift+l",
+    "command": "workbench.action.nextEditor",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  }
+]

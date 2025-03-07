@@ -21,14 +21,16 @@ return {
       --   if info == "cursorline" then vim.wo.cursorline = true end
       -- end,
     }
+
     local keymap = {
       ["<C-u>"] = function() neoscroll.ctrl_u { duration = 100 } end,
       ["<C-d>"] = function() neoscroll.ctrl_d { duration = 100 } end,
     }
     local modes = { "n", "v", "x" }
     for key, func in pairs(keymap) do
-      vim.keymap.set(modes, key, func)
+      vim.keymap.set(modes, key, func, { noremap = true, silent = true })
     end
+
     -- キーマップ設定用のヘルパー関数
     -- local function map(mode, lhs, rhs, opts)
     --   local options = { noremap = true, silent = true }

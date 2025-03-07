@@ -37,6 +37,8 @@ program = "/bin/zsh"
 [window]
 opacity = 0.95
 title = "Alacritty"
+resize_increments = true
+option_as_alt = "Both"
 
 [window.class]
 general = "Alacritty"

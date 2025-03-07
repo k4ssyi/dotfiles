@@ -1,11 +1,86 @@
 [user]
+	# ユーザー情報の設定
 	email = kasikasi00@gmail.com
 	name = k4ssyi
+
+[column]
+	# カラムのUI設定
+	ui = auto
+
+[branch]
+	# ブランチのソート順設定
+	sort = -committerdate
+
+[tag]
+	# タグのソート順設定
+	sort = version:refname
+
+[diff]
+	# 差分表示のアルゴリズム設定
+	algorithm = histogram
+	# 移動した行の色付け設定
+	colorMoved = plain
+	# プレフィックスの表示をわかりやすくする
+	mnemonicPrefix = true
+	# ファイル名の変更を検出
+	renames = true
+
 [core]
+	# デフォルトのエディタ設定
 	editor = nvim
+	# 除外ファイルの設定
+  # excludesfile = ~/.gitignore
+	# ファイルシステムモニタリングの有効化
+	fsmonitor = true
+	# 未追跡ファイルのキャッシュを有効化
+	untrackedCache = true
+
 [push]
-	default = current
+	# プッシュのデフォルト動作設定
+	default = simple
+	# リモートの自動設定を有効化
+	autoSetupRemote = true
+	# タグを含めてプッシュ
+	followTags = true
+
+[fetch]
+	# フェッチ時に不要なリモート追跡ブランチを削除
+	prune = true
+	# フェッチ時に不要なタグを削除
+	pruneTags = true
+	# 全てのリモートをフェッチ
+	all = true
+
+[help]
+	# コマンドの自動補正をプロンプトで確認
+	autocorrect = prompt
+
+[commit]
+	# コミット時に詳細情報を表示
+	verbose = true
+
+[rerere]
+	# マージの競合解決を記憶
+	enabled = true
+	# 自動で競合解決を更新
+	autoupdate = true
+
 [mergetool]
+	# マージツール使用後にバックアップを保持しない
 	keepBackup = false
+
 [rebase]
-	autostash = true
+	# 自動でコミットをまとめる
+	autoSquash = true
+	# リベース前に自動でスタッシュ
+	autoStash = true
+	# リファレンスを更新
+	updateRefs = true
+
+[merge]
+	# マージ時の競合スタイル設定
+	conflictstyle = zdiff3 
+
+[pull]
+	# プル時にリベースを使用
+	rebase = true

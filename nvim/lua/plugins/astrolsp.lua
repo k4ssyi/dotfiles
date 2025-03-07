@@ -37,7 +37,7 @@ return {
         "tsserver",
         "pylsp",
       },
-      timeout_ms = 5000, -- default format timeout
+      timeout_ms = 10000, -- default format timeout
       -- filter = function(client) -- fully override the default formatting function
       --   return true
       -- end
@@ -47,9 +47,10 @@ return {
       -- "pyright"
       typos_lsp = {
         init_options = {
-          config = vim.fn.expand "~/.config/typos.toml",
+          config = vim.fn.filereadable(vim.fn.getcwd() .. "/typos.toml") == 1 and vim.fn.getcwd() .. "/typos.toml"
+            or vim.fn.expand "~/.config/typos.toml",
         },
-        cmd_env = { RUST_LOG = "error" }, -- 必要に応じてデバッグログを有効にする
+        cmd_env = { RUST_LOG = "debug" }, -- 必要に応じてデバッグログを有効にする
       },
     },
     -- customize language server configuration options passed to `lspconfig`

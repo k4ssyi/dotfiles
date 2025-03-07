@@ -21,6 +21,10 @@ export HISTSIZE=20000
 export SAVEHIST=20000
 export HISTTIMEFORMAT='%Y/%m/%d %H:%M:%S '
 
+# vim alias
+export EDITOR=nvim
+alias vim="nvim"
+
 alias ls='lsd'
 alias l='lsd -l'
 alias ll='lsd -l'
@@ -28,10 +32,6 @@ alias la='lsd -la'
 alias lt='lsd --tree'
 alias grep='grep --color=auto'
 alias history='history -E -i 1'
-
-# vim alias
-export EDITOR=nvim
-alias vim="nvim"
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
