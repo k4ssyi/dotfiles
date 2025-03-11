@@ -1,0 +1,114 @@
+{
+	"editor.renderWhitespace": "all",
+	"editor.tabSize": 2,
+	"editor.wordWrap": "on",
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true,
+	"editor.renderControlCharacters": true,
+	"workbench.statusBar.visible": true,
+	"emmet.showSuggestionsAsSnippets": true,
+	"emmet.triggerExpansionOnTab": true,
+	"emmet.variables": {
+		"lang": "ja"
+	},
+	"workbench.iconTheme": "vscode-icons",
+	"tabnine.experimentalAutoImports": true,
+	"editor.bracketPairColorization.enabled": true,
+	"files.autoSave": "afterDelay",
+	"files.autoSaveDelay": 1500,
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports.biome": "explicit"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"editor.rename.enablePreview": false,
+	"editor.guides.bracketPairs": true,
+	"editor.suggest.snippetsPreventQuickSuggestions": false,
+	"editor.copyWithSyntaxHighlighting": false,
+	"typescript.inlayHints.parameterNames.enabled": "all",
+	"editor.cursorSmoothCaretAnimation": "on",
+	"editor.smoothScrolling": true,
+	"workbench.list.smoothScrolling": true,
+	"terminal.integrated.smoothScrolling": true,
+	"editor.cursorBlinking": "smooth",
+	"files.exclude": {
+		"**/.git": false,
+		"**/*.pyc": true
+	},
+	"editor.fontSize": 13,
+	"gitlens.codeLens.enabled": false,
+	"vim.useSystemClipboard": true,
+	"terminal.integrated.fontSize": 14,
+	"editor.unicodeHighlight.allowedCharacters": {
+		"事": true
+	},
+	"editor.unicodeHighlight.nonBasicASCII": false,
+	"window.newWindowDimensions": "maximized",
+	"security.workspace.trust.untrustedFiles": "open",
+	"vscode-neovim.mouseSelectionStartVisualMode": true,
+	"editor.scrollBeyondLastLine": false,
+	"vscode-neovim.neovimInitVimPaths.darwin": "/Users/k4ssyi/.config/vscode-nvim/init.lua",
+	"docker.host": "unix:///Users/k4ssyi/.lima/docker_x86_64/sock/docker.sock",
+	"diffEditor.renderSideBySide": false,
+	"javascript.inlayHints.parameterNames.enabled": "literals",
+	"editor.unicodeHighlight.ambiguousCharacters": false,
+	"python.linting.flake8Enabled": true,
+	"editor.rulers": [
+		99,
+		120
+	],
+	"python.linting.maxNumberOfProblems": 8000,
+	"python.formatting.autopep8Args": [
+		"--aggressive",
+		"--aggressive"
+	],
+	"[python]": {
+		"editor.formatOnType": true
+	},
+	"settingsSync.ignoredSettings": [
+		"editor.fontFamily"
+	],
+	"editor.fontFamily": "Hack Nerd Font",
+	"debug.console.fontFamily": "Hack Nerd Font",
+	"gitlens.views.worktrees.showBranchComparison": "branch",
+	"extensions.experimental.affinity": {
+		"asvetliakov.vscode-neovim": 1
+	},
+	"vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
+	"diffEditor.ignoreTrimWhitespace": true,
+	"git.autofetch": true,
+	"window.zoomLevel": 1,
+	"cursor.cpp.disabledLanguages": [
+		"plaintext",
+		"markdown",
+		"scminput"
+	],
+	"githubPullRequests.pullBranch": "never",
+	"editor.formatOnType": true,
+	"prisma.showPrismaDataPlatformNotification": false,
+	"github.copilot.editor.enableAutoCompletions": true,
+	"github.copilot.enable": {
+		"*": true,
+		"plaintext": false,
+		"markdown": false,
+		"scminput": false
+	},
+	"workbench.editor.customLabels.patterns": {
+		"**/{page,layout,template,route,actions,index,hooks,components,utils,types}.{js,ts,jsx,tsx}": "${dirname}/${filename}.${extname} .../${dirname(1)}"
+	},
+	"workbench.colorTheme": "Default Dark Modern",
+	"editor.formatOnPaste": true,
+	"biome_lsp.trace.server": "verbose",
+	"git.blame.editorDecoration.enabled": true,
+	"cursor.cpp.enablePartialAccepts": true,
+	"editor.cursorSurroundingLines": 15,
+	"editor.cursorSurroundingLinesStyle": "all",
+	"diffEditor.experimental.showMoves": true
+}

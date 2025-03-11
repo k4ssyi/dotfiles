@@ -20,3 +20,4 @@ opt.laststatus = 2
 opt.expandtab = true
 opt.autoindent = true
 opt.smartindent = true
+opt.scrolloff = 999

@@ -20,18 +20,6 @@
   {
     "key": "ctrl+e",
     "command": "vscode-neovim.send",
-    "args": "$",
-    "when": "editorTextFocus && neovim.mode == 'normal'"
-  },
-  {
-    "key": "ctrl+a",
-    "command": "vscode-neovim.send",
-    "args": "0",
-    "when": "editorTextFocus && neovim.mode == 'normal'"
-  },
-  {
-    "key": "ctrl+e",
-    "command": "vscode-neovim.send",
     "args": "<Esc>A",
     "when": "editorTextFocus && neovim.mode == 'insert'"
   },
@@ -48,28 +36,24 @@
     "when": "editorTextFocus && neovim.mode == 'insert'"
   },
   {
-    "key": "ctrl+j",
-    "command": "vscode-neovim.send",
-    "args": "<Down>",
-    "when": "editorTextFocus && neovim.mode == 'insert'"
-  },
-  {
-    "key": "ctrl+k",
-    "command": "vscode-neovim.send",
-    "args": "<Up>",
-    "when": "editorTextFocus && neovim.mode == 'insert'"
-  },
-  {
     "key": "ctrl+h",
-    "command": "vscode-neovim.send",
-    "args": "<Left>",
-    "when": "editorTextFocus && neovim.mode == 'insert'"
+    "command": "workbench.action.navigateLeft",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
   },
   {
     "key": "ctrl+l",
-    "command": "vscode-neovim.send",
-    "args": "<Right>",
-    "when": "editorTextFocus && neovim.mode == 'insert'"
+    "command": "workbench.action.navigateRight",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.navigateDown",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.navigateUp",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
   },
   {
     "key": "space w",
@@ -95,5 +79,59 @@
     "key": "shift+l",
     "command": "workbench.action.nextEditor",
     "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "g d",
+    "command": "editor.action.revealDefinition",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "g r",
+    "command": "editor.action.goToReferences",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "g g",
+    "command": "cursorTop",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+d",
+    "command": "vscode-neovim.send",
+    "args": "<C-d>zz",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+u",
+    "command": "vscode-neovim.send",
+    "args": "<C-u>zz",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+f",
+    "command": "vscode-neovim.send",
+    "args": "<C-f>zz",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+b",
+    "command": "vscode-neovim.send",
+    "args": "<C-b>zz",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "space b c",
+    "command": "workbench.action.closeActiveEditor",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "space b shift+c",
+    "command": "workbench.action.closeAllEditors",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+w q",
+    "command": "-workbench.action.closeActiveEditor",
+    "when": "!editorTextFocus && !filesExplorerFocus && !searchViewletFocus && !terminalFocus && neovim.mode != 'cmdline'"
   }
 ]
