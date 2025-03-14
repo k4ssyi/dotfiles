@@ -133,5 +133,62 @@
     "key": "ctrl+w q",
     "command": "-workbench.action.closeActiveEditor",
     "when": "!editorTextFocus && !filesExplorerFocus && !searchViewletFocus && !terminalFocus && neovim.mode != 'cmdline'"
-  }
+  },
+  {
+    "key": "space e",
+    "command": "workbench.action.toggleSidebarVisibility",
+    "when": "neovim.mode == normal"
+  },
+  {
+    "key": "ctrl+e",
+    "command": "vscode-neovim.send",
+    "args": "$",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "ctrl+a",
+    "command": "vscode-neovim.send",
+    "args": "^",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "shift+o",
+    "command": "workbench.action.toggleSidebarVisibility",
+    "when": "sideBarFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "shift+o",
+    "command": "workbench.action.focusSideBar",
+    "when": "!sideBarFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "shift+l",
+    "command": "workbench.action.nextSideBarView",
+    "when": "sideBarFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "shift+h",
+    "command": "workbench.action.previousSideBarView",
+    "when": "sideBarFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "space f w",
+    "command": "workbench.action.findInFiles",
+    "when": "neovim.mode == normal"
+  },
+  {
+    "key": "space f g",
+    "command": "workbench.view.scm",
+    "when": "neovim.mode == normal"
+  },
+  {
+    "key": "space f e",
+    "command": "workbench.view.explorer",
+    "when": "neovim.mode == normal"
+  },
+  {
+    "key": "space f f",
+    "command": "workbench.action.quickOpen",
+    "when": "neovim.mode == normal"
+  },
 ]

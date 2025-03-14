@@ -68,3 +68,6 @@ Temporary Items
 # python env
 
 .venv
+
+# cspell
+.cspell.json

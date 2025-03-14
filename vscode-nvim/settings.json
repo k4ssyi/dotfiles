@@ -32,7 +32,6 @@
 	"editor.guides.bracketPairs": true,
 	"editor.suggest.snippetsPreventQuickSuggestions": false,
 	"editor.copyWithSyntaxHighlighting": false,
-	"typescript.inlayHints.parameterNames.enabled": "all",
 	"editor.cursorSmoothCaretAnimation": "on",
 	"editor.smoothScrolling": true,
 	"workbench.list.smoothScrolling": true,
@@ -110,5 +109,13 @@
 	"cursor.cpp.enablePartialAccepts": true,
 	"editor.cursorSurroundingLines": 15,
 	"editor.cursorSurroundingLinesStyle": "all",
-	"diffEditor.experimental.showMoves": true
+	"diffEditor.experimental.showMoves": true,
+	"window.commandCenter": true,
+	"workbench.layoutControl.enabled": false,
+	"typescript.locale": "en",
+	"editor.minimap.enabled": true,
+	"typescript.inlayHints.parameterNames.enabled": "literals",
+	"typescript.inlayHints.parameterTypes.enabled": true,
+	"javascript.inlayHints.parameterTypes.enabled": true,
+	"vscode-neovim.useWSL": false,
 }
