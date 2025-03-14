@@ -44,7 +44,7 @@ return {
     },
     -- enable servers that you already have installed without mason
     servers = {
-      -- "pyright"
+      "vtsls",
       typos_lsp = {
         init_options = {
           config = vim.fn.filereadable(vim.fn.getcwd() .. "/typos.toml") == 1 and vim.fn.getcwd() .. "/typos.toml"
@@ -56,7 +56,42 @@ return {
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
-      -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
+      vtsls = {
+        cmd = { "vtsls", "--stdio" },
+        filetypes = {
+          "javascript",
+          "javascriptreact",
+          "javascript.jsx",
+          "typescript",
+          "typescriptreact",
+          "typescript.tsx",
+        },
+        root_dir = require("lspconfig.util").root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
+        settings = {
+          vtsls = {
+            experimental = {
+              completion = {
+                enableServerSideFuzzyMatch = true,
+                entriesLimit = 10,
+              },
+            },
+            autoUseWorkspaceTsdk = true,
+          },
+          typescript = {
+            inlayHints = {
+              parameterNames = { enabled = "literals" },
+              parameterTypes = { enabled = true },
+              variableTypes = { enabled = true },
+              propertyDeclarationTypes = { enabled = true },
+              functionLikeReturnTypes = { enabled = true },
+              enumMemberValues = { enabled = true },
+            },
+            tsserver = {
+              maxTsServerMemory = 8192,
+            },
+          },
+        },
+      },
     },
     -- customize how language servers are attached
     handlers = {
