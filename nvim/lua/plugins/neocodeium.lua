@@ -35,7 +35,9 @@ return {
       gitrebase = false,
       ["."] = false,
     },
-    -- バッファフィルター関数
+    --- バッファがAI補完対象か判定するフィルタ関数
+    -- @param bufnr number バッファ番号
+    -- @return boolean AI補完を有効にする場合はtrue、無効にする場合はfalse
     filter = function(bufnr)
       -- 特殊なバッファタイプでは無効化
       local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
@@ -51,41 +53,6 @@ return {
       mode = "i",
       desc = "Accept neocodeium suggestion",
     },
-    -- -- 単語単位で補完を受け入れ
-    -- {
-    --   "<A-w>",
-    --   function() require("neocodeium").accept_word() end,
-    --   mode = "i",
-    --   desc = "Accept neocodeium word",
-    -- },
-    -- -- 行単位で補完を受け入れ
-    -- {
-    --   "<A-a>",
-    --   function() require("neocodeium").accept_line() end,
-    --   mode = "i",
-    --   desc = "Accept neocodeium line",
-    -- },
-    -- -- 次の補完候補に切り替え
-    -- {
-    --   "<A-e>",
-    --   function() require("neocodeium").cycle_or_complete() end,
-    --   mode = "i",
-    --   desc = "Cycle to next neocodeium suggestion",
-    -- },
-    -- -- 前の補完候補に切り替え
-    -- {
-    --   "<A-r>",
-    --   function() require("neocodeium").cycle_or_complete(-1) end,
-    --   mode = "i",
-    --   desc = "Cycle to previous neocodeium suggestion",
-    -- },
-    -- -- 補完をクリア
-    -- {
-    --   "<A-c>",
-    --   function() require("neocodeium").clear() end,
-    --   mode = "i",
-    --   desc = "Clear neocodeium suggestions",
-    -- },
   },
   config = function(_, opts)
     local neocodeium = require "neocodeium"

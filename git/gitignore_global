@@ -74,3 +74,6 @@ Temporary Items
 
 # MakeFile
 LocalMakeFile
+
+# AI_ROLE
+ai_role.md

@@ -1,16 +1,36 @@
--- AstroUI provides the basis for configuring the AstroNvim User Interface
--- Configuration documentation can be found with `:h astroui`
--- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
---       as this provides autocomplete and documentation while editing
+--[[
+AstroUI - AstroNvimのユーザーインターフェース設定モジュール
+
+@概要
+  - AstroNvimのユーザーインターフェース（UI）全体の外観やアイコン、ステータスライン、ハイライトなどを一元的に設定します。
+  - 設定内容は `:h astroui` でドキュメントを参照できます。
+  - Lua言語サーバー（:LspInstall lua_ls）の導入を強く推奨します。これにより補完やドキュメント参照が可能になります。
+
+@主な仕様
+  - colorscheme: カラースキームの指定
+  - icons: UIで使用するアイコンの定義
+  - status: heirline用のステータスラインやウィンバーのカスタマイズ
+  - highlights: カラースキームごとのハイライトグループの上書き
+  - その他、UI全体の細かな調整が可能
+
+@制限事項
+  - 設定内容によっては他プラグインと競合する場合があります。
+  - カラースキームやアイコンは、使用するフォントやテーマに依存する場合があります。
+
+@参考
+  - https://github.com/AstroNvim/AstroNvim
+  - :h astroui
+
+]]
 
 ---@type LazySpec
 return {
   "AstroNvim/astroui",
   ---@type AstroUIOpts
   opts = {
-    -- change colorscheme
+    -- カラースキームの指定
     colorscheme = "everforest",
-    -- add new user interface icon
+    -- ユーザーインターフェース用アイコンの追加
     icons = {
       VimIcon = "",
       ScrollText = "",
@@ -29,18 +49,18 @@ return {
       LSPLoading9 = "⠇",
       LSPLoading10 = "⠏",
     },
-    -- modify variables used by heirline but not defined in the setup call directly
+    -- heirlineで直接定義されていない変数のカスタマイズ
     status = {
-      -- define the separators between each section
+      -- 各セクション間のセパレータ定義
       separators = {
-        left = { "", "" }, -- separator for the left side of the statusline
-        right = { " ", "" }, -- separator for the right side of the statusline
+        left = { "", "" }, -- ステータスライン左側のセパレータ
+        right = { " ", "" }, -- ステータスライン右側のセパレータ
         tab = { "", "" },
       },
-      -- add new colors that can be used by heirline
+      -- heirlineで使用可能な新しい色の追加
       colors = function(hl)
         local get_hlgroup = require("astroui").get_hlgroup
-        -- use helper function to get highlight group properties
+        -- ハイライトグループのプロパティ取得用ヘルパー関数を利用
         local comment_fg = get_hlgroup("Comment").fg
         hl.git_branch_fg = comment_fg
         hl.git_added = comment_fg
@@ -62,18 +82,17 @@ return {
         },
       },
     },
-    -- AstroUI allows you to easily modify highlight groups easily for any and all colorschemes
+    -- ハイライトグループのカスタマイズ（全カラースキーム共通）
     highlights = {
       init = function()
         local get_hlgroup = require("astroui").get_hlgroup
-        -- get highlights from highlight groups
+        -- ハイライトグループから色を取得
         local normal = get_hlgroup "Normal"
         local fg, bg = normal.fg, normal.bg
         local bg_alt = get_hlgroup("Visual").bg
         local green = get_hlgroup("String").fg
         local red = get_hlgroup("Error").fg
-        -- return a table of highlights for telescope based on
-        -- colors gotten from highlight groups
+        -- telescope用のハイライトテーブルを返す
         return {
           TelescopeBorder = { fg = bg_alt, bg = bg },
           TelescopeNormal = { bg = bg },
@@ -89,7 +108,7 @@ return {
           TelescopeResultsTitle = { fg = bg, bg = bg },
         }
       end,
-      astrodark = { -- a table of overrides/changes when applying the astrotheme theme
+      astrodark = { -- astrothemeテーマ適用時の上書き・変更用テーブル
         -- Normal = { bg = "#000000" },
       },
     },

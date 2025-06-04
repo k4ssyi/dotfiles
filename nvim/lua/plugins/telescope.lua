@@ -1,3 +1,24 @@
+--[[
+Telescope - ファジーファインダー/検索プラグイン設定
+
+@概要
+  - ファイル・バッファ・LSPシンボルなど様々なリソースをインクリメンタル検索できます。
+  - fzf-native拡張や各種UIカスタマイズが可能です。
+
+@主な仕様
+  - prompt_prefix, selection_caret, entry_prefix: UIの装飾
+  - extensions.fzf: fzf拡張の有効化
+  - file_ignore_patterns: 検索除外パターン
+  - opts.defaults: デフォルト設定のマージ
+
+@制限事項
+  - fzf-native拡張はmakeコマンドによるビルドが必要です。
+
+@参考
+  - https://github.com/nvim-telescope/telescope.nvim
+
+]]
+
 return {
   "nvim-telescope/telescope.nvim",
   requires = {

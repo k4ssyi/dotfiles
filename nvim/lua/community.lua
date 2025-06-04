@@ -1,6 +1,21 @@
--- AstroCommunity: import any community modules here
--- We import this file in `lazy_setup.lua` before the `plugins/` folder.
--- This guarantees that the specs are processed before any user plugins.
+--[[
+AstroCommunity - AstroNvim公式コミュニティプラグイン集
+
+@概要
+  - AstroNvim公式コミュニティが提供する各種プラグインパックをimportできます。
+  - colorscheme, scrolling, indent, git, language support等のカテゴリ別パックを柔軟に追加可能です。
+
+@主な仕様
+  - import: 必要なパックやプラグインをimportで指定
+  - plugins/よりも先に読み込まれるため、上書きや拡張が容易
+
+@制限事項
+  - import順や内容によってはユーザープラグインと競合する場合があります。
+
+@参考
+  - https://github.com/AstroNvim/astrocommunity
+
+]]
 
 ---@type LazySpec
 return {

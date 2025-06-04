@@ -1,118 +1,140 @@
--- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
--- Configuration documentation can be found with `:h astrocore`
--- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
---       as this provides autocomplete and documentation while editing
+--[[
+AstroCore - AstroNvimのコア設定モジュール
+
+@概要
+  - キーマッピング、Vimオプション、自動コマンドなどの中心的な設定を行うためのモジュールです。
+  - 設定内容は `:h astrocore` でドキュメントを参照できます。
+  - Lua言語サーバー（:LspInstall lua_ls）の導入を強く推奨します。これにより補完やドキュメント参照が可能になります。
+
+@主な仕様
+  - features: AstroNvimのコア機能の有効/無効化
+  - diagnostics: 診断表示の設定
+  - autocmds: 自動コマンドの設定
+  - options: Vimオプションの一括設定
+  - mappings: キーマッピングの一括設定
+  - on_keys: キー入力時の関数実行設定
+  - rooter: プロジェクトルート検出の設定
+  - sessions: セッション管理の設定
+
+@制限事項
+  - 設定内容によっては他プラグインと競合する場合があります。
+  - mapleader/maplocalleaderは `lua/lazy_setup.lua` で事前に設定してください。
+
+  @参考
+  - https://github.com/AstroNvim/AstroNvim
+  - :h astrocore
+
+]]
 
 ---@type LazySpec
 return {
   "AstroNvim/astrocore",
   ---@type AstroCoreOpts
   opts = {
-    -- Configure core features of AstroNvim
+    -- AstroNvimのコア機能設定
     features = {
-      large_buf = { size = 1024 * 1024, lines = 10000 },
-      autopairs = true, -- enable autopairs at start
-      cmp = true, -- enable completion at start
-      diagnostics_mode = 3, -- diagnostic mode on start (0 = off, 1 = no signs/virtual text, 2 = no virtual text, 3 = on)
-      highlighturl = true, -- highlight URLs at start
-      notifications = true, -- enable notifications at start
+      large_buf = { size = 1024 * 1024, lines = 10000 }, -- 大きなバッファの閾値（サイズ・行数）
+      autopairs = true, -- 起動時に自動ペア補完を有効化
+      cmp = true, -- 起動時に補完機能を有効化
+      diagnostics_mode = 3, -- 診断表示モード（0:無効, 1:サイン/仮想テキストなし, 2:仮想テキストなし, 3:全て表示）
+      highlighturl = true, -- 起動時にURLをハイライト
+      notifications = true, -- 起動時に通知機能を有効化
     },
-    -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
+    -- 診断表示の設定（vim.diagnostics.config({...})に渡される）
     diagnostics = {
-      virtual_text = true,
-      underline = true,
+      virtual_text = true, -- 仮想テキストで診断を表示
+      underline = true, -- 下線で診断を表示
     },
-    -- easily configure auto commands
+    -- 自動コマンドの設定
     autocmds = {
-      -- first key is the `augroup` (:h augroup)
+      -- 最初のキーはaugroup名
       highlighturl = {
-        -- list of auto commands to set
+        -- 設定する自動コマンドのリスト
         {
-          -- events to trigger
+          -- トリガーとなるイベント
           event = { "VimEnter", "FileType", "BufEnter", "WinEnter" },
-          -- the rest of the autocmd options (:h nvim_create_autocmd)
-          desc = "URL Highlighting",
+          -- その他のautocmdオプション
+          desc = "URLハイライト",
           callback = function() require("astrocore").set_url_match() end,
         },
       },
     },
-    -- vim options can be configured here
+    -- Vimオプションの一括設定
     options = {
       opt = { -- vim.opt.<key>
-        relativenumber = false, -- sets vim.opt.relativenumber
-        number = true, -- sets vim.opt.number
-        spell = false, -- sets vim.opt.spell
-        signcolumn = "auto", -- sets vim.opt.signcolumn to auto
-        swapfile = false, -- sets vim.opt.swapfile to false
-        wrap = true, -- sets vim.opt.wrap to false
+        relativenumber = false, -- 相対行番号を無効化
+        number = true, -- 行番号を有効化
+        spell = false, -- スペルチェックを無効化
+        signcolumn = "auto", -- サインカラムを自動表示
+        swapfile = false, -- スワップファイルを無効化
+        wrap = true, -- テキストの折り返しを有効化
       },
       g = { -- vim.g.<key>
-        -- configure global vim variables (vim.g)
-        -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
-        -- This can be found in the `lua/lazy_setup.lua` file
+        -- グローバル変数の設定（vim.g）
+        -- mapleader/maplocalleaderはAstroNvimのoptsまたは`lazy.setup`前に設定してください
+        -- 詳細は`lua/lazy_setup.lua`を参照
       },
     },
-    -- Mappings can be configured through AstroCore as well.
-    -- NOTE: keycodes follow the casing in the vimdocs. For example, `<Leader>` must be capitalized
+    -- キーマッピングの一括設定
+    -- キーコードはvimドキュメントの表記に従い、大文字小文字を区別します（例: <Leader>）
     mappings = {
-      -- first key is the mode
+      -- 最初のキーはモード
       n = {
-        -- 行の端に行く
-        ["<C-a>"] = { "^", noremap = true },
-        ["<C-e>"] = { "$", noremap = true, silent = true, desc = "Move to end of line" },
+        -- 行頭・行末への移動
+        ["<C-a>"] = { "^", noremap = true, desc = "行頭に移動" },
+        ["<C-e>"] = { "$", noremap = true, silent = true, desc = "行末に移動" },
 
-        -- split window resize
-        -- Alt key
-        ["∆"] = { ":resize +2<CR>", desc = "Resize split up" },
-        ["˚"] = { ":resize -2<CR>", desc = "Resize split down" },
-        ["¬"] = { ":vertical resize +2<CR>", desc = "Resize split left" },
-        ["˙"] = { ":vertical resize -2<CR>", desc = "Resize split right" },
+        -- 分割ウィンドウのリサイズ（Altキー）
+        ["<A-j>"] = { ":resize +2<CR>", desc = "ウィンドウを上に拡大" },
+        ["<A-k>"] = { ":resize -2<CR>", desc = "ウィンドウを下に縮小" },
+        ["<A-l>"] = { ":vertical resize +2<CR>", desc = "ウィンドウを右に拡大" },
+        ["<A-h>"] = { ":vertical resize -2<CR>", desc = "ウィンドウを左に縮小" },
 
-        -- Do not yank with x
-        x = { '"_x', desc = "do not yank with x" },
+        -- xでヤンクしない
+        x = { '"_x', desc = "xでヤンクしない" },
 
-        -- second key is the lefthand side of the map
-        ["\\"] = { "<cmd>vsplit<cr>", desc = "Vertical Split" },
-        ["-"] = { "<cmd>split<cr>", desc = "Horizontal Split" },
+        -- 2つ目のキーはマッピングの左辺
+        ["\\"] = { "<cmd>vsplit<cr>", desc = "縦分割" },
+        ["-"] = { "<cmd>split<cr>", desc = "横分割" },
 
-        -- navigate buffer tabs
-        ["L"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
-        ["H"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+        -- バッファタブの移動
+        ["L"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "次のバッファへ" },
+        ["H"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "前のバッファへ" },
 
-        -- mappings seen under group name "Buffer"
+        -- "Buffer"グループのマッピング
         ["<Leader>bd"] = {
           function()
             require("astroui.status.heirline").buffer_picker(
               function(bufnr) require("astrocore.buffer").close(bufnr) end
             )
           end,
-          desc = "Close buffer from tabline",
+          desc = "タブラインからバッファを閉じる",
         },
-        -- plugin mappings
-        ["<leader>gnd"] = { "<cmd>DiffviewOpen<cr>", desc = "View Git diffviewOpen" },
+        -- プラグイン用マッピング
+        ["<leader>gnd"] = { "<cmd>DiffviewOpen<cr>", desc = "Git差分ビューを開く" },
       },
-      -- insert mode
+      -- 挿入モード
       i = {
-        ["jj"] = { "<Esc>", desc = "Escape insert mode", silent = true, noremap = true },
-        ["ｊｊ"] = { "<Esc>", desc = "Escape insert mode", silent = true, noremap = true },
-        -- カーソルを行の末尾に移動
-        ["<C-e>"] = { "<Esc>A", desc = "Move to end of line" },
-        -- カーソルを行の先頭に移動
-        ["<C-a>"] = { "<Esc>I", desc = "Move to start of line" },
+        ["jj"] = { "<Esc>", desc = "挿入モードを抜ける", silent = true, noremap = true },
+        ["ｊｊ"] = { "<Esc>", desc = "挿入モードを抜ける", silent = true, noremap = true },
+        -- 行末にカーソル移動
+        ["<C-e>"] = { "<Esc>A", desc = "行末に移動" },
+        -- 行頭にカーソル移動
+        ["<C-a>"] = { "<Esc>I", desc = "行頭に移動" },
       },
-      -- visual mode
+      -- ビジュアルモード
       v = {
-        x = { '"_x', desc = "do not yank with x" },
-        ["<C-a>"] = { "^" },
-        ["<C-e>"] = { "$" },
+        x = { '"_x', desc = "xでヤンクしない" },
+        ["<C-a>"] = { "^", desc = "行頭に移動" },
+        ["<C-e>"] = { "$", desc = "行末に移動" },
       },
     },
-    -- easily configure functions on key press
+    -- キー入力時に実行する関数の設定
     on_keys = {
-      -- first key is the namespace
+      -- 最初のキーは名前空間
       auto_hlsearch = {
-        -- list of functions to execute on key press (:h vim.on_key)
-        function(char) -- example automatically disables `hlsearch` when not actively searching
+        -- キー入力時に実行する関数のリスト
+        function(char) -- 検索中以外は自動的にhlsearchを無効化
           if vim.fn.mode() == "n" then
             local new_hlsearch = vim.tbl_contains({ "<CR>", "n", "N", "*", "#", "?", "/" }, vim.fn.keytrans(char))
             if vim.opt.hlsearch:get() ~= new_hlsearch then vim.opt.hlsearch = new_hlsearch end
@@ -120,41 +142,38 @@ return {
         end,
       },
     },
-    -- Configure project root detection, check status with `:AstroRootInfo`
+    -- プロジェクトルート検出の設定（:AstroRootInfoで状態確認可能）
     rooter = {
-      -- list of detectors in order of prevalence, elements can be:
-      --   "lsp" : lsp detection
-      --   string[] : a list of directory patterns to look for
-      --   fun(bufnr: integer): string|string[] : a function that takes a buffer number and outputs detected roots
+      -- 優先順に検出方法をリスト
       detector = {
-        "lsp", -- highest priority is getting workspace from running language servers
-        { ".git", "_darcs", ".hg", ".bzr", ".svn" }, -- next check for a version controlled parent directory
-        { "lua", "MakeFile", "package.json" }, -- lastly check for known project root files
+        "lsp", -- 最優先は稼働中のLSPからワークスペース取得
+        { ".git", "_darcs", ".hg", ".bzr", ".svn" }, -- 次にバージョン管理ディレクトリを探索
+        { "lua", "MakeFile", "package.json" }, -- 最後に既知のプロジェクトルートファイルを探索
       },
-      -- ignore things from root detection
+      -- ルート検出から除外するもの
       ignore = {
-        servers = {}, -- list of language server names to ignore (Ex. { "efm" })
-        dirs = {}, -- list of directory patterns (Ex. { "~/.cargo/*" })
+        servers = {}, -- 除外するLSPサーバー名リスト（例: { "efm" }）
+        dirs = {}, -- 除外するディレクトリパターン（例: { "~/.cargo/*" }）
       },
-      -- automatically update working directory (update manually with `:AstroRoot`)
+      -- 作業ディレクトリを自動で更新（手動更新は:AstroRoot）
       autochdir = false,
-      -- scope of working directory to change ("global"|"tab"|"win")
+      -- 作業ディレクトリの変更範囲（"global"|"tab"|"win"）
       scope = "global",
-      -- show notification on every working directory change
+      -- 作業ディレクトリ変更時に毎回通知を表示
       notify = false,
     },
-    -- Configuration table of session options for AstroNvim's session management powered by Resession
+    -- セッション管理（Resessionによる）の設定
     sessions = {
-      -- Configure auto saving
+      -- 自動保存の設定
       autosave = {
-        last = true, -- auto save last session
-        cwd = true, -- auto save session for each working directory
+        last = true, -- 最後のセッションを自動保存
+        cwd = true, -- 作業ディレクトリごとにセッションを自動保存
       },
-      -- Patterns to ignore when saving sessions
+      -- セッション保存時に無視するパターン
       ignore = {
-        dirs = {}, -- working directories to ignore sessions in
-        filetypes = { "gitcommit", "gitrebase" }, -- filetypes to ignore sessions
-        buftypes = {}, -- buffer types to ignore sessions
+        dirs = {}, -- セッションを無視する作業ディレクトリ
+        filetypes = { "gitcommit", "gitrebase" }, -- セッションを無視するファイルタイプ
+        buftypes = {}, -- セッションを無視するバッファタイプ
       },
     },
   },

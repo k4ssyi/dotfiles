@@ -1,3 +1,24 @@
+--[[
+nvim-scrollbar - スクロールバー表示プラグイン設定
+
+@概要
+  - Neovimのウィンドウ右端にスクロールバーを表示し、カーソル位置やGit差分、診断情報などを可視化します。
+  - 各種マークやハンドラで表示内容を細かく制御できます。
+
+@主な仕様
+  - handlers: gitsigns, search, aleなどの連携
+  - marks: カーソル・検索・Git・診断などのマーク表示
+  - excluded_buftypes/filetypes: 除外対象のバッファ・ファイルタイプ
+  - autocmd: スクロールバーの描画・クリアイベント
+
+@制限事項
+  - 一部のファイルタイプやバッファでは自動的に非表示となります。
+
+@参考
+  - https://github.com/petertriho/nvim-scrollbar
+
+]]
+
 return {
   "petertriho/nvim-scrollbar",
   event = "User AstroFile",

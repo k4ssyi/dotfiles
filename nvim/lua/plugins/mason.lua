@@ -1,4 +1,22 @@
--- Customize Mason plugins
+--[[
+Mason - LSP/フォーマッタ/デバッガ自動インストール管理プラグイン設定
+
+@概要
+  - LSPサーバー、フォーマッタ、リンター、デバッガの自動インストール・管理を行います。
+  - mason-lspconfig, mason-null-ls, mason-nvim-dapの各拡張を利用します。
+
+@主な仕様
+  - ensure_installed: インストール対象のサーバー・ツールリスト
+  - settings: LSPサーバーごとの追加設定
+  - 各拡張ごとに個別のoptsで詳細設定可能
+
+@制限事項
+  - 一部のツールはmason経由でインストールできない場合があります。
+
+@参考
+  - https://github.com/williamboman/mason.nvim
+
+]]
 
 ---@type LazySpec
 return {

@@ -1,3 +1,22 @@
+--[[
+Neo-tree - ファイラ/ツリービュー プラグイン設定
+
+@概要
+  - Neovim上でファイル・ディレクトリをツリー表示し、直感的なファイル操作が可能です。
+  - 隠しファイルやgitignoreファイルの表示制御、カスタムマッピングなど柔軟な設定が可能です。
+
+@主な仕様
+  - filtered_items: 隠しファイルや特定ファイルの表示制御
+  - window: ウィンドウ幅や操作マッピングのカスタマイズ
+
+@制限事項
+  - 設定内容によっては他のファイラ系プラグインと競合する場合があります。
+
+@参考
+  - https://github.com/nvim-neo-tree/neo-tree.nvim
+
+]]
+
 return {
   "nvim-neo-tree/neo-tree.nvim",
   opts = {
@@ -23,13 +42,13 @@ return {
     window = {
       width = 40,
       mappings = {
-        ["c"] = { -- takes text input for destination, also accepts the optional config.show_path option like "add":
+        ["c"] = {
           "copy",
           config = {
             show_path = "relative", -- "none", "relative", "absolute"
           },
         },
-        ["m"] = { -- takes text input for destination, also accepts the optional config.show_path option like "add":
+        ["m"] = {
           "move",
           config = {
             show_path = "relative", -- "none", "relative", "absolute"
