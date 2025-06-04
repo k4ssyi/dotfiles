@@ -39,6 +39,8 @@
 	"editor.cursorBlinking": "smooth",
 	"files.exclude": {
 		"**/.git": false,
+		"**/.venv/*": true,
+		"**/.yarn/*": true,
 		"**/*.pyc": true
 	},
 	"editor.fontSize": 13,
@@ -55,7 +57,7 @@
 	"editor.scrollBeyondLastLine": false,
 	"vscode-neovim.neovimInitVimPaths.darwin": "/Users/k4ssyi/.config/vscode-nvim/init.lua",
 	"docker.host": "unix:///Users/k4ssyi/.lima/docker_x86_64/sock/docker.sock",
-	"diffEditor.renderSideBySide": false,
+	"diffEditor.renderSideBySide": true,
 	"javascript.inlayHints.parameterNames.enabled": "literals",
 	"editor.unicodeHighlight.ambiguousCharacters": false,
 	"python.linting.flake8Enabled": true,
@@ -107,7 +109,7 @@
 	"biome_lsp.trace.server": "verbose",
 	"git.blame.editorDecoration.enabled": true,
 	"cursor.cpp.enablePartialAccepts": true,
-	"editor.cursorSurroundingLines": 15,
+	"editor.cursorSurroundingLines": 1,
 	"editor.cursorSurroundingLinesStyle": "all",
 	"diffEditor.experimental.showMoves": true,
 	"window.commandCenter": true,
@@ -118,4 +120,14 @@
 	"typescript.inlayHints.parameterTypes.enabled": true,
 	"javascript.inlayHints.parameterTypes.enabled": true,
 	"vscode-neovim.useWSL": false,
+	"vscode-neovim.compositeTimeout": 200,
+	"vscode-neovim.compositeKeys": {
+		"jj": {
+			"command": "vscode-neovim.escape"
+		}
+	},
+	"editor.largeFileOptimizations": false,
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	}
 }

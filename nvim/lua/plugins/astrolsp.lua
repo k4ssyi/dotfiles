@@ -4,7 +4,7 @@
 --       as this provides autocomplete and documentation while editing
 local function remember_cursor_position()
   local pos = vim.api.nvim_win_get_cursor(0) -- 現在のカーソル位置を保存
-  vim.lsp.buf.formatting_sync(nil, 1000) -- 1000msのタイムアウトで同期フォーマットを実行
+  vim.lsp.buf.format({ timeout_ms = 1000 }) -- 1000msのタイムアウトでフォーマットを実行
   vim.api.nvim_win_set_cursor(0, pos) -- 保存した位置にカーソルを戻す
 end
 
