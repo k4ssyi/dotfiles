@@ -61,7 +61,7 @@ log_level = "Warn" # Default: "Warn"
 
 [general]
 live_config_reload = true
-import = ["/Users/k4ssyi/.config/alacritty/themes/themes/everforest_dark.toml"]
+import = ["/Users/k4ssyi/.config/alacritty/themes/themes/ecatppuccin.toml"]
 
 [terminal]
 

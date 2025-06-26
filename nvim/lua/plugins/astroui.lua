@@ -29,7 +29,7 @@ return {
   ---@type AstroUIOpts
   opts = {
     -- カラースキームの指定
-    colorscheme = "everforest",
+    colorscheme = "catppuccin",
     -- ユーザーインターフェース用アイコンの追加
     icons = {
       VimIcon = "",

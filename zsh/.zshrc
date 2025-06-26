@@ -32,7 +32,7 @@ alias la='lsd -la'
 alias lt='lsd --tree'
 alias grep='grep --color=auto'
 alias history='history -E -i 1'
-alias aider="aider --model gpt-4.1 --no-auto-commit --read ~/workspace/dotfiles/ai_role.md"
+alias aider="aider --model gpt-4.1 --multiline --watch-files --no-auto-commit --read ~/workspace/dotfiles/ai_role.md"
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
