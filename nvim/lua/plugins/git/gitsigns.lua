@@ -16,7 +16,6 @@ Gitsigns - Git差分・ブレーム表示プラグイン設定
 
 @制限事項
   - 大きなファイル（max_file_length以上）は自動的に無効化されます。
-  - yadmリポジトリにはデフォルトで非対応です。
 
 @参考
   - https://github.com/lewis6991/gitsigns.nvim
@@ -54,9 +53,6 @@ return {
       relative = "cursor",
       row = 0,
       col = 1,
-    },
-    yadm = {
-      enable = false,
     },
   },
 }

@@ -1,16 +1,13 @@
 --[[
-nvim-hlslens - 検索結果ハイライト拡張プラグイン
+nvim-hlslens - 検索結果ハイライト上書き設定
 
 @概要
-  - 検索時に現在位置や一致数をステータスライン等に表示し、検索体験を向上させます。
-  - n/N/*/# などの検索移動時に自動でハイライトを更新します。
+  - AstroCommunityのnvim-hlslens設定を上書きします。
+  - カスタム検索キーマッピングを設定します。
 
-@主な仕様
-  - init関数で各種キーマップを設定
-  - <Esc><Esc>で検索ハイライトをクリア
-
-@制限事項
-  - 他の検索系プラグインと競合する場合があります。
+@基本設定
+  - community.luaで "astrocommunity.search.nvim-hlslens" をimport
+  - ここでカスタム設定を上書き
 
 @参考
   - https://github.com/kevinhwang91/nvim-hlslens

@@ -10,6 +10,7 @@ LazyGit - ターミナルGitクライアント連携プラグイン
 
 @制限事項
   - 別途lazygitコマンドのインストールが必要です。
+  - AstroCommunityに対応するパックが存在しないため、個別設定として維持
 
 @参考
   - https://github.com/kdheepak/lazygit.nvim

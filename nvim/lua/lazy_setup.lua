@@ -33,11 +33,16 @@ require("lazy").setup({
       update_notifications = true, -- :Lazy update実行時の通知有無
     },
   },
+  { import = "config" },
   { import = "community" },
-  { import = "plugins" },
+  { import = "plugins.git" },
+  { import = "plugins.editor" },
+  { import = "plugins.lsp" },
+  { import = "plugins.ui" },
+  { import = "plugins.ui.heirline" },
 } --[[@as LazySpec]], {
   -- その他のlazy.nvim設定
-  install = { colorscheme = { "astrotheme", "habamax" } },
+  install = { colorscheme = { "astrotheme" } },
   ui = { backdrop = 100 },
   performance = {
     rtp = {

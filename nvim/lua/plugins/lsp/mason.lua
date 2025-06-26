@@ -73,7 +73,6 @@ return {
     opts = {
       ensure_installed = {
         -- add more arguments for adding more debuggers
-        -- "python",
       },
     },
   },

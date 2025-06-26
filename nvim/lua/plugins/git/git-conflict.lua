@@ -12,6 +12,7 @@ Git Conflict - Gitコンフリクト解決支援プラグイン設定
 
 @制限事項
   - 設定内容によっては他のGitプラグインと競合する場合があります。
+  - AstroCommunityに対応するパックが存在しないため、個別設定として維持
 
 @参考
   - https://github.com/akinsho/git-conflict.nvim
@@ -27,5 +28,6 @@ return {
       incoming = "DiffText",
       current = "DiffAdd",
     }
+    return opts
   end,
 }

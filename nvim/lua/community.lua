@@ -20,13 +20,26 @@ AstroCommunity - AstroNvim公式コミュニティプラグイン集
 ---@type LazySpec
 return {
   "AstroNvim/astrocommunity",
+  -- Language packs
   { import = "astrocommunity.pack.lua" },
-  -- import/override with your plugins folder
-  -- { import = "astrocommunity.colorscheme.everforest" },
+
+  -- Colorschemes
   { import = "astrocommunity.colorscheme.catppuccin" },
   { import = "astrocommunity.color.transparent-nvim" },
-  { import = "astrocommunity.scrolling.nvim-scrollbar" },
-  { import = "astrocommunity.indent.mini-indentscope" },
-  { import = "astrocommunity.programming-language-support.csv-vim" },
+
+  -- Git integration
   { import = "astrocommunity.git.blame-nvim" },
+  { import = "astrocommunity.git.diffview-nvim" },
+
+  -- UI and navigation
+  { import = "astrocommunity.scrolling.nvim-scrollbar" },
+  { import = "astrocommunity.scrolling.neoscroll-nvim" },
+  { import = "astrocommunity.search.nvim-hlslens" },
+  { import = "astrocommunity.utility.noice-nvim" },
+
+  -- Editor enhancements
+  { import = "astrocommunity.indent.mini-indentscope" },
+
+  -- Language support
+  { import = "astrocommunity.programming-language-support.csv-vim" },
 }
