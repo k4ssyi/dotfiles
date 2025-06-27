@@ -37,6 +37,9 @@ return {
   { import = "astrocommunity.search.nvim-hlslens" },
   { import = "astrocommunity.utility.noice-nvim" },
 
+  -- Motion
+  { import = "astrocommunity.motion.flash-nvim" },
+
   -- Editor enhancements
   { import = "astrocommunity.indent.mini-indentscope" },
 

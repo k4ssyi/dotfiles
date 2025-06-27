@@ -1,23 +1,5 @@
 [
   {
-    "key": "shift+semicolon shift+semicolon",
-    "command": "vscode-neovim.send",
-    "args": "$",
-    "when": "editorTextFocus && neovim.init"
-  },
-  {
-    "key": "shift+h",
-    "command": "vscode-neovim.send",
-    "args": "0",
-    "when": "editorTextFocus && neovim.init"
-  },
-  {
-    "key": "shift+l",
-    "command": "vscode-neovim.send",
-    "args": "$",
-    "when": "editorTextFocus && neovim.init"
-  },
-  {
     "key": "ctrl+h",
     "command": "workbench.action.navigateLeft",
     "when": "editorTextFocus && neovim.mode == 'normal'"
@@ -73,11 +55,6 @@
     "when": "editorTextFocus && neovim.mode == 'normal'"
   },
   {
-    "key": "g g",
-    "command": "cursorTop",
-    "when": "editorTextFocus && neovim.mode == 'normal'"
-  },
-  {
     "key": "ctrl+d",
     "command": "vscode-neovim.send",
     "args": "<C-d>zz",
@@ -112,46 +89,9 @@
     "when": "editorTextFocus && neovim.mode == 'normal'"
   },
   {
-    "key": "ctrl+w q",
-    "command": "-workbench.action.closeActiveEditor",
-    "when": "!editorTextFocus && !filesExplorerFocus && !searchViewletFocus && !terminalFocus && neovim.mode != 'cmdline'"
-  },
-  {
     "key": "space e",
     "command": "workbench.action.toggleSidebarVisibility",
     "when": "neovim.mode == normal"
-  },
-  {
-    "key": "ctrl+e",
-    "command": "vscode-neovim.send",
-    "args": "$",
-    "when": "editorTextFocus && neovim.mode == 'normal'"
-  },
-  {
-    "key": "ctrl+a",
-    "command": "vscode-neovim.send",
-    "args": "^",
-    "when": "editorTextFocus && neovim.mode == 'normal'"
-  },
-  // {
-  //   "key": "shift+o",
-  //   "command": "workbench.action.toggleSidebarVisibility",
-  //   "when": "sideBarFocus && neovim.mode == 'normal'"
-  // },
-  // {
-  //   "key": "shift+o",
-  //   "command": "workbench.action.focusSideBar",
-  //   "when": "!sideBarFocus && neovim.mode == 'normal'"
-  // },
-  {
-    "key": "shift+l",
-    "command": "workbench.action.nextSideBarView",
-    "when": "sideBarFocus && neovim.mode == 'normal'"
-  },
-  {
-    "key": "shift+h",
-    "command": "workbench.action.previousSideBarView",
-    "when": "sideBarFocus && neovim.mode == 'normal'"
   },
   {
     "key": "space f w",
@@ -177,4 +117,73 @@
     "key": "cmd+i",
     "command": "composerMode.agent"
   },
+  {
+    "key": "alt+j",
+    "command": "workbench.action.increaseViewHeight",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "alt+k",
+    "command": "workbench.action.decreaseViewHeight",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "alt+l",
+    "command": "workbench.action.increaseViewWidth",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "alt+h",
+    "command": "workbench.action.decreaseViewWidth",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "x",
+    "command": "vscode-neovim.send",
+    "args": "\"_x",
+    "when": "editorTextFocus && neovim.mode == 'normal'"
+  },
+  {
+    "key": "x",
+    "command": "vscode-neovim.send",
+    "args": "\"_x",
+    "when": "editorTextFocus && neovim.mode == 'visual'"
+  },
+  {
+    "key": "ctrl+e",
+    "command": "vscode-neovim.send",
+    "args": "<Esc>A",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "ctrl+a",
+    "command": "vscode-neovim.send",
+    "args": "<Esc>I",
+    "when": "editorTextFocus && neovim.mode == 'insert'"
+  },
+  {
+    "key": "space g n d",
+    "command": "git.openChange",
+    "when": "neovim.mode == normal"
+  },
+  {
+    "key": "space f o",
+    "command": "workbench.action.files.openFile",
+    "when": "neovim.mode == normal"
+  },
+  {
+    "key": "space t",
+    "command": "workbench.action.terminal.toggleTerminal",
+    "when": "neovim.mode == normal"
+  },
+  {
+    "key": "space u n",
+    "command": "undo",
+    "when": "neovim.mode == normal"
+  },
+  {
+    "key": "space u r",
+    "command": "redo",
+    "when": "neovim.mode == normal"
+  }
 ]

@@ -45,7 +45,6 @@
 	},
 	"editor.fontSize": 13,
 	"gitlens.codeLens.enabled": false,
-	"vim.useSystemClipboard": true,
 	"terminal.integrated.fontSize": 14,
 	"editor.unicodeHighlight.allowedCharacters": {
 		"事": true
