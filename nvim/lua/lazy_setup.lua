@@ -46,14 +46,31 @@ require("lazy").setup({
   ui = { backdrop = 100 },
   performance = {
     rtp = {
-      -- 無効化するrtpプラグイン
+      -- 無効化するrtpプラグイン（パフォーマンス最適化）
       disabled_plugins = {
         "gzip",
         "netrwPlugin",
         "tarPlugin",
         "tohtml",
         "zipPlugin",
+        "matchit", -- マッチングプラグイン
+        "matchparen", -- 括弧マッチング
+        "logiPat", -- ロジカルパターン
+        "rrhelper", -- リモートヘルプ
+        "spellfile_plugin", -- スペルファイルプラグイン
+        "getscript", -- スクリプト取得
+        "getscriptPlugin", -- スクリプト取得プラグイン
+        "vimball", -- vimball
+        "vimballPlugin", -- vimballプラグイン
+        "2html_plugin", -- HTML変換
+        "tutor_mode_plugin", -- チュートリアル
       },
     },
+    -- モジュールキャッシュを有効化
+    cache = {
+      enabled = true,
+    },
+    -- プラグインの遅延読み込みを有効化
+    reset_packpath = true,
   },
 } --[[@as LazyConfig]])

@@ -18,6 +18,12 @@ return {
     signcolumn = "auto", -- サインカラムを自動表示
     swapfile = false, -- スワップファイルを無効化
     wrap = true, -- テキストの折り返しを有効化
+    -- パフォーマンス最適化設定
+    synmaxcol = 200, -- 長い行のシンタックスハイライトを制限
+    updatetime = 100, -- カーソルホールド時間を短縮
+    timeoutlen = 500, -- キーマップタイムアウトを短縮
+    redrawtime = 1500, -- 再描画タイムアウト
+    maxmempattern = 1000, -- パターンマッチのメモリ使用量制限
   },
   g = { -- vim.g.<key>
     -- グローバル変数の設定（vim.g）
