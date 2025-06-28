@@ -77,3 +77,5 @@ LocalMakeFile
 
 # AI_ROLE
 ai_role.md
+
+**/.claude/settings.local.json

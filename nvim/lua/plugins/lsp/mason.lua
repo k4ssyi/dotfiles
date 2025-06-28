@@ -57,6 +57,7 @@ return {
         -- add more arguments for adding more null-ls sources
         "gitlint",
         "shellcheck",
+        "shfmt",
         "jsonlint",
         "markdownlint",
         "yamllint",

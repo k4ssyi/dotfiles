@@ -1,4 +1,3 @@
-
 [env]
 TERM = "xterm-256color"
 
@@ -29,7 +28,7 @@ history = 10000
 multiplier = 1
 
 [terminal.shell]
-args = ["-l", "-c", "tmux attach || tmux"]
+args = ["-l", "-c", "if tmux has-session 2>/dev/null; then tmux attach; else tmux new-session \\; run-shell 'tmux source-file ~/.tmux.conf'; fi"]
 program = "/bin/zsh"
 
 [window]

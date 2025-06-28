@@ -1,0 +1,35 @@
+# Sheldon Plugin Configuration
+# https://sheldon.cli.rs/
+
+shell = "zsh"
+
+[plugins]
+
+# Syntax highlighting (must be loaded first)
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
+
+# Catppuccin theme for syntax highlighting
+[plugins.catppuccin-zsh-syntax-highlighting]
+github = "catppuccin/zsh-syntax-highlighting"
+dir = "themes"
+use = ["catppuccin_mocha-zsh-syntax-highlighting.zsh"]
+
+# Auto suggestions
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+
+# Auto complete
+[plugins.zsh-autocomplete]
+github = "marlonrichert/zsh-autocomplete"
+
+# History search
+[plugins.history-search-multi-word]
+github = "zdharma-continuum/history-search-multi-word"
+
+# mise version manager (Homebrew installed)
+[plugins.mise]
+inline = 'eval "$(mise activate zsh)"'
+
+[templates]
+defer = "{{ hooks?.pre | nl }}{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}{{ hooks?.post | nl }}"

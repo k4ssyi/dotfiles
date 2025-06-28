@@ -3,77 +3,77 @@ eval "$(starship init zsh)"
 export LANG=ja_JP.UTF-8
 export LC_ALL=ja_JP.UTF-8
 
-### コマンド履歴の管理
+### zsh オプション設定
+# 履歴管理
 HISTFILE=~/.zsh_history
-# 重複を記録しない
-setopt hist_ignore_dups
+HISTSIZE=50000
+SAVEHIST=50000
+HISTTIMEFORMAT='%Y/%m/%d %H:%M:%S '
 
-# ヒストリに追加されるコマンド行が古いものと同じなら古いものを削除
-setopt hist_ignore_all_dups
+# 履歴オプション
+setopt EXTENDED_HISTORY          # 実行時刻とコマンド実行時間を記録
+setopt HIST_EXPIRE_DUPS_FIRST    # 履歴削除時に重複を優先削除
+setopt HIST_IGNORE_ALL_DUPS      # 重複コマンドは古いものを削除
+setopt HIST_IGNORE_DUPS          # 直前と同じコマンドは記録しない
+setopt HIST_IGNORE_SPACE         # スペースから始まるコマンドは記録しない
+setopt HIST_REDUCE_BLANKS        # 余分な空白を削除
+setopt HIST_SAVE_NO_DUPS         # 重複を保存しない
+setopt HIST_VERIFY               # 履歴展開時に確認
+setopt INC_APPEND_HISTORY        # リアルタイムで履歴を追加
+setopt SHARE_HISTORY             # セッション間で履歴を共有
 
-# 余分な空白は詰めて記録
-setopt hist_reduce_blanks 
+# その他の便利オプション
+setopt AUTO_CD                   # ディレクトリ名だけでcd
+setopt AUTO_PUSHD                # cdで自動的にpushd
+setopt PUSHD_IGNORE_DUPS         # 重複するディレクトリをpushdしない
+setopt CORRECT                   # コマンドのスペル修正
+setopt NO_BEEP                   # ビープ音を無効化
 
-# 開始と終了を記録
-setopt EXTENDED_HISTORY
-
-export HISTSIZE=20000
-export SAVEHIST=20000
-export HISTTIMEFORMAT='%Y/%m/%d %H:%M:%S '
-
-# vim alias
+# エディタとツール設定
 export EDITOR=nvim
-alias vim="nvim"
+export VISUAL=nvim
 
+# エイリアス設定
+alias vim="nvim"
+alias vi="nvim"
+
+# lsd aliases
 alias ls='lsd'
 alias l='lsd -l'
 alias ll='lsd -l'
 alias la='lsd -la'
 alias lt='lsd --tree'
+
+# その他のエイリアス
 alias grep='grep --color=auto'
 alias history='history -E -i 1'
+alias reload='source ~/.zshrc'
 alias aider="aider --model gpt-4.1 --multiline --watch-files --no-auto-commit --read ~/workspace/dotfiles/ai_role.md"
 
-### Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
-fi
-
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-### End of Zinit's installer chunk
-
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-source "${ZINIT_HOME}/zinit.zsh"
-
 # ----------------------------
-# Zinit plugins
+# Sheldon plugin manager
 # ----------------------------
+# 設定ファイルパスを明示的に指定
+export SHELDON_CONFIG_DIR="$HOME/workspace/dotfiles/zsh/sheldon"
+eval "$(sheldon source)"
 
-# シンタックスハイライト
-zinit light zsh-users/zsh-syntax-highlighting
-# 入力補完
-zinit light zsh-users/zsh-autosuggestions
-# zinit light zsh-users/zsh-completions
-zinit light marlonrichert/zsh-autocomplete
-# コマンド履歴を検索
-zinit light zdharma/history-search-multi-word
-zinit light asdf-vm/asdf
-
-## asdf
+## asdf completion setup
 fpath=(${ASDF_DIR}/completions $fpath)
 autoload -Uz compinit && compinit
 
-export PATH="/opt/homebrew/opt/jpeg/bin:$PATH"
-source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
-export PATH="/opt/homebrew/bin:$PATH"
+# PATH設定の最適化
+typeset -U path  # 重複を自動削除
+path=(
+    /opt/homebrew/bin
+    /opt/homebrew/opt/jpeg/bin
+    $path
+)
+export PATH
+
+# asdf-direnv integration
+if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc" ]]; then
+    source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+fi
 
 function auto_venv() {
   if [ -e ".venv/bin/activate" ]; then
