@@ -30,7 +30,7 @@ else
 fi
 
 # パッケージ定義
-declare -a core_tools=("git" "vim" "neovim" "tmux" "direnv" "jq" "wget" "curl" "fzf" "im-select")
+declare -a core_tools=("git" "vim" "neovim" "tmux" "jq" "wget" "curl" "fzf" "im-select")
 declare -a file_utils=("ghq" "tree" "coreutils" "lsd" "ripgrep")
 declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk")
 declare -a vcs_tools=("tig" "jesseduffield/lazygit/lazygit" "gh")
@@ -135,7 +135,7 @@ brew install --cask arc firefox
 
 # Development tools
 log_info "開発ツールをインストール中..."
-brew install --cask cursor alacritty dbeaver-community docker awscli aws-vault wireshark
+brew install --cask cursor alacritty dbeaver-community docker wireshark
 
 # Communication
 log_info "コミュニケーションアプリをインストール中..."
