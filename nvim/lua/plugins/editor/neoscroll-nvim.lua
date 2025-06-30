@@ -19,6 +19,7 @@ neoscroll.nvim - スムーズスクロール上書き設定
 
 return {
   "karb94/neoscroll.nvim",
+  event = "VeryLazy",
   opts = {
     hide_cursor = true,
     stop_eof = true,

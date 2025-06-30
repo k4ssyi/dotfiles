@@ -30,7 +30,7 @@ else
 fi
 
 # パッケージ定義
-declare -a core_tools=("git" "vim" "neovim" "tmux" "direnv" "jq" "wget" "curl" "fzf")
+declare -a core_tools=("git" "vim" "neovim" "tmux" "direnv" "jq" "wget" "curl" "fzf" "im-select")
 declare -a file_utils=("ghq" "tree" "coreutils" "lsd" "ripgrep")
 declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk")
 declare -a vcs_tools=("tig" "jesseduffield/lazygit/lazygit" "gh")
@@ -135,19 +135,19 @@ brew install --cask arc firefox
 
 # Development tools
 log_info "開発ツールをインストール中..."
-brew install --cask visual-studio-code cursor alacritty dbeaver-community docker
+brew install --cask cursor alacritty dbeaver-community docker awscli aws-vault wireshark
 
 # Communication
 log_info "コミュニケーションアプリをインストール中..."
-brew install --cask slack discord zoom
+brew install --cask slack discord zoom microsoft-teams
 
 # Productivity
 log_info "生産性向上アプリをインストール中..."
-brew install --cask notion figma bitwarden clipy appcleaner
+brew install --cask notion figma bitwarden clipy appcleaner libreoffice
 
 # Media and utilities
 log_info "メディア・ユーティリティアプリをインストール中..."
-brew install --cask spotify gyazo kindle
+brew install --cask spotify gyazo kindle amazon-music yt-music steam curseforge
 
 # System utilities
 log_info "システムユーティリティをインストール中..."
