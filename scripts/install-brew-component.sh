@@ -135,7 +135,7 @@ brew install --cask arc firefox
 
 # Development tools
 log_info "開発ツールをインストール中..."
-brew install --cask cursor alacritty dbeaver-community docker wireshark
+brew install --cask ghostty cursor dbeaver-community docker wireshark
 
 # Communication
 log_info "コミュニケーションアプリをインストール中..."
@@ -143,7 +143,7 @@ brew install --cask slack discord zoom microsoft-teams
 
 # Productivity
 log_info "生産性向上アプリをインストール中..."
-brew install --cask notion figma bitwarden clipy appcleaner libreoffice
+brew install --cask notion figma bitwarden clipy appcleaner libreoffice obsidian raycast
 
 # Media and utilities
 log_info "メディア・ユーティリティアプリをインストール中..."

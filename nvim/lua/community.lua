@@ -42,7 +42,6 @@ return {
 
   -- Editor enhancements
   { import = "astrocommunity.indent.mini-indentscope" },
-
   -- Language support
   { import = "astrocommunity.programming-language-support.csv-vim" },
 }

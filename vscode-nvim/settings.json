@@ -128,5 +128,6 @@
 	"editor.largeFileOptimizations": false,
 	"[json]": {
 		"editor.defaultFormatter": "biomejs.biome"
-	}
+	},
+	"cursor.general.disableHttp2": true
 }

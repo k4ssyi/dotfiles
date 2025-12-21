@@ -40,6 +40,7 @@ return {
         "vimls",
         "biome",
         "pylsp",
+        "tailwindcss",
       },
       settings = {
         ["pylsp"] = {

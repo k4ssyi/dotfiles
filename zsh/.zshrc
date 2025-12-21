@@ -48,7 +48,7 @@ alias lt='lsd --tree'
 alias grep='grep --color=auto'
 alias history='history -E -i 1'
 alias reload='source ~/.zshrc'
-alias aider="aider --model gpt-4.1 --multiline --watch-files --no-auto-commit --read ~/workspace/dotfiles/ai_role.md"
+alias aider="aider --model gpt-5 --multiline --watch-files --no-auto-commit --read ~/workspace/dotfiles/ai_role.md"
 
 # ----------------------------
 # Sheldon plugin manager
@@ -86,3 +86,4 @@ add-zsh-hook chpwd auto_venv
 
 # 初回読み込み時にも実行
 auto_venv
+eval "$(nodenv init -)"

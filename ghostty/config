@@ -1,0 +1,67 @@
+# Ghostty Configuration
+# Migrated from Alacritty configuration
+
+# Font Configuration
+font-family = Hack Nerd Font
+font-size = 13
+
+# Disable font features if needed (uncomment to use)
+# font-feature = -liga
+# font-feature = -calt
+
+# Window Settings
+window-theme = dark
+background-opacity = 0.95
+window-padding-x = 1
+window-padding-y = 1
+
+# Window Dimensions (in pixels - approximate equivalent to 180x52 chars)
+# window-width = 1440
+# window-height = 832
+
+# Cursor Style
+cursor-style = bar
+
+# Scrollback
+scrollback-limit = 10000
+
+# macOS Specific Settings
+macos-option-as-alt = true
+macos-titlebar-proxy-icon = hidden
+
+# Shell Integration
+shell-integration = zsh
+command = /bin/zsh -l -c "if tmux has-session 2>/dev/null; then tmux attach; else tmux new-session \\; run-shell 'tmux source-file ~/.tmux.conf'; fi"
+
+# Catppuccin Mocha Color Scheme
+# Primary Colors
+background = 1e1e2e
+foreground = d6d6d6
+
+# Cursor Colors
+cursor-color = d9d9d9
+cursor-text = 1e1e2e
+
+# Selection Colors (using similar to cursor)
+selection-background = d9d9d9
+selection-foreground = 1e1e2e
+
+# Normal Colors (ANSI 0-7)
+palette = 0=#181a1f
+palette = 1=#e86671
+palette = 2=#98c379
+palette = 3=#e5c07b
+palette = 4=#61afef
+palette = 5=#c678dd
+palette = 6=#54afbc
+palette = 7=#abb2bf
+
+# Bright Colors (ANSI 8-15)
+palette = 8=#5c6370
+palette = 9=#e86671
+palette = 10=#98c379
+palette = 11=#e5c07b
+palette = 12=#61afef
+palette = 13=#c678dd
+palette = 14=#54afbc
+palette = 15=#f7f7f7

@@ -7,7 +7,7 @@ macOS開発環境を最新ツールと設定で構築するためのdotfiles
 
 ## 特徴
 
-- **ターミナル**: Alacritty + Catppuccin Mochaテーマ
+- **ターミナル**: Ghostty + Catppuccin Mochaテーマ
 - **シェル**: Zsh + Sheldonプラグインマネージャー
 - **プロンプト**: Starship（最適化済み設定）
 - **エディタ**: Neovim + AstroNvimフレームワーク
@@ -121,7 +121,8 @@ dotfiles/
 │       └── plugins.toml
 ├── nvim/                   # Neovim設定
 ├── vscode-nvim/            # VSCode Neovim設定
-├── alacritty/              # ターミナル設定
+├── ghostty/                # Ghosttyターミナル設定
+├── alacritty/              # Alacrittyターミナル設定（バックアップ）
 ├── starship.toml           # プロンプト設定
 ├── tmux/                   # tmux設定
 ├── karabiner/              # キーマッピング設定
