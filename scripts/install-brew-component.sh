@@ -30,9 +30,10 @@ else
 fi
 
 # パッケージ定義
+brew tap daipeihust/tap
 declare -a core_tools=("git" "vim" "neovim" "tmux" "jq" "wget" "curl" "fzf" "im-select")
 declare -a file_utils=("ghq" "tree" "coreutils" "lsd" "ripgrep")
-declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk")
+declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk" "neofetch")
 declare -a vcs_tools=("tig" "jesseduffield/lazygit/lazygit" "gh")
 declare -a package_managers=("mas" "gpg" "sheldon" "mise")
 
@@ -145,17 +146,13 @@ brew install --cask slack discord zoom microsoft-teams
 log_info "生産性向上アプリをインストール中..."
 brew install --cask notion figma bitwarden clipy appcleaner libreoffice obsidian raycast
 
-# Media and utilities
-log_info "メディア・ユーティリティアプリをインストール中..."
-brew install --cask spotify gyazo kindle amazon-music yt-music steam curseforge
-
 # System utilities
 log_info "システムユーティリティをインストール中..."
 brew install --cask karabiner-elements logi-options-plus hammerspoon
 
 # Optional development tools
 log_info "追加開発ツールをインストール中..."
-brew install --cask postman jasper
+brew install --cask postman
 
 # App Store apps (requires App Store login)
 log_step "App Storeアプリケーションをインストール中..."

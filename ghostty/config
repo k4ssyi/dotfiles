@@ -11,7 +11,7 @@ font-size = 13
 
 # Window Settings
 window-theme = dark
-background-opacity = 0.95
+background-opacity = 0.90
 window-padding-x = 1
 window-padding-y = 1
 
@@ -31,7 +31,7 @@ macos-titlebar-proxy-icon = hidden
 
 # Shell Integration
 shell-integration = zsh
-command = /bin/zsh -l -c "if tmux has-session 2>/dev/null; then tmux attach; else tmux new-session \\; run-shell 'tmux source-file ~/.tmux.conf'; fi"
+command = /bin/zsh -l
 
 # Catppuccin Mocha Color Scheme
 # Primary Colors

@@ -99,3 +99,16 @@ auto_venv
 if command -v nodenv >/dev/null 2>&1; then
   eval "$(nodenv init -)"
 fi
+
+# ----------------------------
+# tmux自動起動設定
+# ----------------------------
+# tmuxがインストールされていて、かつtmuxセッション内でない場合にのみ自動起動
+if command -v tmux >/dev/null 2>&1 && [ -z "$TMUX" ]; then
+  # 既存のtmuxセッションがある場合はアタッチ、ない場合は新規作成
+  if tmux has-session 2>/dev/null; then
+    exec tmux attach
+  else
+    exec tmux new-session
+  fi
+fi
