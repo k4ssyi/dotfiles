@@ -57,6 +57,14 @@ alias aider="aider --model gpt-5 --multiline --watch-files --no-auto-commit --re
 export SHELDON_CONFIG_DIR="$HOME/workspace/dotfiles/zsh/sheldon"
 eval "$(sheldon source)"
 
+# ----------------------------
+# mise (version manager)
+# ----------------------------
+# miseの初期化（Node.js、Python、Go、Rubyなどのバージョン管理）
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi
+
 ## asdf completion setup
 fpath=(${ASDF_DIR}/completions $fpath)
 autoload -Uz compinit && compinit
@@ -86,4 +94,8 @@ add-zsh-hook chpwd auto_venv
 
 # 初回読み込み時にも実行
 auto_venv
-eval "$(nodenv init -)"
+
+# nodenvの初期化（インストールされている場合のみ）
+if command -v nodenv >/dev/null 2>&1; then
+  eval "$(nodenv init -)"
+fi

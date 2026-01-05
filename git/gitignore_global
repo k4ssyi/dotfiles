@@ -79,3 +79,5 @@ LocalMakeFile
 ai_role.md
 
 **/.claude/settings.local.json
+
+mise.toml
