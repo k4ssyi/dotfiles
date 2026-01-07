@@ -25,7 +25,7 @@ return {
     "nvimtools/none-ls-extras.nvim",
   },
   opts = function(_, opts)
-    local null_ls = require("null-ls")
+    local null_ls = require "null-ls"
     -- Check supported formatters and linters
     -- https://github.com/nvimtools/none-ls.nvim/tree/main/lua/null-ls/builtins/formatting
     -- https://github.com/nvimtools/none-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
@@ -33,10 +33,45 @@ return {
     -- Only insert new sources, do not replace the existing ones
     -- (If you wish to replace, use `opts.sources = {}` instead of the `list_insert_unique` function)
     opts.sources = require("astrocore").list_insert_unique(opts.sources, {
-      -- Set a formatter
-      null_ls.builtins.formatting.biome.with({
-        condition = function(utils) return utils.has_file({ "biome.json", "biome.jsonc" }) end,
-      }),
+      -- biome.json/biome.jsonc があればBiomeを使用
+      null_ls.builtins.formatting.biome.with {
+        condition = function(utils) return utils.has_file { "biome.json", "biome.jsonc" } end,
+      },
+
+      -- Biomeがない場合に.prettierrc.*などがあればPrettierを使用
+      null_ls.builtins.formatting.prettier.with {
+        condition = function(utils)
+          return not utils.has_file { "biome.json", "biome.jsonc" }
+            and utils.has_file {
+              ".prettierrc",
+              ".prettierrc.json",
+              ".prettierrc.json5",
+              ".prettierrc.yml",
+              ".prettierrc.yaml",
+              ".prettierrc.js",
+              ".prettierrc.cjs",
+              ".prettierrc.mjs",
+              ".prettierrc.toml",
+              "prettier.config.js",
+              "prettier.config.cjs",
+              "prettier.config.mjs",
+            }
+        end,
+        filetypes = {
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact",
+          "json",
+          "jsonc",
+          "yaml",
+          "markdown",
+          "html",
+          "css",
+          "scss",
+          "less",
+        },
+      },
     })
     return opts
   end,

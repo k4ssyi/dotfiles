@@ -23,7 +23,9 @@ return {
   disabled = { -- 指定した言語サーバーのフォーマット機能を無効化
     -- StyLuaを使ってluaコードをフォーマットしたい場合はlua_lsのフォーマット機能を無効化
     -- "lua_ls",
+    -- TypeScript/JavaScript関連（Biome/Prettierに任せる）
     "tsserver",
+    "vtsls",
     "pylsp",
   },
   timeout_ms = require("utils").CONSTANTS.TIMEOUT_MS * 10, -- デフォルトフォーマットタイムアウト（10秒）

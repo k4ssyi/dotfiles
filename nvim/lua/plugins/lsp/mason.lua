@@ -39,6 +39,7 @@ return {
         "sqlls",
         "vimls",
         "biome",
+        "eslint",
         "pylsp",
         "tailwindcss",
       },

@@ -10,7 +10,7 @@ config/mappings.lua - キーマッピング設定
 
 ]]
 
-local utils = require("utils")
+local utils = require "utils"
 
 -- 基本的なライン移動マッピングをutils.luaから取得
 local base_mappings = utils.get_line_movement_mappings()
@@ -39,9 +39,7 @@ local custom_mappings = {
     -- "Buffer"グループのマッピング
     ["<Leader>bd"] = {
       function()
-        require("astroui.status.heirline").buffer_picker(
-          function(bufnr) require("astrocore.buffer").close(bufnr) end
-        )
+        require("astroui.status.heirline").buffer_picker(function(bufnr) require("astrocore.buffer").close(bufnr) end)
       end,
       desc = "タブラインからバッファを閉じる",
     },
