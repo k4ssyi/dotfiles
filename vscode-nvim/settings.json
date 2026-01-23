@@ -78,9 +78,6 @@
 	"editor.fontFamily": "Hack Nerd Font",
 	"debug.console.fontFamily": "Hack Nerd Font",
 	"gitlens.views.worktrees.showBranchComparison": "branch",
-	"extensions.experimental.affinity": {
-		"asvetliakov.vscode-neovim": 1
-	},
 	"vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
 	"diffEditor.ignoreTrimWhitespace": true,
 	"git.autofetch": true,

@@ -1,0 +1,38 @@
+{
+  "env": {
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_BUG_COMMAND": "1",
+    "API_TIMEOUT_MS": "600000",
+    "DISABLE_AUTOUPDATER": "0",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  },
+  "permissions": {
+    "deny": [],
+    "ask": []
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); tool_name=$(jq -r '.tool_name' <<< \"$input\"); if command -v osascript >/dev/null 2>&1; then osascript -e \"display notification \\\"$tool_name completed\\\" with title \\\"Claude Code\\\"\"; elif command -v notify-send >/dev/null 2>&1; then notify-send 'Claude Code' \"$tool_name completed\"; fi"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "python3 ~/.claude/scripts/context-monitor.py"
+  },
+  "enabledPlugins": {
+    "code-simplifier@claude-plugins-official": true,
+    "context7@claude-plugins-official": true
+  },
+  "language": "Japanese",
+  "alwaysThinkingEnabled": true
+}

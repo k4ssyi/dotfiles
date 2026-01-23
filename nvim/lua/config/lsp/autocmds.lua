@@ -63,12 +63,12 @@ local lsp_actions = {
     format_sync(client, bufnr)
   end,
   yamlls = function(client, bufnr) format_sync(client, bufnr) end,
-  tsserver = function(client, bufnr)
+  vtsls = function(client, bufnr)
     organize_imports_sync(client, bufnr)
     format_sync(client, bufnr)
   end,
   lua_ls = function(client, bufnr) format_sync(client, bufnr) end,
-  -- 必要に応じて他のLSPも追加
+  eslint = function(client, bufnr) fix_all_sync(client, bufnr) end,
 }
 
 vim.api.nvim_create_autocmd("BufWritePre", {
@@ -79,7 +79,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
       local action = lsp_actions[client.name]
       if action then
         action(client, bufnr)
-        break -- 複数LSPがattachされていても最初の1つだけ実行
       end
     end
   end,
