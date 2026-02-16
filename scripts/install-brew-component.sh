@@ -11,11 +11,15 @@ setup_cleanup_trap
 
 log_info "Homebrewコンポーネントのインストールを開始します"
 
-# アーキテクチャ情報の読み込み
-if [[ -f "/tmp/dotfiles_arch_info.sh" ]]; then
+# アーキテクチャ情報の読み込み（安全な一時ファイル or 環境変数から）
+if [[ -n "${DOTFILES_ARCH_INFO_FILE:-}" && -f "$DOTFILES_ARCH_INFO_FILE" ]]; then
 	# shellcheck source=/dev/null
-	source "/tmp/dotfiles_arch_info.sh"
-	log_info "アーキテクチャ情報を読み込みました: $ARCH"
+	source "$DOTFILES_ARCH_INFO_FILE"
+	log_info "アーキテクチャ情報を読み込みました: ${ARCH:-unknown}"
+elif [[ -n "${DOTFILES_HOMEBREW_PREFIX:-}" ]]; then
+	export HOMEBREW_PREFIX="$DOTFILES_HOMEBREW_PREFIX"
+	export ARCH="${DOTFILES_ARCH:-$(uname -m)}"
+	log_info "環境変数からアーキテクチャ情報を読み込みました: $ARCH"
 fi
 
 # Homebrewの初期化
@@ -148,7 +152,7 @@ brew install --cask notion figma bitwarden clipy appcleaner libreoffice obsidian
 
 # System utilities
 log_info "システムユーティリティをインストール中..."
-brew install --cask karabiner-elements logi-options-plus hammerspoon
+brew install --cask karabiner-elements logi-options-plus hammerspoon tailscale
 
 # Optional development tools
 log_info "追加開発ツールをインストール中..."

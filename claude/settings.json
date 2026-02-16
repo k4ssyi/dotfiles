@@ -56,5 +56,5 @@
   "outputStyle": "explanatory",
   "language": "Japanese",
   "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": false
 }

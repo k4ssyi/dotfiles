@@ -192,8 +192,8 @@ measure_time() {
 
 # 一時ファイルのクリーンアップ
 cleanup_temp_files() {
-	if [[ -f "/tmp/dotfiles_arch_info.sh" ]]; then
-		rm -f "/tmp/dotfiles_arch_info.sh"
+	if [[ -n "${DOTFILES_ARCH_INFO_FILE:-}" && -f "$DOTFILES_ARCH_INFO_FILE" ]]; then
+		rm -f "$DOTFILES_ARCH_INFO_FILE"
 		log_info "一時ファイルをクリーンアップしました"
 	fi
 }
@@ -203,15 +203,24 @@ setup_cleanup_trap() {
 	trap cleanup_temp_files EXIT
 }
 
-# アーキテクチャ情報の保存
+# アーキテクチャ情報の保存（環境変数方式）
 save_arch_info() {
 	local homebrew_prefix
 	homebrew_prefix=$(get_homebrew_prefix)
-	cat >/tmp/dotfiles_arch_info.sh <<EOF
+
+	# 環境変数に直接設定（ファイルを介さない安全な方式）
+	export DOTFILES_HOMEBREW_PREFIX="$homebrew_prefix"
+	export DOTFILES_ARCH="$(uname -m)"
+
+	# 子プロセスに渡す必要がある場合のみ、安全な一時ファイルを使用
+	DOTFILES_ARCH_INFO_FILE=$(mktemp "${TMPDIR:-/tmp}/dotfiles_arch_XXXXXX.sh")
+	export DOTFILES_ARCH_INFO_FILE
+	cat >"$DOTFILES_ARCH_INFO_FILE" <<EOF
 #!/usr/bin/env bash
 export HOMEBREW_PREFIX="$homebrew_prefix"
 export ARCH="$(uname -m)"
 EOF
+	chmod 600 "$DOTFILES_ARCH_INFO_FILE"
 	log_info "アーキテクチャ情報を保存しました: $(uname -m)"
 }
 

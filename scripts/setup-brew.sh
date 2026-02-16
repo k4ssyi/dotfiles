@@ -21,10 +21,19 @@ if command_exists brew; then
 else
 	log_step "Homebrewをインストール中..."
 
-	# セキュリティ：公式インストールスクリプトの実行
-	if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+	# セキュリティ：スクリプトをダウンロード後に実行（pipe-to-shellを回避）
+	install_script=$(mktemp "${TMPDIR:-/tmp}/brew_install_XXXXXX.sh")
+	if ! curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o "$install_script"; then
+		rm -f "$install_script"
+		handle_error "Homebrewインストールスクリプトのダウンロードに失敗しました"
+	fi
+	log_info "インストールスクリプトをダウンロードしました: $install_script"
+	log_info "SHA256: $(shasum -a 256 "$install_script" | cut -d' ' -f1)"
+	if ! /bin/bash "$install_script"; then
+		rm -f "$install_script"
 		handle_error "Homebrewのインストールに失敗しました"
 	fi
+	rm -f "$install_script"
 
 	# アーキテクチャに応じたPATH設定
 	homebrew_prefix=$(get_homebrew_prefix)

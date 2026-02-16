@@ -75,6 +75,7 @@ scripts_to_run=(
 	"scripts/install-git-conf.sh:Git設定"
 	"scripts/install-vim-conf.sh:Neovim設定"
 	"scripts/install-tmux-conf.sh:tmux設定"
+	"scripts/install-remote-access.sh:リモートアクセス設定"
 	"scripts/install-hammerspoon.sh:Hammerspoon設定"
 	"scripts/install-karabiner.sh:Karabiner設定"
 )

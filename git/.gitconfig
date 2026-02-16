@@ -1,7 +1,12 @@
 [user]
-	# ユーザー情報の設定
-	email = kasikasi00@gmail.com
-	name = k4ssyi
+	# ユーザー情報はローカル設定ファイルで管理（リポジトリに含めない）
+	# ~/.gitconfig.local に以下を記述:
+	#   [user]
+	#     email = your@email.com
+	#     name = yourname
+
+[include]
+	path = ~/.gitconfig.local
 
 [column]
 	# カラムのUI設定
@@ -58,6 +63,13 @@
 [commit]
 	# コミット時に詳細情報を表示
 	verbose = true
+	# コミットにSSH署名を付与
+	gpgsign = true
+
+[gpg]
+	# 署名形式にSSHを使用（GPG鍵管理が不要）
+	format = ssh
+	# user.signingkey は ~/.gitconfig.local で設定（install-git-conf.sh が自動検出）
 
 [rerere]
 	# マージの競合解決を記憶
@@ -80,6 +92,10 @@
 [merge]
 	# マージ時の競合スタイル設定
 	conflictstyle = zdiff3 
+
+[credential]
+	# macOSキーチェーンで認証情報を安全に管理
+	helper = osxkeychain
 
 [pull]
 	# プル時にリベースを使用

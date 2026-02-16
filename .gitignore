@@ -1,1 +1,27 @@
 .aider*
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Secrets & credentials
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+!id_ed25519.pub
+id_ecdsa
+id_ecdsa.*
+!id_ecdsa.pub
+authorized_keys
+known_hosts
+*.env
+.env.*
+!.env.example
+credentials.json
+.gitconfig.local

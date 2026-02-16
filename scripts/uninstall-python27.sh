@@ -45,8 +45,18 @@ if [[ ! "$response" =~ ^[Yy]$ ]]; then
 	exit 0
 fi
 
-# 削除実行（各ファイル個別に確認）
+# 削除実行（各ファイル個別に確認、安全性ガード付き）
 for target in "${targets_to_remove[@]}"; do
+	# 安全性チェック: 空文字列やルートパスの防止
+	if [[ -z "$target" || "$target" == "/" ]]; then
+		log_error "無効な削除対象: '$target'（スキップ）"
+		continue
+	fi
+	# 安全性チェック: 想定されるパスプレフィックスの検証
+	if [[ "$target" != /Library/* && "$target" != /Applications/* ]]; then
+		log_error "予期しないパス: '$target'（スキップ）"
+		continue
+	fi
 	if [[ -d "$target" ]]; then
 		log_step "$target を削除中..."
 		if sudo rm -rf "$target"; then

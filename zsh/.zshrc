@@ -83,10 +83,24 @@ if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc" ]]; then
     source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 fi
 
+# 信頼されたディレクトリ配下でのみ自動activateする
+# $HOME/workspace 配下のみ許可（必要に応じて追加）
+AUTO_VENV_TRUSTED_DIRS=("$HOME/workspace")
+
 function auto_venv() {
   if [ -e ".venv/bin/activate" ]; then
-      source .venv/bin/activate
-      echo "Activated virtual environment in $(pwd)"
+      local current_dir="$(pwd)"
+      local trusted=false
+      for dir in "${AUTO_VENV_TRUSTED_DIRS[@]}"; do
+          if [[ "$current_dir" == "$dir" || "$current_dir" == "$dir/"* ]]; then
+              trusted=true
+              break
+          fi
+      done
+      if $trusted; then
+          source .venv/bin/activate
+          echo "Activated virtual environment in $current_dir"
+      fi
   fi
 }
 autoload -Uz add-zsh-hook

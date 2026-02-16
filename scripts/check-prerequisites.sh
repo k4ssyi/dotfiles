@@ -4,7 +4,7 @@ echo "🔍 Checking system prerequisites..."
 echo "================================="
 
 # Exit on any error
-set -e
+set -euo pipefail
 
 # 1. Check macOS only
 if [[ "$(uname)" != "Darwin" ]]; then
@@ -49,8 +49,9 @@ else
 	exit 1
 fi
 
-# Save architecture info for other scripts
-echo "export HOMEBREW_PREFIX=\"$HOMEBREW_PREFIX\"" >/tmp/dotfiles_arch_info.sh
+# Save architecture info for other scripts (環境変数方式)
+export DOTFILES_HOMEBREW_PREFIX="$HOMEBREW_PREFIX"
+export DOTFILES_ARCH="$ARCH"
 
 # 5. Check for admin privileges (for Python 2.7 removal)
 echo "🔐 Checking admin privileges..."
