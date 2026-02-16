@@ -30,6 +30,7 @@ return {
     -- デフォルト設定を定義
     local default_config = {
       defaults = {
+        git_worktrees = vim.g.git_worktrees,
         prompt_prefix = "🔍 ",
         selection_caret = " ",
         entry_prefix = "  ",

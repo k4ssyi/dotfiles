@@ -9,8 +9,28 @@
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
   },
   "permissions": {
-    "deny": [],
-    "ask": []
+    "deny": [
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~/*)",
+      "Bash(rm -rf $HOME/*)",
+      "Bash(sudo *)",
+      "Bash(su *)",
+      "Bash(git config *)",
+      "Bash(brew install *)",
+      "Bash(chmod 777 *)",
+      "Bash(chmod -R 777 /*)",
+      "Bash(dd *)",
+      "Bash(mkfs *)",
+      "Bash(shutdown *)",
+      "Bash(reboot *)",
+      "Bash(curl * | bash)",
+      "Bash(wget * | bash)",
+      "Bash(curl * | sh)",
+      "Bash(wget * | sh)",
+      "Bash(gh repo delete *)"
+    ],
+    "ask": [],
+    "defaultMode": "default"
   },
   "hooks": {
     "PostToolUse": [
@@ -33,6 +53,8 @@
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true
   },
+  "outputStyle": "explanatory",
   "language": "Japanese",
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true
 }

@@ -18,6 +18,27 @@ init.lua - Neovim起動時のエントリーポイント
 
 ]]
 
+-- Git worktree検出（telescope.nvim用）
+local function detect_git_worktrees()
+  local handle = io.popen("git rev-parse --git-dir 2>/dev/null")
+  if handle then
+    local gitdir = handle:read("*a"):gsub("\n", "")
+    handle:close()
+    if gitdir and gitdir:match("worktrees") then
+      local toplevel_handle = io.popen("git rev-parse --show-toplevel 2>/dev/null")
+      if toplevel_handle then
+        local toplevel = toplevel_handle:read("*a"):gsub("\n", "")
+        toplevel_handle:close()
+        if toplevel ~= "" and gitdir ~= "" then
+          return { { toplevel = toplevel, gitdir = gitdir } }
+        end
+      end
+    end
+  end
+  return nil
+end
+vim.g.git_worktrees = detect_git_worktrees()
+
 local lazypath = vim.env.LAZY or vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 if not (vim.env.LAZY or (vim.uv or vim.loop).fs_stat(lazypath)) then
   -- stylua: ignore

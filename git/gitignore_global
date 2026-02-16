@@ -81,6 +81,6 @@ ai_role.md
 **/.claude/settings.local.json
 **/.mcp.json
 
-CLAUDE.md
+CLAUDE.local.md
 
 mise.toml
