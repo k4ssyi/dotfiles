@@ -1,0 +1,14 @@
+# マシン固有のホスト設定（鍵パス等）を読み込む
+Include config.local
+
+# グローバル設定
+Host *
+    # 接続維持（モバイル回線でのSSH切断を早期検知）
+    ServerAliveInterval 15
+    ServerAliveCountMax 3
+    # macOS Keychain連携
+    AddKeysToAgent yes
+    UseKeychain yes
+    # セキュリティ強化
+    HashKnownHosts yes
+    IdentitiesOnly yes

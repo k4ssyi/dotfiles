@@ -33,7 +33,46 @@ else
 	fi
 fi
 
-# --- 2. sshd_config.d drop-inファイルの配置 ---
+# --- 2. SSHクライアント設定の配置 ---
+log_step "SSHクライアント設定を配置中..."
+ssh_config_source="$(pwd)/ssh/config"
+ssh_config_target="${HOME}/.ssh/config"
+
+if [[ -f "$ssh_config_source" ]]; then
+	mkdir -p "${HOME}/.ssh"
+	chmod 700 "${HOME}/.ssh"
+
+	if [[ -e "$ssh_config_target" && ! -L "$ssh_config_target" ]]; then
+		backup_path="${HOME}/.dotfiles_backup/ssh_config.$(date +%Y%m%d%H%M%S)"
+		mkdir -p "${HOME}/.dotfiles_backup"
+		cp "$ssh_config_target" "$backup_path"
+		log_info "既存のSSHクライアント設定をバックアップしました: $backup_path"
+	fi
+
+	create_symlink "$ssh_config_source" "$ssh_config_target" true
+	chmod 600 "$ssh_config_target"
+
+	# config.local が未作成の場合、テンプレートを生成
+	ssh_config_local="${HOME}/.ssh/config.local"
+	if [[ ! -f "$ssh_config_local" ]]; then
+		cat > "$ssh_config_local" <<-'TEMPLATE'
+		# マシン固有のホスト設定（このファイルはgit管理外）
+		# Host github.com
+		#     HostName github.com
+		#     User git
+		#     IdentityFile ~/.ssh/id_ed25519
+		TEMPLATE
+		chmod 600 "$ssh_config_local"
+		log_info "config.local テンプレートを作成しました: $ssh_config_local"
+		log_warning "ホスト別の鍵パス等を config.local に記載してください"
+	else
+		log_info "config.local は既に存在します: $ssh_config_local"
+	fi
+else
+	log_warning "SSHクライアント設定ファイルが見つかりません: $ssh_config_source"
+fi
+
+# --- 3. sshd_config.d drop-inファイルの配置 ---
 log_step "sshd硬化設定を配置中..."
 sshd_config_source="$(pwd)/ssh/sshd_config.d/99-remote-access.conf"
 sshd_config_target="/etc/ssh/sshd_config.d/99-remote-access.conf"
@@ -49,16 +88,23 @@ if [[ ! -d "/etc/ssh/sshd_config.d" ]]; then
 fi
 
 # /etc/ssh/sshd_configにIncludeディレクティブがあるか確認
-if ! sudo grep -q "^Include /etc/ssh/sshd_config.d/\*.conf" /etc/ssh/sshd_config; then
+if ! sudo grep -q "^Include /etc/ssh/sshd_config.d/" /etc/ssh/sshd_config; then
 	log_warning "/etc/ssh/sshd_config に Include ディレクティブがありません"
 	log_info "以下を /etc/ssh/sshd_config の先頭に追加してください:"
 	log_info "  Include /etc/ssh/sshd_config.d/*.conf"
 fi
 
-if sudo cp "$sshd_config_source" "$sshd_config_target"; then
-	sudo sed -i '' "s/__CURRENT_USER__/$(whoami)/" "$sshd_config_target"
+actual_user="${SUDO_USER:-$(whoami)}"
+if [[ "$actual_user" == "root" ]]; then
+	handle_error "root ユーザーでの実行は許可されていません。通常ユーザーで sudo 経由で実行してください"
+fi
+
+tmpfile=$(mktemp)
+sed "s/__CURRENT_USER__/$actual_user/" "$sshd_config_source" > "$tmpfile"
+if sudo cp "$tmpfile" "$sshd_config_target"; then
+	rm -f "$tmpfile"
 	sudo chmod 644 "$sshd_config_target"
-	log_success "sshd硬化設定を配置しました（AllowUsers=$(whoami)）: $sshd_config_target"
+	log_success "sshd硬化設定を配置しました（AllowUsers=${actual_user}）: ${sshd_config_target}"
 
 	# 設定の構文チェックとsshd再起動
 	if sudo sshd -t 2>/dev/null; then
@@ -75,10 +121,11 @@ if sudo cp "$sshd_config_source" "$sshd_config_target"; then
 		log_info "問題のある設定ファイルを削除しました"
 	fi
 else
+	rm -f "$tmpfile"
 	log_warning "sshd設定の配置に失敗しました"
 fi
 
-# --- 3. SSH鍵ペアの生成 ---
+# --- 4. SSH鍵ペアの生成 ---
 log_step "SSH鍵ペアを確認中..."
 ssh_key_path="${HOME}/.ssh/id_ed25519_mobile"
 
@@ -101,7 +148,7 @@ else
 	fi
 fi
 
-# --- 4. authorized_keysへの公開鍵追加 ---
+# --- 5. authorized_keysへの公開鍵追加 ---
 log_step "authorized_keysを設定中..."
 authorized_keys="${HOME}/.ssh/authorized_keys"
 public_key_path="${ssh_key_path}.pub"
@@ -115,12 +162,13 @@ public_key=$(cat "$public_key_path")
 if [[ -f "$authorized_keys" ]] && grep -qF "$public_key" "$authorized_keys"; then
 	log_info "公開鍵は既にauthorized_keysに登録済みです"
 else
-	echo "$public_key" >>"$authorized_keys"
+	# restrict: 全転送を無効化、pty: tmuxセッションに必要なターミナル割当のみ許可
+	echo "restrict,pty ${public_key}" >>"$authorized_keys"
 	chmod 600 "$authorized_keys"
-	log_success "公開鍵をauthorized_keysに追加しました"
+	log_success "公開鍵をauthorized_keysに追加しました（restrict,pty制約付き）"
 fi
 
-# --- 5. Tailscaleセットアップガイダンス ---
+# --- 6. Tailscaleセットアップガイダンス ---
 log_step "Tailscaleの状態を確認中..."
 echo ""
 echo "================================="
@@ -150,17 +198,19 @@ log_info "  2. 「Log in」からアカウントにログイン"
 log_info "  3. Tailscale管理画面でSSH ACLを確認"
 echo ""
 
-# --- 6. iPhone側の設定ガイダンス ---
+# --- 7. iPhone側の設定ガイダンス ---
 echo "================================="
 echo "  iPhone側の設定ガイド"
 echo "================================="
 echo ""
 log_info "1. iPhoneにTailscaleアプリをインストールし、同じアカウントでログイン"
-log_info "2. iPhoneにSSHクライアントをインストール（Blink Shell推奨）"
+log_info "2. iPhoneにSSHクライアントをインストール:"
+log_info "     無料: Secure ShellFish / Termius（基本機能無料）"
+log_info "     有料: Blink Shell（Mosh対応）/ Prompt 3"
 log_info ""
 log_warning "=== SSH鍵の安全な設定方法 ==="
 log_info "  【推奨】iPhone側で鍵ペアを生成する方式（秘密鍵がネットワークを経由しない）:"
-log_info "    a. Blink Shell等でed25519鍵ペアを生成"
+log_info "    a. SSHクライアントアプリ内でed25519鍵ペアを生成"
 log_info "    b. 公開鍵のみをMacの authorized_keys に追加:"
 log_info "       echo '<公開鍵>' >> ~/.ssh/authorized_keys"
 log_info ""

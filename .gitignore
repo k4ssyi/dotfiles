@@ -25,3 +25,4 @@ known_hosts
 !.env.example
 credentials.json
 .gitconfig.local
+config.local
