@@ -24,15 +24,23 @@ AskUserQuestionツールでレビュー対象を確認する。
 質問: 「レビュー対象のdiffを選択してください」
 header: "Diff対象"
 選択肢:
-- 「developブランチとの差分」: developブランチからHEADまでの全変更をレビュー（PR作成前に最適）
+- 「親ブランチとの差分」: 分岐元ブランチからHEADまでの全変更をレビュー（PR作成前に最適）
 - 「現在の変更」: ステージ済み＋未ステージの作業中の変更をレビュー（実装途中のチェックに最適）
 ```
 
-選択に応じたdiff取得:
+#### 親ブランチの自動検出
+
+「親ブランチとの差分」が選択された場合、以下の手順でベースブランチを特定する。
+
+1. デフォルトブランチの検出: `git symbolic-ref refs/remotes/origin/HEAD` からリモートのデフォルトブランチを取得
+2. 失敗した場合のフォールバック: `main` → `master` → `develop` の順に `git rev-parse --verify` で存在確認
+3. いずれも見つからない場合: AskUserQuestionでベースブランチ名をユーザーに確認
+
+#### diff取得コマンド
 
 | 選択 | コマンド |
 |------|---------|
-| developブランチとの差分 | `git diff develop..HEAD` |
+| 親ブランチとの差分 | `git diff $(git merge-base {base_branch} HEAD)..HEAD` |
 | 現在の変更 | `git diff HEAD` |
 
 diffが空の場合、ユーザーに通知してレビューを中断する。
@@ -75,6 +83,7 @@ Taskツールで選択したエージェントを**単一メッセージで並�
 全エージェントの結果を `references/report-template.md` の形式に従って統合する。
 
 統合時のルール:
+
 - 複数エージェントが同じ箇所を指摘した場合、検出元を併記して重複を排除する
 - 重要度の高い順（BLOCKER > CRITICAL > MAJOR > MINOR）に並べる
 - 良い点セクションを必ず含める

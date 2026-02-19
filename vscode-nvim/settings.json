@@ -12,7 +12,6 @@
 		"lang": "ja"
 	},
 	"workbench.iconTheme": "vscode-icons",
-	"tabnine.experimentalAutoImports": true,
 	"editor.bracketPairColorization.enabled": true,
 	"files.autoSave": "afterDelay",
 	"files.autoSaveDelay": 1500,
@@ -21,12 +20,10 @@
 		"source.organizeImports.biome": "explicit"
 	},
 	"[typescript]": {
-		"editor.defaultFormatter": "biomejs.biome",
-		"editor.formatOnSave": true
+		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"[typescriptreact]": {
-		"editor.defaultFormatter": "biomejs.biome",
-		"editor.formatOnSave": true
+		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"editor.rename.enablePreview": false,
 	"editor.guides.bracketPairs": true,
@@ -55,30 +52,20 @@
 	"vscode-neovim.mouseSelectionStartVisualMode": true,
 	"editor.scrollBeyondLastLine": false,
 	"vscode-neovim.neovimInitVimPaths.darwin": "~/.config/vscode-nvim/init.lua",
-	"docker.host": "unix://${HOME}/.lima/docker_x86_64/sock/docker.sock",
 	"diffEditor.renderSideBySide": true,
 	"javascript.inlayHints.parameterNames.enabled": "literals",
 	"editor.unicodeHighlight.ambiguousCharacters": false,
-	"python.linting.flake8Enabled": true,
 	"editor.rulers": [
 		99,
 		120
 	],
-	"python.linting.maxNumberOfProblems": 8000,
-	"python.formatting.autopep8Args": [
-		"--aggressive",
-		"--aggressive"
-	],
-	"[python]": {
-		"editor.formatOnType": true
-	},
 	"settingsSync.ignoredSettings": [
 		"editor.fontFamily"
 	],
 	"editor.fontFamily": "Hack Nerd Font",
 	"debug.console.fontFamily": "Hack Nerd Font",
 	"gitlens.views.worktrees.showBranchComparison": "branch",
-	"vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
+	"vscode-neovim.neovimExecutablePaths.darwin": "nvim",
 	"diffEditor.ignoreTrimWhitespace": true,
 	"git.autofetch": true,
 	"window.zoomLevel": 1,
