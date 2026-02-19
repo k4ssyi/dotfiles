@@ -21,11 +21,14 @@ fi
 log_step "開発ツールをインストール中..."
 
 # miseは自動的にツールを検出・インストールするため、プラグイン管理は不要
+# NOTE: @lts/@latest はインストール時点の最新に解決される
+# プロジェクト固有の固定バージョンは .tool-versions で管理すること
 tools=(
-	"nodejs@20.11.0"
-	"python@3.11.10"
+	"nodejs@lts"
+	"python@latest"
 	"golang@latest"
 	"ruby@latest"
+	"pnpm@latest"
 )
 
 for tool in "${tools[@]}"; do
@@ -46,11 +49,11 @@ done
 log_step "グローバルバージョンを設定中..."
 
 if [[ "$DRYRUN_MODE" == "true" ]]; then
-	log_dryrun "グローバルバージョン設定: nodejs@20.11.0, python@3.11.10"
+	log_dryrun "グローバルバージョン設定: nodejs@lts, python@latest"
 else
 	# ホームディレクトリにグローバル設定のみ
-	mise use --global nodejs@20.11.0
-	mise use --global python@3.11.10
+	mise use --global nodejs@lts
+	mise use --global python@latest
 	log_success "グローバルバージョンを設定しました"
 	
 	# 従来のバージョンファイル（.nvmrc、.python-versionなど）の自動認識を有効化

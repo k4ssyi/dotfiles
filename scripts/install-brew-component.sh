@@ -33,146 +33,141 @@ else
 	log_warning "Homebrewの更新・アップグレードに失敗しましたが、継続します"
 fi
 
+# ----------------------------
+# formula/cask 共通インストール関数
+# ----------------------------
+
+# formulaパッケージをインストールする共通関数
+# 使い方: install_formula_packages "カテゴリ名" "${array[@]}"
+install_formula_packages() {
+	local label="$1"
+	shift
+	local -a packages=("$@")
+
+	log_step "${label}をインストール中..."
+	local total=${#packages[@]}
+	for i in "${!packages[@]}"; do
+		local package="${packages[$i]}"
+		local package_short="${package##*/}" # tap prefix を除いた実名
+		show_progress $((i + 1)) "$total" "$package"
+
+		if is_brew_package_installed "$package_short"; then
+			log_info "$package は既にインストールされています"
+		else
+			if brew install "$package"; then
+				log_success "$package のインストールが完了しました"
+			else
+				log_warning "$package のインストールに失敗しました（スキップ）"
+			fi
+		fi
+	done
+}
+
+# caskパッケージをインストールする共通関数
+# 使い方: install_cask_packages "カテゴリ名" "${array[@]}"
+install_cask_packages() {
+	local label="$1"
+	shift
+	local -a packages=("$@")
+
+	log_info "${label}をインストール中..."
+	for package in "${packages[@]}"; do
+		if is_brew_package_installed "$package" "cask"; then
+			log_info "$package は既にインストールされています"
+		else
+			if brew install --cask "$package"; then
+				log_success "$package のインストールが完了しました"
+			else
+				log_warning "$package のインストールに失敗しました（スキップ）"
+			fi
+		fi
+	done
+}
+
+# ----------------------------
 # パッケージ定義
+# ----------------------------
+
 brew tap daipeihust/tap
+
 declare -a core_tools=("git" "vim" "neovim" "tmux" "jq" "wget" "curl" "fzf" "im-select")
 declare -a file_utils=("ghq" "tree" "coreutils" "lsd" "ripgrep")
 declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk" "neofetch")
 declare -a vcs_tools=("tig" "jesseduffield/lazygit/lazygit" "gh")
+declare -a ai_tools=("gemini-cli")
+declare -a network_tools=("nmap")
 declare -a package_managers=("mas" "gpg" "sheldon" "mise")
 
-# コアツールのインストール
-log_step "コア開発ツールをインストール中..."
-total=${#core_tools[@]}
-for i in "${!core_tools[@]}"; do
-	package="${core_tools[$i]}"
-	show_progress $((i + 1)) "$total" "$package"
+# ----------------------------
+# CLI ツールのインストール
+# ----------------------------
 
-	if is_brew_package_installed "$package"; then
-		log_info "$package は既にインストールされています"
-	else
-		if brew install "$package"; then
-			log_success "$package のインストールが完了しました"
-		else
-			log_warning "$package のインストールに失敗しました（スキップ）"
-		fi
-	fi
-done
+install_formula_packages "コア開発ツール" "${core_tools[@]}"
+install_formula_packages "ファイル・テキストユーティリティ" "${file_utils[@]}"
+install_formula_packages "ターミナルツール" "${terminal_tools[@]}"
+install_formula_packages "バージョン管理ツール" "${vcs_tools[@]}"
+install_formula_packages "AIツール" "${ai_tools[@]}"
+install_formula_packages "ネットワークツール" "${network_tools[@]}"
+install_formula_packages "パッケージマネージャー" "${package_managers[@]}"
 
-# ファイル・テキストユーティリティ
-log_step "ファイル・テキストユーティリティをインストール中..."
-total=${#file_utils[@]}
-for i in "${!file_utils[@]}"; do
-	package="${file_utils[$i]}"
-	show_progress $((i + 1)) "$total" "$package"
+# ----------------------------
+# GUI アプリケーションのインストール
+# ----------------------------
 
-	if is_brew_package_installed "$package"; then
-		log_info "$package は既にインストールされています"
-	else
-		if brew install "$package"; then
-			log_success "$package のインストールが完了しました"
-		else
-			log_warning "$package のインストールに失敗しました（スキップ）"
-		fi
-	fi
-done
-
-# ターミナルツール
-log_step "ターミナルツールをインストール中..."
-total=${#terminal_tools[@]}
-for i in "${!terminal_tools[@]}"; do
-	package="${terminal_tools[$i]}"
-	show_progress $((i + 1)) "$total" "$package"
-
-	if is_brew_package_installed "$package"; then
-		log_info "$package は既にインストールされています"
-	else
-		if brew install "$package"; then
-			log_success "$package のインストールが完了しました"
-		else
-			log_warning "$package のインストールに失敗しました（スキップ）"
-		fi
-	fi
-done
-
-# バージョン管理ツール
-log_step "バージョン管理ツールをインストール中..."
-total=${#vcs_tools[@]}
-for i in "${!vcs_tools[@]}"; do
-	package="${vcs_tools[$i]}"
-	show_progress $((i + 1)) "$total" "$package"
-
-	if is_brew_package_installed "$package"; then
-		log_info "$package は既にインストールされています"
-	else
-		if brew install "$package"; then
-			log_success "$package のインストールが完了しました"
-		else
-			log_warning "$package のインストールに失敗しました（スキップ）"
-		fi
-	fi
-done
-
-# パッケージマネージャー
-log_step "パッケージマネージャーをインストール中..."
-total=${#package_managers[@]}
-for i in "${!package_managers[@]}"; do
-	package="${package_managers[$i]}"
-	show_progress $((i + 1)) "$total" "$package"
-
-	if is_brew_package_installed "$package"; then
-		log_info "$package は既にインストールされています"
-	else
-		if brew install "$package"; then
-			log_success "$package のインストールが完了しました"
-		else
-			log_warning "$package のインストールに失敗しました（スキップ）"
-		fi
-	fi
-done
-
-# GUI Applications
 log_step "GUIアプリケーションをインストール中..."
 
-# Browsers
-log_info "ブラウザをインストール中..."
-brew install --cask arc firefox
+declare -a cask_browsers=("arc" "firefox" "google-chrome")
+declare -a cask_dev_tools=("ghostty" "cursor" "dbeaver-community" "docker-desktop" "wireshark-app")
+declare -a cask_ai_tools=("claude" "claude-code" "codex")
+declare -a cask_communication=("slack" "discord" "zoom" "microsoft-teams")
+declare -a cask_productivity=("notion" "figma" "bitwarden" "clipy" "appcleaner" "libreoffice" "obsidian" "raycast")
+declare -a cask_entertainment=("spotify")
+declare -a cask_system=("karabiner-elements" "logi-options-plus" "hammerspoon" "tailscale")
+declare -a cask_optional_dev=("postman")
 
-# Development tools
-log_info "開発ツールをインストール中..."
-brew install --cask ghostty cursor dbeaver-community docker wireshark
+install_cask_packages "ブラウザ" "${cask_browsers[@]}"
+install_cask_packages "開発ツール" "${cask_dev_tools[@]}"
+install_cask_packages "AI開発ツール" "${cask_ai_tools[@]}"
+install_cask_packages "コミュニケーション" "${cask_communication[@]}"
+install_cask_packages "生産性向上アプリ" "${cask_productivity[@]}"
+install_cask_packages "エンターテインメント" "${cask_entertainment[@]}"
+install_cask_packages "システムユーティリティ" "${cask_system[@]}"
+install_cask_packages "追加開発ツール" "${cask_optional_dev[@]}"
 
-# Communication
-log_info "コミュニケーションアプリをインストール中..."
-brew install --cask slack discord zoom microsoft-teams
+# ----------------------------
+# App Store アプリケーション
+# ----------------------------
 
-# Productivity
-log_info "生産性向上アプリをインストール中..."
-brew install --cask notion figma bitwarden clipy appcleaner libreoffice obsidian raycast
-
-# System utilities
-log_info "システムユーティリティをインストール中..."
-brew install --cask karabiner-elements logi-options-plus hammerspoon tailscale
-
-# Optional development tools
-log_info "追加開発ツールをインストール中..."
-brew install --cask postman
-
-# App Store apps (requires App Store login)
 log_step "App Storeアプリケーションをインストール中..."
+
+# 順序保証のためキー配列を別途管理（bash連想配列はイテレーション順序不定）
+declare -A mas_apps=(
+	["LINE"]="539883307"
+	["RunCat"]="1429033973"
+)
+declare -a mas_app_order=("LINE" "RunCat")
+
 if mas account &>/dev/null; then
-	log_info "LINEアプリをインストール中..."
-	if mas install 539883307; then
-		log_success "LINEアプリのインストールが完了しました"
-	else
-		log_warning "LINEアプリのインストールに失敗しました（App Store認証が必要）"
-	fi
+	for app_name in "${mas_app_order[@]}"; do
+		app_id="${mas_apps[$app_name]}"
+		log_info "$app_name をインストール中..."
+		if mas install "$app_id"; then
+			log_success "$app_name のインストールが完了しました"
+		else
+			log_warning "$app_name のインストールに失敗しました"
+		fi
+	done
 else
 	log_warning "App Storeにサインインしていないため、App Storeアプリをスキップします"
-	log_info "手動インストール: mas install 539883307 (LINE)"
+	for app_name in "${mas_app_order[@]}"; do
+		log_info "手動インストール: mas install ${mas_apps[$app_name]} ($app_name)"
+	done
 fi
 
-# Font
+# ----------------------------
+# フォント
+# ----------------------------
+
 log_step "フォントをインストール中..."
 brew tap homebrew/cask-fonts
 if brew install --cask font-hack-nerd-font; then
