@@ -14,16 +14,7 @@ local function setup_mise_environment()
     end
   end
   
-  -- miseでインストールされたNode.jsのbinディレクトリをPATHに追加
-  local node_bin_dir = vim.fn.expand("~/.local/share/mise/installs/node/20.11.0/bin")
-  if vim.fn.isdirectory(node_bin_dir) == 1 then
-    local current_path = vim.env.PATH or ""
-    if not current_path:match(node_bin_dir) then
-      vim.env.PATH = node_bin_dir .. ":" .. current_path
-    end
-  end
-  
-  -- より柔軟な方法: mise envコマンドを使用して環境変数を取得
+  -- mise envコマンドを使用して環境変数を動的に取得
   local mise_cmd = vim.fn.exepath("mise") or vim.fn.expand("~/.local/share/mise/bin/mise")
   if vim.fn.executable(mise_cmd) == 1 then
     -- mise envコマンドで環境変数を取得

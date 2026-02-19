@@ -36,7 +36,6 @@ return {
         entry_prefix = "  ",
         border = true,
         borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
-        -- path_display = { "shorten" }, -- パスを短縮して表示
         path_display = { "smart" }, -- ファイル名を先頭に表示
         winblend = 10,
         preview = {

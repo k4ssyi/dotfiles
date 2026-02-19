@@ -143,11 +143,6 @@ return {
 
   -- キーマッピング設定
   keys = {
-    -- {
-    --   "<leader>e",
-    --   function() require("oil").open() end,
-    --   desc = "Oil: カレントディレクトリを開く",
-    -- },
     {
       "<leader>e",
       function() require("oil").open_float() end,

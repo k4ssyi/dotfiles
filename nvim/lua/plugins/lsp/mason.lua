@@ -64,7 +64,6 @@ return {
         "markdownlint",
         "yamllint",
         "fixjson",
-        "biome",
         "jq",
         "flake8",
       },

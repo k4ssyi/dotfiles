@@ -32,12 +32,8 @@ return {
 
     -- Only insert new sources, do not replace the existing ones
     -- (If you wish to replace, use `opts.sources = {}` instead of the `list_insert_unique` function)
+    -- Biomeのフォーマットはbiome LSP側に一元化（astrolsp.luaのhandlers.biome参照）
     opts.sources = require("astrocore").list_insert_unique(opts.sources, {
-      -- biome.json/biome.jsonc があればBiomeを使用
-      null_ls.builtins.formatting.biome.with {
-        condition = function(utils) return utils.has_file { "biome.json", "biome.jsonc" } end,
-      },
-
       -- Biomeがない場合に.prettierrc.*などがあればPrettierを使用
       null_ls.builtins.formatting.prettier.with {
         condition = function(utils)
