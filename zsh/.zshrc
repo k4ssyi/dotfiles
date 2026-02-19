@@ -19,8 +19,7 @@ setopt HIST_IGNORE_SPACE         # スペースから始まるコマンドは記
 setopt HIST_REDUCE_BLANKS        # 余分な空白を削除
 setopt HIST_SAVE_NO_DUPS         # 重複を保存しない
 setopt HIST_VERIFY               # 履歴展開時に確認
-setopt INC_APPEND_HISTORY        # リアルタイムで履歴を追加
-setopt SHARE_HISTORY             # セッション間で履歴を共有
+setopt SHARE_HISTORY             # セッション間で履歴を共有（INC_APPEND_HISTORYを内包）
 
 # その他の便利オプション
 setopt AUTO_CD                   # ディレクトリ名だけでcd
@@ -40,7 +39,6 @@ alias vi="nvim"
 # lsd aliases
 alias ls='lsd'
 alias l='lsd -l'
-alias ll='lsd -l'
 alias la='lsd -la'
 alias lt='lsd --tree'
 
@@ -48,40 +46,26 @@ alias lt='lsd --tree'
 alias grep='grep --color=auto'
 alias history='history -E -i 1'
 alias reload='source ~/.zshrc'
-alias aider="aider --model gpt-5 --multiline --watch-files --no-auto-commit --read ~/workspace/dotfiles/ai_role.md"
+alias aider="aider --model gpt-4o --multiline --watch-files --no-auto-commit --read \${DOTFILES_DIR:-\$HOME/workspace/dotfiles}/ai_role.md"
+alias update-all='brew update && brew upgrade; mise upgrade; mas upgrade; sheldon lock --update; ~/.tmux/plugins/tpm/bin/update_plugins all'
 
 # ----------------------------
 # Sheldon plugin manager
 # ----------------------------
-# 設定ファイルパスを明示的に指定
-export SHELDON_CONFIG_DIR="$HOME/workspace/dotfiles/zsh/sheldon"
+# 設定は ~/.config/sheldon にシンボリックリンクで配置（install-zsh-conf.sh参照）
 eval "$(sheldon source)"
 
-# ----------------------------
-# mise (version manager)
-# ----------------------------
-# miseの初期化（Node.js、Python、Go、Rubyなどのバージョン管理）
-if command -v mise >/dev/null 2>&1; then
-  eval "$(mise activate zsh)"
-fi
-
-## asdf completion setup
-fpath=(${ASDF_DIR}/completions $fpath)
+# 補完システムの初期化
 autoload -Uz compinit && compinit
 
 # PATH設定の最適化
 typeset -U path  # 重複を自動削除
+# HOMEBREW_PREFIX は .zprofile の brew shellenv で設定済み
 path=(
-    /opt/homebrew/bin
-    /opt/homebrew/opt/jpeg/bin
+    ${HOMEBREW_PREFIX:-/usr/local}/bin
     $path
 )
 export PATH
-
-# asdf-direnv integration
-if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc" ]]; then
-    source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
-fi
 
 # 信頼されたディレクトリ配下でのみ自動activateする
 # $HOME/workspace 配下のみ許可（必要に応じて追加）
@@ -98,7 +82,7 @@ function auto_venv() {
           fi
       done
       if $trusted; then
-          source .venv/bin/activate
+          source "${current_dir}/.venv/bin/activate"
           echo "Activated virtual environment in $current_dir"
       fi
   fi
@@ -108,11 +92,6 @@ add-zsh-hook chpwd auto_venv
 
 # 初回読み込み時にも実行
 auto_venv
-
-# nodenvの初期化（インストールされている場合のみ）
-if command -v nodenv >/dev/null 2>&1; then
-  eval "$(nodenv init -)"
-fi
 
 # ----------------------------
 # tmux自動起動設定
