@@ -10,7 +10,9 @@ macOS開発環境を最新ツールと設定で構築するためのdotfiles
 - **ターミナル**: Ghostty + Catppuccin Mochaテーマ
 - **シェル**: Zsh + Sheldonプラグインマネージャー
 - **プロンプト**: Starship（最適化済み設定）
-- **エディタ**: Neovim + AstroNvimフレームワーク
+- **エディタ**: Neovim + lazy.nvim
+- **ウィンドウ管理**: Hammerspoon + Karabiner-Elements
+- **AI**: Claude Code（カスタムagents/skills付き）
 - **ツール**: モダンなCLI代替品（lsd、ripgrepなど）
 
 ## クイックセットアップ
@@ -53,9 +55,9 @@ cd dotfiles
 - システム前提条件チェック
 - Xcode Command Line Toolsインストール（必要な場合）
 - Homebrewとパッケージのインストール
-- 全設定ファイルのセットアップ
-- 開発環境の設定
-- 既存設定のバックアップ作成
+- 全設定ファイルのシンボリックリンク作成
+- Claude Code設定の展開（agents/skills含む）
+- 既存設定のバックアップ作成（`~/.dotfiles_backup/`）
 
 ### インストール後の手動作業
 
@@ -107,27 +109,40 @@ cd dotfiles
 ```
 dotfiles/
 ├── install.sh              # メインインストールスクリプト
+├── CLAUDE.md               # プロジェクト固有のClaude Code指示
 ├── scripts/                # 個別セットアップスクリプト
 │   ├── lib/
-│   │   └── common.sh       # 共通ライブラリ
+│   │   └── common.sh       # 共通ライブラリ（create_symlink等）
 │   ├── check-prerequisites.sh
 │   ├── setup-brew.sh
 │   ├── install-brew-component.sh
-│   ├── install-zsh-conf.sh
+│   ├── install-claude-conf.sh
 │   └── ...
-├── zsh/                    # Zsh設定
-│   ├── .zshrc
-│   └── sheldon/
-│       └── plugins.toml
-├── nvim/                   # Neovim設定
-├── vscode-nvim/            # VSCode Neovim設定
+├── claude/                 # Claude Code設定 (-> ~/.claude/)
+│   ├── CLAUDE.md           # グローバル指示
+│   ├── settings.json       # Claude Code設定
+│   ├── agents/             # カスタムagent定義
+│   │   ├── references/     # agent用詳細資料（オンデマンド読み込み）
+│   │   └── *.md
+│   └── skills/             # Personal scope skills（全プロジェクト共通）
+│       ├── commit/
+│       ├── multi-agent-review/
+│       └── skill-creator/
+├── .claude/skills/         # Project scope skills（dotfiles専用）
+│   ├── dotfiles-add/
+│   ├── shell-lint/
+│   └── brew-audit/
+├── zsh/                    # Zsh + Sheldon設定
+├── nvim/                   # Neovim設定（lazy.nvim）
 ├── ghostty/                # Ghosttyターミナル設定
-├── alacritty/              # Alacrittyターミナル設定（バックアップ）
-├── starship.toml           # プロンプト設定
+├── starship/               # Starshipプロンプト設定
 ├── tmux/                   # tmux設定
-├── karabiner/              # キーマッピング設定
 ├── hammerspoon/            # ウィンドウ管理設定
-└── git/                    # Git設定
+├── karabiner/              # キーマッピング設定
+├── git/                    # Git設定
+├── ssh/                    # SSH設定テンプレート
+├── vscode-nvim/            # VSCode Neovim設定
+└── alacritty/              # Alacritty設定（レガシー）
 ```
 
 ## ライセンス
