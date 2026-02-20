@@ -4,6 +4,8 @@
 	#   [user]
 	#     email = your@email.com
 	#     name = yourname
+	# システムのユーザー名・メールアドレスの自動推測を禁止（設定漏れ防止）
+	useConfigOnly = true
 
 [include]
 	path = ~/.gitconfig.local
@@ -16,15 +18,23 @@
 	# ブランチのソート順設定
 	sort = -committerdate
 
+[init]
+	# 新規リポジトリのデフォルトブランチ名（Git 3.0でデフォルト化予定）
+	defaultBranch = main
+
 [tag]
 	# タグのソート順設定
 	sort = version:refname
+	# タグにもSSH署名を自動付与（commit署名と同じポリシー）
+	gpgsign = true
 
 [diff]
 	# 差分表示のアルゴリズム設定
 	algorithm = histogram
 	# 移動した行の色付け設定
 	colorMoved = plain
+	# インデント変更を伴うコード移動も正しく色分け（colorMovedの強化）
+	colorMovedWS = allow-indentation-change
 	# プレフィックスの表示をわかりやすくする
 	mnemonicPrefix = true
 	# ファイル名の変更を検出
@@ -38,6 +48,11 @@
 	fsmonitor = true
 	# 未追跡ファイルのキャッシュを有効化
 	untrackedCache = true
+	# diff/log/showの出力にdelta（シンタックスハイライト付きページャ）を使用
+	# delta未インストール時はlessにフォールバック
+	pager = "delta 2>/dev/null || less"
+	# 日本語ファイル名をエスケープせず表示（\343... -> そのまま）
+	quotePath = false
 
 [push]
 	# プッシュのデフォルト動作設定
@@ -46,6 +61,8 @@
 	autoSetupRemote = true
 	# タグを含めてプッシュ
 	followTags = true
+	# force push時にリモートの最新commitがローカル履歴に含まれる場合のみ許可
+	useForceIfIncludes = true
 
 [fetch]
 	# フェッチ時に不要なリモート追跡ブランチを削除
@@ -54,6 +71,8 @@
 	pruneTags = true
 	# 全てのリモートをフェッチ
 	all = true
+	# fetch時にcommit-graphを自動構築（git log/blameの高速化）
+	writeCommitGraph = true
 
 [help]
 	# コマンドの自動補正をプロンプトで確認
@@ -64,6 +83,8 @@
 	verbose = true
 	# コミットにSSH署名を付与
 	gpgsign = true
+	# コミットメッセージの#をコメント扱いしない（scissor行で区切り）
+	cleanup = scissors
 
 [gpg]
 	# 署名形式にSSHを使用（GPG鍵管理が不要）
@@ -80,6 +101,18 @@
 	# マージツール使用後にバックアップを保持しない
 	keepBackup = false
 
+[log]
+	# 日付をISO 8601形式で表示（2026-02-21 13:54:51 +0900）
+	date = iso
+
+[grep]
+	# git grepでPerl互換正規表現を使用（\b, (?:)等が利用可能）
+	patternType = perl
+
+[transfer]
+	# fetch/push時にオブジェクトの整合性を検証（壊れたデータの伝搬を防止）
+	fsckObjects = true
+
 [rebase]
 	# 自動でコミットをまとめる
 	autoSquash = true
@@ -87,6 +120,8 @@
 	autoStash = true
 	# リファレンスを更新
 	updateRefs = true
+	# インタラクティブリベースでコミット誤削除時にエラーで中断（事故防止）
+	missingCommitsCheck = error
 
 [merge]
 	# マージ時の競合スタイル設定
@@ -95,6 +130,20 @@
 [credential]
 	# macOSキーチェーンで認証情報を安全に管理
 	helper = osxkeychain
+
+[interactive]
+	# git add -p でシンタックスハイライトを有効化
+	diffFilter = delta --color-only
+
+[delta]
+	# n/N でファイル間をジャンプ
+	navigate = true
+	# 行番号を表示
+	line-numbers = true
+	# ダークテーマ
+	dark = true
+	# +/- マーカーを保持（背景色と併用で視認性向上）
+	keep-plus-minus-markers = true
 
 [pull]
 	# プル時にリベースを使用
