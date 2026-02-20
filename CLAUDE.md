@@ -18,6 +18,7 @@ macOS向けdotfilesリポジトリ。シェル環境・エディタ・ターミ�
 | `.claude/skills/` | Project scope skills (このリポジトリ専用) |
 | `zsh/` | Zsh設定 (`zshrc`, `zprofile` 等) |
 | `nvim/` | Neovim設定 (lazy.nvim) |
+| `ripgrep/` | ripgrep設定 (`~/.config/ripgrep/` にシンボリックリンク) |
 | `ghostty/` | Ghostty設定 |
 | `tmux/` | tmux設定 |
 | `starship/` | Starship prompt設定 |
@@ -73,9 +74,29 @@ AstroNvim v4 + lazy.nvim構成。詳細は `nvim/README.md` を参照。
 - LSPフォーマッタは `biome.json` > `.prettierrc*` > `.eslintrc*` の優先順位で排他的に動作（`astrolsp.lua` handlers + `none-ls.lua` condition）
 - `neo-tree.lua` は `enabled = false` で無効化済み（oil.nvimに移行済み）
 
+## カラーテーマ (Catppuccin Mocha)
+
+全ツールで Catppuccin Mocha に統一。テーマ変更時は以下を全て更新すること:
+
+| ファイル | 設定方式 | 変更内容 |
+|---|---|---|
+| `nvim/lua/config/ui/colorscheme.lua` | プラグイン名 | 返り値の文字列を変更 |
+| `nvim/lua/plugins/editor/scrollbar.lua` | `get_palette "mocha"` | パレット名を変更 |
+| `nvim/lua/community.lua` | AstroCommunity import | colorschemeのimportを変更 |
+| `tmux/.tmux.conf` | `@catppuccin_flavor` | フレーバー名を変更 |
+| `zsh/sheldon/plugins.toml` | プラグイン参照 | github先・`use`ファイル名を変更 |
+| `zsh/.zshrc` (`BAT_THEME`) | 文字列名 | テーマ名を変更 |
+| `zsh/.zshrc` (`FZF_DEFAULT_OPTS`) | hexカラー直書き | 全色を手動置換 |
+| `starship/starship.toml` | パレット定義 + `palette` | パレットブロックと参照名を差し替え |
+| `ghostty/config` | カラースキームブロック | 色定義ブロックを差し替え |
+| `alacritty/alacritty.toml` | import パス | テーマファイルパスを変更 |
+
+検出コマンド: `grep -ri 'catppuccin\|#1e1e2e\|#313244' --include='*.lua' --include='*.toml' --include='*.zshrc' --include='config'`
+
 ## install.sh のパターン
 
 新しいツール設定を追加する場合:
+
 1. `scripts/install-<tool>.sh` を作成
 2. `install.sh` の `scripts_to_run` 配列に `"scripts/install-<tool>.sh:<説明>"` 形式で追加
 3. `./install.sh --dry-run` で動作確認

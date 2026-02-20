@@ -13,7 +13,7 @@ macOS開発環境を最新ツールと設定で構築するためのdotfiles
 - **エディタ**: Neovim + lazy.nvim
 - **ウィンドウ管理**: Hammerspoon + Karabiner-Elements
 - **AI**: Claude Code（カスタムagents/skills付き）
-- **ツール**: モダンなCLI代替品（lsd、ripgrepなど）
+- **ツール**: モダンなCLI代替品（fd、ripgrep、bat、fzfなど）
 
 ## クイックセットアップ
 
@@ -134,6 +134,7 @@ dotfiles/
 │   └── brew-audit/
 ├── zsh/                    # Zsh + Sheldon設定
 ├── nvim/                   # Neovim設定（lazy.nvim）
+├── ripgrep/                # ripgrep設定
 ├── ghostty/                # Ghosttyターミナル設定
 ├── starship/               # Starshipプロンプト設定
 ├── tmux/                   # tmux設定
