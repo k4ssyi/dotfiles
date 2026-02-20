@@ -129,6 +129,12 @@ create_symlink() {
 
 	# 既存リンクの処理
 	if [[ -L "$target" ]]; then
+		local current_target
+		current_target=$(readlink "$target")
+		if [[ "$current_target" == "$source" ]]; then
+			log_info "シンボリックリンクは既に正しく設定されています: $target"
+			return 0
+		fi
 		if [[ "$force" == "true" ]]; then
 			rm "$target"
 			log_info "既存のシンボリックリンクを削除しました: $target"
@@ -229,15 +235,42 @@ create_backup() {
 	local file_path="$1"
 	local backup_dir="${HOME}/.dotfiles_backup"
 
+	# dotfiles管理下のシンボリックリンクはバックアップ不要
+	if [[ -L "$file_path" ]]; then
+		local link_target
+		link_target=$(readlink "$file_path" 2>/dev/null || true)
+		local dotfiles_root
+		dotfiles_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
+		if [[ "$link_target" == "$dotfiles_root"/* ]]; then
+			return 0
+		fi
+	fi
+
 	if [[ -e "$file_path" ]]; then
+		# ディレクトリ構造を保持して衝突を防止
+		# 例: ~/.config/nvim -> ~/.dotfiles_backup/.config/nvim
+		local relative_path="${file_path#$HOME/}"
+		local backup_path="$backup_dir/$relative_path"
+
 		if [[ "$DRYRUN_MODE" == "true" ]]; then
-			log_dryrun "バックアップ作成: $file_path -> $backup_dir/$(basename "$file_path").$(date +%Y%m%d_%H%M%S)"
+			log_dryrun "バックアップ作成: $file_path -> $backup_path"
 			return 0
 		fi
 
-		mkdir -p "$backup_dir"
-		backup_path="$backup_dir/$(basename "$file_path").$(date +%Y%m%d_%H%M%S)"
-		cp -r "$file_path" "$backup_path"
+		# 既存バックアップがあれば上書きしない（初回オリジナル保護）
+		if [[ -e "$backup_path" ]]; then
+			log_info "バックアップは既に存在します（スキップ）: $backup_path"
+			return 0
+		fi
+
+		mkdir -p "$(dirname "$backup_path")" || {
+			log_warning "バックアップディレクトリ作成失敗: $(dirname "$backup_path")"
+			return 1
+		}
+		if ! cp -r "$file_path" "$backup_path"; then
+			log_warning "バックアップ作成失敗: $file_path"
+			return 1
+		fi
 		log_info "バックアップを作成しました: $backup_path"
 	fi
 }

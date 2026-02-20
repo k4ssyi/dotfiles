@@ -73,6 +73,7 @@ scripts_to_run=(
 	"scripts/install-mise.sh:mise設定"
 	"scripts/install-zsh-conf.sh:zsh・Sheldon設定"
 	"scripts/install-git-conf.sh:Git設定"
+	"scripts/install-claude-conf.sh:Claude Code設定"
 	"scripts/install-vim-conf.sh:Neovim設定"
 	"scripts/install-tmux-conf.sh:tmux設定"
 	"scripts/install-remote-access.sh:リモートアクセス設定"
@@ -88,22 +89,21 @@ for i in "${!scripts_to_run[@]}"; do
 
 	show_progress $((i + 1)) "$total_scripts" "$description"
 
-	if [[ -f "$script_path" ]]; then
-		log_step "$description を実行中..."
-		if [[ "$DRYRUN_MODE" == "true" ]]; then
-			log_dryrun "スクリプト実行: $script_path"
-			log_success "$description が完了しました（ドライラン）"
-		else
-			if measure_time "./$script_path"; then
-				log_success "$description が完了しました"
-			else
-				log_warning "$description に失敗しました（継続します）"
-				failed_scripts+=("$description")
-			fi
-		fi
-	else
+	if [[ ! -f "$script_path" ]]; then
 		log_warning "スクリプトが見つかりません: $script_path"
 		failed_scripts+=("$description (スクリプト未発見)")
+		echo ""
+		continue
+	fi
+
+	if [[ "$DRYRUN_MODE" == "true" ]]; then
+		log_dryrun "スクリプト実行: $script_path"
+		log_success "$description が完了しました（ドライラン）"
+	elif measure_time "./$script_path"; then
+		log_success "$description が完了しました"
+	else
+		log_warning "$description に失敗しました（継続します）"
+		failed_scripts+=("$description")
 	fi
 
 	echo ""
