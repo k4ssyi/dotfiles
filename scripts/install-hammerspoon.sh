@@ -15,7 +15,7 @@ log_info "Hammerspoon設定のセットアップを開始します"
 ensure_dotfiles_root
 
 # Hammerspoon設定ファイルの存在確認
-hammerspoon_source="$(pwd)/hammerspoon/.hammerspoon"
+hammerspoon_source="$(pwd)/hammerspoon"
 
 if [[ ! -d "$hammerspoon_source" ]]; then
 	handle_error "Hammerspoon設定ディレクトリが見つかりません: $hammerspoon_source"

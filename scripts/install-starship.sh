@@ -15,7 +15,7 @@ log_info "Starship設定のセットアップを開始します"
 ensure_dotfiles_root
 
 # Starship設定ファイルの存在確認
-starship_config_source="$(pwd)/starship.toml"
+starship_config_source="$(pwd)/starship/starship.toml"
 
 if [[ ! -f "$starship_config_source" ]]; then
 	handle_error "Starship設定ファイルが見つかりません: $starship_config_source"

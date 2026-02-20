@@ -46,7 +46,7 @@ alias lt='lsd --tree'
 alias grep='grep --color=auto'
 alias history='history -E -i 1'
 alias reload='source ~/.zshrc'
-alias aider="aider --model gpt-4o --multiline --watch-files --no-auto-commit --read \${DOTFILES_DIR:-\$HOME/workspace/dotfiles}/ai_role.md"
+alias aider="aider --model gpt-4o --multiline --watch-files --no-auto-commit"
 alias update-all='brew update && brew upgrade; mise upgrade; mas upgrade; sheldon lock --update; ~/.tmux/plugins/tpm/bin/update_plugins all'
 
 # ----------------------------
