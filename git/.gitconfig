@@ -33,8 +33,7 @@
 [core]
 	# デフォルトのエディタ設定
 	editor = nvim
-	# 除外ファイルの設定
-  # excludesfile = ~/.gitignore
+	# グローバルexcludesはXDGデフォルト (~/.config/git/ignore) を使用
 	# ファイルシステムモニタリングの有効化
 	fsmonitor = true
 	# 未追跡ファイルのキャッシュを有効化

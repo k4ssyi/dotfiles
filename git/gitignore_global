@@ -1,41 +1,18 @@
-# Windows thumbnail cache files
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
+# Global gitignore
+# Based on: https://github.com/github/gitignore/tree/main/Global
+#
+# OS artifacts, editor/IDE files, runtime caches, secrets, AI tools
+# プロジェクト固有の除外は各リポジトリの .gitignore で管理する
 
-# Dump file
-*.stackdump
+# === OS artifacts ===
 
-# Folder config file
-[Dd]esktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-# General
+# macOS (Global/macOS.gitignore)
 .DS_Store
+__MACOSX/
 .AppleDouble
 .LSOverride
-
-# Icon must end with two \r
 Icon
-
-
-# Thumbnails
 ._*
-
-# Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
 .Spotlight-V100
@@ -43,44 +20,137 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
 Network Trash Folder
 Temporary Items
 .apdisk
 
+# Windows (Global/Windows.gitignore)
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux (Global/Linux.gitignore)
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+nohup.out
+
+# === Editor / IDE ===
+
+# Vim / Neovim (Global/Vim.gitignore)
+# Swap
+[._]*.s[a-v][a-z]
+!*.svg
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+# Session
+Session.vim
+Sessionx.vim
+# Temporary / persistent undo
+.netrwhist
 *~
 
-# temporary files which can be created if a process still has a handle open of a deleted file
-.fuse_hidden*
+# Tags (Global/Tags.gitignore)
+TAGS
+.TAGS
+!TAGS/
+tags
+.tags
+!tags/
+gtags.files
+GTAGS
+GRTAGS
+GPATH
+GSYMS
+cscope.files
+cscope.out
+cscope.in.out
+cscope.po.out
 
-# KDE directory preferences
-.directory
+# JetBrains (Global/JetBrains.gitignore simplified)
+.idea/
 
-# Linux trash folder which might appear on any partition or disk
-.Trash-*
+# Cursor (Global/Cursor.gitignore)
+.cursor/
+.cursorignore
+.cursorindexingignore
 
-.tool-versions
+# VSCode (Global/VisualStudioCode.gitignore partial)
+*.vsix
+
+# Backup / Patch (Global/Backup.gitignore + Global/Patch.gitignore)
+*.bak
+*.tmp
+*.orig
+*.rej
+
+# === Runtime / tools ===
+
+# direnv
 .envrc
 
-# python env
+# mise / asdf (Global/mise.gitignore + バージョン管理は個人環境で統一)
+.tool-versions
+mise.toml
+.mise.toml
+.mise.local.toml
+.mise.*.local.toml
+mise.local.toml
+mise.*.local.toml
+.mise/*.local.toml
+mise/*.local.toml
 
+# Node.js / pnpm
+node_modules/
+.pnpm-debug.log
+
+# Ruby
+.ruby-lsp/
+
+# Python
 .venv
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# cspell
-.cspell.json
+# Go
+coverage.out
 
-# MakeFile
+# Docker (個人のオーバーライド)
+docker-compose.override.yml
+
+# Build local overrides
 LocalMakeFile
 
-# AI_ROLE
-ai_role.md
+# === Secrets (safety net) ===
 
+.env
+.env.*
+!.env.example
+!.env*.example
+secring.*
+
+# === AI tools ===
+
+.aider*
 **/.claude/settings.local.json
-**/.mcp.json
-
 CLAUDE.local.md
-
-mise.toml
+**/.mcp.json
