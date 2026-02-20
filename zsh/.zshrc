@@ -32,6 +32,31 @@ setopt NO_BEEP                   # ビープ音を無効化
 export EDITOR=nvim
 export VISUAL=nvim
 
+# ripgrep設定
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
+
+# bat設定
+export BAT_THEME="Catppuccin Mocha"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+# ----------------------------
+# FZF設定
+# ----------------------------
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_DEFAULT_OPTS=" \
+  --height=80% \
+  --layout=reverse \
+  --border \
+  --info=inline \
+  --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+  --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+  --color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
+  --color=selected-bg:#45475a"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:500 {} 2>/dev/null || cat {}'"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
+export FZF_ALT_C_OPTS="--preview 'lsd --tree --depth 2 {} 2>/dev/null | head -50'"
+
 # エイリアス設定
 alias vim="nvim"
 alias vi="nvim"
@@ -41,6 +66,15 @@ alias ls='lsd'
 alias l='lsd -l'
 alias la='lsd -la'
 alias lt='lsd --tree'
+
+# bat aliases（パイプ時は素のcatにフォールバックしてバイナリデータ破損を防止）
+cat() {
+  if [ -t 1 ] && command -v bat >/dev/null 2>&1; then
+    bat --paging=never "$@"
+  else
+    command cat "$@"
+  fi
+}
 
 # その他のエイリアス
 alias grep='grep --color=auto'
@@ -57,6 +91,10 @@ eval "$(sheldon source)"
 
 # 補完システムの初期化
 autoload -Uz compinit && compinit
+
+# FZFキーバインド・補完の有効化（Ctrl+T, Ctrl+R, Alt+C）
+# compinit後に読み込む（fzf --zsh 内部で compdef を使用するため）
+eval "$(fzf --zsh)"
 
 # PATH設定の最適化
 typeset -U path  # 重複を自動削除
