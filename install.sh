@@ -72,6 +72,7 @@ scripts_to_run=(
 	"scripts/uninstall-python27.sh:Python 2.7のクリーンアップ"
 	"scripts/install-mise.sh:mise設定"
 	"scripts/install-zsh-conf.sh:zsh・Sheldon設定"
+	"scripts/install-ripgrep-conf.sh:ripgrep設定"
 	"scripts/install-git-conf.sh:Git設定"
 	"scripts/install-claude-conf.sh:Claude Code設定"
 	"scripts/install-vim-conf.sh:Neovim設定"
