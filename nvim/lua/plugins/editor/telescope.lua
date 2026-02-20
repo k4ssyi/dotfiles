@@ -38,6 +38,19 @@ return {
         borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
         path_display = { "smart" }, -- ファイル名を先頭に表示
         winblend = 10,
+        -- CLI用 ripgrep/config とオプション重複あり。--no-config で独立管理（外部設定変更の影響排除）
+        vimgrep_arguments = {
+          "rg",
+          "--no-config",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "--hidden",
+          "--glob", "!.git/",
+        },
         preview = {
           hide_on_startup = false,
         },
@@ -46,6 +59,11 @@ return {
           "node_modules/",
           "dist/",
           "vendor/",
+        },
+      },
+      pickers = {
+        find_files = {
+          find_command = { "fd", "--type", "f", "--hidden", "--exclude", ".git" },
         },
       },
       extensions = {
