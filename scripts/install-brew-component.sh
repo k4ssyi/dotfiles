@@ -90,10 +90,10 @@ install_cask_packages() {
 
 brew tap daipeihust/tap
 
-declare -a core_tools=("git" "vim" "neovim" "tmux" "jq" "wget" "curl" "fzf" "im-select")
-declare -a file_utils=("ghq" "tree" "coreutils" "lsd" "ripgrep")
-declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk" "neofetch")
-declare -a vcs_tools=("tig" "jesseduffield/lazygit/lazygit" "gh")
+declare -a core_tools=("git" "vim" "neovim" "tmux" "jq" "wget" "curl" "fzf" "im-select" "shellcheck")
+declare -a file_utils=("ghq" "tree" "coreutils" "lsd" "ripgrep" "fd" "bat")
+declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk" "fastfetch")
+declare -a vcs_tools=("tig" "jesseduffield/lazygit/lazygit" "gh" "git-delta")
 declare -a ai_tools=("gemini-cli")
 declare -a network_tools=("nmap")
 declare -a package_managers=("mas" "gpg" "sheldon" "mise")
