@@ -1,67 +1,80 @@
 # Ghostty Configuration
-# Migrated from Alacritty configuration
 
-# Font Configuration
+# ---------------------------------------------------------
+# Theme
+# ---------------------------------------------------------
+
+# macOSアピアランス連動: ライト/ダークモード自動切替
+theme = "light:Catppuccin Latte,dark:Catppuccin Mocha"
+
+# ---------------------------------------------------------
+# Font
+# ---------------------------------------------------------
+
 font-family = Hack Nerd Font
 font-size = 13
 
-# Disable font features if needed (uncomment to use)
-# font-feature = -liga
-# font-feature = -calt
+# macOS: Core Textによるフォントストロークの太字化
+font-thicken = true
 
-# Window Settings
+# ---------------------------------------------------------
+# Window
+# ---------------------------------------------------------
+
 window-theme = dark
 background-opacity = 0.90
-window-padding-x = 1
-window-padding-y = 1
+background-blur-radius = 20
 
-# Window Dimensions (in pixels - approximate equivalent to 180x52 chars)
-# window-width = 1440
-# window-height = 832
+# パディング（テキストとウィンドウ端の余白）
+window-padding-x = 12
+window-padding-y = 8
+window-padding-balance = true
 
-# Cursor Style
+# ウィンドウの状態（位置・サイズ）を記憶
+window-save-state = always
+
+# リサイズオーバーレイを非表示
+resize-overlay = never
+
+# ---------------------------------------------------------
+# Cursor
+# ---------------------------------------------------------
+
 cursor-style = bar
 
+# ---------------------------------------------------------
 # Scrollback
-scrollback-limit = 10000
+# ---------------------------------------------------------
 
-# macOS Specific Settings
+scrollback-limit = 50000
+
+# ---------------------------------------------------------
+# macOS Specific
+# ---------------------------------------------------------
+
 macos-option-as-alt = true
 macos-titlebar-proxy-icon = hidden
 
+# ウィンドウ閉じる時に確認（誤操作防止）
+confirm-close-surface = always
+
+# ---------------------------------------------------------
 # Shell Integration
-shell-integration = zsh
-command = /bin/zsh -l
+# ---------------------------------------------------------
 
-# Catppuccin Mocha Color Scheme
-# Primary Colors
-background = 1e1e2e
-foreground = d6d6d6
+# シェルを自動検出（zsh/bash/fish/elvish対応）
+shell-integration = detect
 
-# Cursor Colors
-cursor-color = d9d9d9
-cursor-text = 1e1e2e
+# cursor: プロンプトでalt+clickカーソル移動
+# sudo:   sudo実行時にterminfo情報を保持
+# title:  実行中コマンド・ディレクトリでウィンドウタイトル自動更新
+shell-integration-features = cursor,sudo,title
 
-# Selection Colors (using similar to cursor)
-selection-background = d9d9d9
-selection-foreground = 1e1e2e
+# ---------------------------------------------------------
+# Keybindings
+# ---------------------------------------------------------
 
-# Normal Colors (ANSI 0-7)
-palette = 0=#181a1f
-palette = 1=#e86671
-palette = 2=#98c379
-palette = 3=#e5c07b
-palette = 4=#61afef
-palette = 5=#c678dd
-palette = 6=#54afbc
-palette = 7=#abb2bf
-
-# Bright Colors (ANSI 8-15)
-palette = 8=#5c6370
-palette = 9=#e86671
-palette = 10=#98c379
-palette = 11=#e5c07b
-palette = 12=#61afef
-palette = 13=#c678dd
-palette = 14=#54afbc
-palette = 15=#f7f7f7
+# プロンプトナビゲーション（shell integration連携）
+# 長いログ出力後でも前後のプロンプト位置へ一発ジャンプ
+keybind = cmd+shift+up=jump_to_prompt:-1
+keybind = cmd+shift+down=jump_to_prompt:1

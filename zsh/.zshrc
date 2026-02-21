@@ -89,6 +89,12 @@ alias update-all='brew update && brew upgrade; mise upgrade; mas upgrade; sheldo
 # 設定は ~/.config/sheldon にシンボリックリンクで配置（install-zsh-conf.sh参照）
 eval "$(sheldon source)"
 
+# Emacsキーバインドを明示的に設定（プラグインが$EDITOR=nvimでviモードに切り替えるのを防ぐ）
+bindkey -e
+
+# 単語境界の改善（/, ., - 等を境界として扱い、パス単位の単語操作を可能にする）
+WORDCHARS=''
+
 # 補完システムの初期化
 autoload -Uz compinit && compinit
 

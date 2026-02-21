@@ -1,15 +1,16 @@
-# Starship Configuration - 2025年最適化版
-# 参考: https://namileriblog.com/terminal/starship_2025
+# Starship Configuration
+# Catppuccin Mocha テーマ統一・全モジュールでパレット色を使用
 
 # 基本設定
 add_newline = true
 scan_timeout = 30
-command_timeout = 5000
+command_timeout = 3000
+continuation_prompt = '[∙](fg:overlay0) '
 
 # Catppuccin Mocha テーマカラー
 palette = "catppuccin_mocha"
 
-# メインプロンプトフォーマット
+# メインプロンプトフォーマット（2行構成: 情報行 + 入力行）
 format = """
 $os\
 $sudo\
@@ -30,14 +31,15 @@ $docker_context\
 $aws\
 $gcloud\
 $kubernetes\
-$cmd_duration\
 $line_break\
 $character\
 """
 
-# 右側のプロンプト（時間表示）
+# 入力行の右側に表示（前コマンドの結果情報）
 right_format = """
-$time\
+$status\
+$cmd_duration\
+$shell\
 """
 
 # OS アイコン表示
@@ -72,7 +74,7 @@ disabled = false
 
 # ディレクトリ表示
 [directory]
-style = "fg:cyan bold"
+style = "fg:teal bold"
 format = "[$path]($style)[$read_only]($read_only_style) "
 truncation_length = 3
 truncation_symbol = "…/"
@@ -89,7 +91,9 @@ read_only = " 󰌾"
 [git_branch]
 symbol = " "
 format = "[$symbol$branch]($style) "
-style = "fg:purple bold"
+style = "fg:mauve bold"
+truncation_length = 24
+truncation_symbol = "…"
 
 # Git 状態
 [git_state]
@@ -120,7 +124,7 @@ only_nonzero_diffs = true
 format = "([+$added]($added_style) )([-$deleted]($deleted_style) )"
 disabled = false
 
-# フィル（左右のスペース調整）
+# フィル（1行目の左右分割）
 [fill]
 symbol = " "
 
@@ -148,7 +152,7 @@ style = "fg:red"
 [golang]
 symbol = " "
 format = "[$symbol($version )]($style)"
-style = "fg:cyan"
+style = "fg:sky"
 
 # Docker
 [docker_context]
@@ -161,7 +165,7 @@ only_with_files = true
 [aws]
 symbol = "  "
 format = '[$symbol($profile )(\($region\) )]($style)'
-style = "fg:orange"
+style = "fg:peach"
 
 [aws.region_aliases]
 ap-northeast-1 = "tokyo"
@@ -176,21 +180,48 @@ style = "fg:blue"
 
 # Kubernetes
 [kubernetes]
-format = '[⎈ $context \($namespace\)](fg:cyan) '
+format = '[⎈ $context \($namespace\)](fg:sky) '
 disabled = false
 
-# コマンド実行時間
+[kubernetes.context_aliases]
+"arn:aws:eks:*:*:cluster/prod-*" = "PROD"
+
+[[kubernetes.contexts]]
+context_pattern = ".*prod.*"
+style = "fg:red bold"
+
+[[kubernetes.contexts]]
+context_pattern = ".*staging.*"
+style = "fg:yellow"
+
+# 終了コード表示（失敗時のみ）
+[status]
+symbol = "✖ "
+not_executable_symbol = " "
+not_found_symbol = "󰍉 "
+sigint_symbol = "󰟾 "
+map_symbol = true
+format = '[$symbol$status( $common_meaning)]($style) '
+style = "fg:red"
+disabled = false
+
+# コマンド実行時間（入力行右側に表示）
 [cmd_duration]
 min_time = 2000
 format = "took [$duration](fg:yellow)"
 show_milliseconds = false
 
-# 時間表示
-[time]
+# シェル種別表示（Zshでは非表示、SSH先の別シェル時に表示）
+[shell]
+zsh_indicator = ""
+bash_indicator = "bash"
+fish_indicator = "fish"
+style = "fg:overlay1"
 disabled = false
-format = '🕙 [$time]($style) '
-time_format = "%R"
-style = "fg:white"
+
+# 時間表示: tmux status-right に移管済み
+[time]
+disabled = true
 
 # プロンプト文字
 [character]
@@ -208,8 +239,7 @@ disabled = true
 [battery]
 disabled = true
 
-[env_var]
-disabled = true
+# env_var: format に含めていないため設定不要
 
 # Catppuccin Mocha カラーパレット
 [palettes.catppuccin_mocha]
@@ -239,4 +269,3 @@ surface0 = "#313244"
 base = "#1e1e2e"
 mantle = "#181825"
 crust = "#11111b"
-
