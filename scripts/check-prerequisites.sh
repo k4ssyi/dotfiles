@@ -1,142 +1,133 @@
 #!/usr/bin/env bash
 
-echo "🔍 Checking system prerequisites..."
+# システム前提条件チェックスクリプト
+# 共通ライブラリを使用してログ出力と規約準拠を保証
+
+# 共通ライブラリの読み込み
+source "$(dirname "$0")/lib/common.sh"
+
+# クリーンアップ用トラップの設定
+setup_cleanup_trap
+
+log_step "システム前提条件のチェックを開始します"
 echo "================================="
 
-# Exit on any error
-set -euo pipefail
+# dotfilesディレクトリからの実行を確認
+ensure_dotfiles_root
 
 # 1. Check macOS only
 if [[ "$(uname)" != "Darwin" ]]; then
-	echo "❌ This script is designed for macOS only"
-	exit 1
+	handle_error "このスクリプトはmacOS専用です"
 fi
 
 # 2. Check macOS version (require macOS 10.15+)
 MACOS_VERSION=$(sw_vers -productVersion)
 MAJOR_VERSION=$(echo "$MACOS_VERSION" | cut -d '.' -f 1)
 MINOR_VERSION=$(echo "$MACOS_VERSION" | cut -d '.' -f 2)
+# macOS 11+ では MINOR_VERSION が空になる場合があるためデフォルト値を設定
+MINOR_VERSION="${MINOR_VERSION:-0}"
 
 if [[ "$MAJOR_VERSION" -lt 10 ]] || [[ "$MAJOR_VERSION" -eq 10 && "$MINOR_VERSION" -lt 15 ]]; then
-	echo "❌ macOS 10.15 (Catalina) or later is required. Current version: $MACOS_VERSION"
-	exit 1
+	handle_error "macOS 10.15 (Catalina) 以降が必要です。現在のバージョン: $MACOS_VERSION"
 fi
 
-echo "✅ macOS $MACOS_VERSION detected"
+log_success "macOS $MACOS_VERSION を検出しました"
 
 # 3. Check and install Xcode Command Line Tools
-echo "📦 Checking Xcode Command Line Tools..."
+log_step "Xcode Command Line Tools を確認中..."
 if ! xcode-select -p &>/dev/null; then
-	echo "⚠️  Xcode Command Line Tools not found. Installing..."
+	log_warning "Xcode Command Line Tools が見つかりません。インストールを開始します..."
 	xcode-select --install
-	echo "⚠️  Please complete the Xcode Command Line Tools installation and re-run this script"
-	echo "   You can check installation status with: xcode-select -p"
+	log_warning "Xcode Command Line Tools のインストールが完了したら、このスクリプトを再実行してください"
+	log_info "インストール状態の確認: xcode-select -p"
 	exit 1
 else
-	echo "✅ Xcode Command Line Tools found: $(xcode-select -p)"
+	log_success "Xcode Command Line Tools を検出: $(xcode-select -p)"
 fi
 
 # 4. Detect architecture for Homebrew paths
 ARCH=$(uname -m)
 if [[ "$ARCH" == "arm64" ]]; then
 	export HOMEBREW_PREFIX="/opt/homebrew"
-	echo "✅ Apple Silicon (ARM64) detected - Homebrew path: $HOMEBREW_PREFIX"
+	log_success "Apple Silicon (ARM64) を検出 - Homebrew path: $HOMEBREW_PREFIX"
 elif [[ "$ARCH" == "x86_64" ]]; then
 	export HOMEBREW_PREFIX="/usr/local"
-	echo "✅ Intel (x86_64) detected - Homebrew path: $HOMEBREW_PREFIX"
+	log_success "Intel (x86_64) を検出 - Homebrew path: $HOMEBREW_PREFIX"
 else
-	echo "❌ Unsupported architecture: $ARCH"
-	exit 1
+	handle_error "サポートされていないアーキテクチャ: $ARCH"
 fi
 
 # Save architecture info for other scripts (環境変数方式)
 export DOTFILES_HOMEBREW_PREFIX="$HOMEBREW_PREFIX"
 export DOTFILES_ARCH="$ARCH"
 
-# 5. Check for admin privileges (for Python 2.7 removal)
-echo "🔐 Checking admin privileges..."
-if [[ "${DRYRUN_MODE:-false}" == "true" ]]; then
-	echo "🧪 [DRYRUN] Skipping sudo check in dry-run mode"
+# 5. Check for admin privileges
+log_step "管理者権限を確認中..."
+if [[ "$DRYRUN_MODE" == "true" ]]; then
+	log_dryrun "sudoチェックをスキップします"
 elif ! sudo -n true 2>/dev/null; then
-	echo "⚠️  This script requires sudo privileges for system cleanup tasks"
-	echo "   You will be prompted for your password during installation"
-	# Test sudo access
+	log_warning "このスクリプトにはsudo権限が必要です"
+	log_info "インストール中にパスワードを求められる場合があります"
 	sudo -v || {
-		echo "❌ Unable to obtain sudo privileges"
-		exit 1
+		handle_error "sudo権限を取得できません"
 	}
 else
-	echo "✅ Admin privileges available"
+	log_success "管理者権限を確認しました"
 fi
 
 # 6. Check internet connectivity
-echo "🌐 Checking internet connectivity..."
+log_step "インターネット接続を確認中..."
 if ! curl -s --head --connect-timeout 5 https://github.com >/dev/null; then
-	echo "❌ Internet connection required for installation"
-	echo "   Please check your network connection and try again"
-	exit 1
+	handle_error "インストールにはインターネット接続が必要です。ネットワーク接続を確認してください"
 fi
-echo "✅ Internet connection verified"
+log_success "インターネット接続を確認しました"
 
-# 7. Ensure running from correct directory
-if [[ ! -f "./install.sh" ]]; then
-	echo "❌ Please run this script from the dotfiles directory"
-	echo "   Current directory: $(pwd)"
-	echo "   Expected files: install.sh, scripts/, zsh/, nvim/, etc."
-	exit 1
-fi
-echo "✅ Running from correct directory: $(pwd)"
-
-# 8. Check if App Store is signed in (for mas installs)
-echo "🏪 Checking App Store authentication..."
-if command -v mas &>/dev/null; then
+# 7. Check if App Store is signed in (for mas installs)
+log_step "App Store認証を確認中..."
+if command_exists mas; then
 	if mas account &>/dev/null; then
 		APPLE_ID=$(mas account)
-		echo "✅ App Store signed in as: $APPLE_ID"
+		log_success "App Storeにサインイン済み: $APPLE_ID"
 	else
-		echo "⚠️  Not signed in to App Store"
-		echo "   Some applications will be skipped during installation"
-		echo "   To install all apps, sign in with: mas signin your@email.com"
+		log_warning "App Storeにサインインしていません"
+		log_info "一部のアプリケーションはインストールがスキップされます"
+		log_info "全アプリのインストール: mas signin your@email.com"
 	fi
 else
-	echo "ℹ️  mas (Mac App Store CLI) not installed - will be installed later"
+	log_info "mas (Mac App Store CLI) 未インストール - 後でインストールされます"
 fi
 
-# 9. Check available disk space (require at least 2GB)
-echo "💾 Checking available disk space..."
+# 8. Check available disk space (require at least 2GB)
+log_step "ディスク空き容量を確認中..."
 AVAILABLE_SPACE=$(df -g . | tail -1 | awk '{print $4}')
 if [[ "$AVAILABLE_SPACE" -lt 2 ]]; then
-	echo "❌ Insufficient disk space. At least 2GB required, $AVAILABLE_SPACE GB available"
-	exit 1
+	handle_error "ディスク容量不足。2GB以上必要ですが、${AVAILABLE_SPACE}GB しかありません"
 fi
-echo "✅ Sufficient disk space: ${AVAILABLE_SPACE}GB available"
+log_success "ディスク空き容量: ${AVAILABLE_SPACE}GB"
 
-# 10. Check if zsh is available
-echo "🐚 Checking shell availability..."
-if ! command -v zsh &>/dev/null; then
-	echo "❌ zsh is required but not found"
-	echo "   zsh should be available on macOS 10.15+ by default"
-	exit 1
+# 9. Check if zsh is available
+log_step "シェルの状態を確認中..."
+if ! command_exists zsh; then
+	handle_error "zshが見つかりません。macOS 10.15以降ではデフォルトで利用可能なはずです"
 fi
 
 # Check if zsh is already the default shell
-if [[ "$SHELL" != "$(which zsh)" ]]; then
-	echo "⚠️  Current shell is $SHELL, but zsh is recommended"
-	echo "   The installation will configure zsh settings"
-	echo "   To make zsh your default shell: chsh -s $(which zsh)"
+if [[ "$SHELL" != "$(command -v zsh)" ]]; then
+	log_warning "現在のシェルは $SHELL ですが、zsh を推奨します"
+	log_info "zshをデフォルトシェルに設定: chsh -s $(command -v zsh)"
 fi
-echo "✅ zsh available at: $(which zsh)"
+log_success "zsh を検出: $(command -v zsh)"
 
-# 11. Warning about permissions that require manual intervention
+# 10. Warning about permissions that require manual intervention
 echo ""
-echo "⚠️  IMPORTANT NOTES:"
-echo "   - Karabiner Elements will require accessibility permissions"
-echo "   - Hammerspoon will require accessibility permissions"
-echo "   - Some installations may require your password"
-echo "   - First-time Homebrew installation may take 10+ minutes"
+log_warning "重要な注意事項:"
+log_info "  - Karabiner Elements にはアクセシビリティ権限が必要です"
+log_info "  - Hammerspoon にはアクセシビリティ権限が必要です"
+log_info "  - 一部のインストールでパスワード入力が必要です"
+log_info "  - 初回のHomebrewインストールには10分以上かかる場合があります"
 echo ""
 
 echo "================================="
-echo "✅ All prerequisites check passed!"
-echo "🚀 Ready to run ./install.sh"
+log_success "全ての前提条件チェックが完了しました"
+log_info "実行準備完了: ./install.sh"
 echo ""

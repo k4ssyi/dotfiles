@@ -17,10 +17,15 @@ ensure_dotfiles_root
 # SSH署名鍵を対話的に選択する共通関数
 # stdout に選択された鍵パスを出力。鍵がなければ何も出力しない。
 select_signing_key() {
-	local ssh_pub_keys=(~/.ssh/*.pub)
+	local -a ssh_pub_keys
+	# nullglob を一時的に有効化して未マッチ時に空配列にする
+	local old_nullglob
+	old_nullglob=$(shopt -p nullglob)
+	shopt -s nullglob
+	ssh_pub_keys=(~/.ssh/*.pub)
+	eval "$old_nullglob"
 
-	# グロブ未展開の場合（nullglob未設定で鍵がない場合）
-	if [[ ${#ssh_pub_keys[@]} -eq 0 ]] || [[ ! -f "${ssh_pub_keys[0]}" ]]; then
+	if [[ ${#ssh_pub_keys[@]} -eq 0 ]]; then
 		return
 	fi
 

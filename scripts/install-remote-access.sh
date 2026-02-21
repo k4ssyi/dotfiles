@@ -7,8 +7,13 @@
 # 共通ライブラリの読み込み
 source "$(dirname "$0")/lib/common.sh"
 
-# クリーンアップ用トラップの設定
-setup_cleanup_trap
+# クリーンアップ用トラップの設定（ローカルtmpfileも含む）
+_local_tmpfile=""
+cleanup_remote_access() {
+	[[ -n "$_local_tmpfile" && -f "$_local_tmpfile" ]] && rm -f "$_local_tmpfile"
+	cleanup_temp_files
+}
+trap cleanup_remote_access EXIT
 
 log_info "リモートアクセス設定のセットアップを開始します"
 
@@ -109,32 +114,34 @@ fi
 if [[ "$DRYRUN_MODE" == "true" ]]; then
 	log_dryrun "sshd硬化設定を配置: ${sshd_config_target}（AllowUsers=${actual_user}）"
 else
-tmpfile=$(mktemp "${TMPDIR:-/tmp}/sshd_config_XXXXXX.conf")
-chmod 600 "$tmpfile"
-sed "s|__CURRENT_USER__|${actual_user}|" "$sshd_config_source" > "$tmpfile"
-if sudo cp "$tmpfile" "$sshd_config_target"; then
-	rm -f "$tmpfile"
-	sudo chmod 644 "$sshd_config_target"
-	log_success "sshd硬化設定を配置しました（AllowUsers=${actual_user}）: ${sshd_config_target}"
+	_local_tmpfile=$(mktemp "${TMPDIR:-/tmp}/sshd_config_XXXXXX.conf")
+	chmod 600 "$_local_tmpfile"
+	sed "s|__CURRENT_USER__|${actual_user}|" "$sshd_config_source" > "$_local_tmpfile"
+	if sudo cp "$_local_tmpfile" "$sshd_config_target"; then
+		rm -f "$_local_tmpfile"
+		_local_tmpfile=""
+		sudo chmod 644 "$sshd_config_target"
+		log_success "sshd硬化設定を配置しました（AllowUsers=${actual_user}）: ${sshd_config_target}"
 
-	# 設定の構文チェックとsshd再起動
-	if sudo sshd -t 2>/dev/null; then
-		log_info "sshd設定の構文チェックが成功しました"
-		log_step "sshdを再起動中..."
-		if sudo launchctl kickstart -k system/com.openssh.sshd 2>/dev/null; then
-			log_success "sshdを再起動しました"
+		# 設定の構文チェックとsshd再起動
+		if sudo sshd -t 2>/dev/null; then
+			log_info "sshd設定の構文チェックが成功しました"
+			log_step "sshdを再起動中..."
+			if sudo launchctl kickstart -k system/com.openssh.sshd 2>/dev/null; then
+				log_success "sshdを再起動しました"
+			else
+				log_warning "sshdの再起動に失敗しました。手動で再起動してください"
+			fi
 		else
-			log_warning "sshdの再起動に失敗しました。手動で再起動してください"
+			log_warning "sshd設定に構文エラーがあります。設定を確認してください"
+			sudo rm -f "$sshd_config_target"
+			log_info "問題のある設定ファイルを削除しました"
 		fi
 	else
-		log_warning "sshd設定に構文エラーがあります。設定を確認してください"
-		sudo rm -f "$sshd_config_target"
-		log_info "問題のある設定ファイルを削除しました"
+		rm -f "$_local_tmpfile"
+		_local_tmpfile=""
+		log_warning "sshd設定の配置に失敗しました"
 	fi
-else
-	rm -f "$tmpfile"
-	log_warning "sshd設定の配置に失敗しました"
-fi
 fi
 
 # --- 4. SSH鍵ペアの生成 ---

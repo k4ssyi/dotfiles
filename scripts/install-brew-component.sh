@@ -26,11 +26,15 @@ fi
 init_homebrew
 
 # Homebrewの更新とアップグレード
-log_step "Homebrewを更新・アップグレード中..."
-if brew update && brew upgrade; then
-	log_success "Homebrewの更新・アップグレードが完了しました"
+if [[ "$DRYRUN_MODE" == "true" ]]; then
+	log_dryrun "brew update && brew upgrade"
 else
-	log_warning "Homebrewの更新・アップグレードに失敗しましたが、継続します"
+	log_step "Homebrewを更新・アップグレード中..."
+	if brew update && brew upgrade; then
+		log_success "Homebrewの更新・アップグレードが完了しました"
+	else
+		log_warning "Homebrewの更新・アップグレードに失敗しましたが、継続します"
+	fi
 fi
 
 # ----------------------------
@@ -53,6 +57,8 @@ install_formula_packages() {
 
 		if is_brew_package_installed "$package_short"; then
 			log_info "$package は既にインストールされています"
+		elif [[ "$DRYRUN_MODE" == "true" ]]; then
+			log_dryrun "brew install $package"
 		else
 			if brew install "$package"; then
 				log_success "$package のインストールが完了しました"
@@ -74,6 +80,8 @@ install_cask_packages() {
 	for package in "${packages[@]}"; do
 		if is_brew_package_installed "$package" "cask"; then
 			log_info "$package は既にインストールされています"
+		elif [[ "$DRYRUN_MODE" == "true" ]]; then
+			log_dryrun "brew install --cask $package"
 		else
 			if brew install --cask "$package"; then
 				log_success "$package のインストールが完了しました"
@@ -88,7 +96,11 @@ install_cask_packages() {
 # パッケージ定義
 # ----------------------------
 
-brew tap daipeihust/tap
+if [[ "$DRYRUN_MODE" == "true" ]]; then
+	log_dryrun "brew tap daipeihust/tap"
+else
+	brew tap daipeihust/tap
+fi
 
 declare -a core_tools=("git" "vim" "neovim" "tmux" "jq" "wget" "curl" "fzf" "im-select" "shellcheck")
 declare -a file_utils=("ghq" "tree" "coreutils" "lsd" "ripgrep" "fd" "bat")
@@ -150,11 +162,15 @@ declare -a mas_app_order=("LINE" "RunCat")
 if mas account &>/dev/null; then
 	for app_name in "${mas_app_order[@]}"; do
 		app_id="${mas_apps[$app_name]}"
-		log_info "$app_name をインストール中..."
-		if mas install "$app_id"; then
-			log_success "$app_name のインストールが完了しました"
+		if [[ "$DRYRUN_MODE" == "true" ]]; then
+			log_dryrun "mas install $app_id ($app_name)"
 		else
-			log_warning "$app_name のインストールに失敗しました"
+			log_info "$app_name をインストール中..."
+			if mas install "$app_id"; then
+				log_success "$app_name のインストールが完了しました"
+			else
+				log_warning "$app_name のインストールに失敗しました"
+			fi
 		fi
 	done
 else
@@ -170,7 +186,9 @@ fi
 
 log_step "フォントをインストール中..."
 # homebrew/cask-fonts は2024年に homebrew/cask に統合済み（tap不要）
-if brew install --cask font-hack-nerd-font; then
+if [[ "$DRYRUN_MODE" == "true" ]]; then
+	log_dryrun "brew install --cask font-hack-nerd-font"
+elif brew install --cask font-hack-nerd-font; then
 	log_success "Hack Nerd Fontのインストールが完了しました"
 else
 	log_warning "Hack Nerd Fontのインストールに失敗しました"

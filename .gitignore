@@ -14,6 +14,10 @@ authorized_keys
 known_hosts
 credentials.json
 
+# Python bytecode
+__pycache__/
+*.pyc
+
 # Machine-specific overrides
 .gitconfig.local
 ssh/config.local
