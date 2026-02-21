@@ -91,6 +91,11 @@
 	format = ssh
 	# user.signingkey は ~/.gitconfig.local で設定（install-git-conf.sh が自動検出）
 
+[gpg "ssh"]
+	# SSH署名の検証に使用する信頼済み公開鍵リスト
+	# install-git-conf.sh が署名鍵設定時に自動生成
+	allowedSignersFile = ~/.ssh/allowed_signers
+
 [rerere]
 	# マージの競合解決を記憶
 	enabled = true

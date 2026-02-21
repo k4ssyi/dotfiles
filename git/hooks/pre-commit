@@ -53,12 +53,24 @@ run_shellcheck() {
         return
     fi
 
+    # 一時ディレクトリを作成し、関数終了時にまとめて削除（シグナル受信時の漏れ防止）
+    local tmp_dir
+    tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/pre-commit-XXXXXX")
+    trap 'rm -rf "$tmp_dir"' RETURN
+
     local failed=0
     while IFS= read -r file; do
-        if [[ ! -f "$file" ]]; then
+        # ステージ済みの内容を一時ファイルに書き出して検査（TOCTOU対策）
+        local tmp rel_dir
+        rel_dir=$(dirname "$file")
+        mkdir -p "${tmp_dir}/${rel_dir}"
+        tmp="${tmp_dir}/${file}"
+        if ! git show ":$file" > "$tmp" 2>/dev/null; then
             continue
         fi
-        if ! shellcheck -x --exclude=SC1091,SC2088 "$file"; then
+        # SC1091: source先が一時ディレクトリで解決不可  SC2088: チルダ展開注意（dotfilesでは頻出）
+        if ! shellcheck -x --exclude=SC1091,SC2088 "$tmp"; then
+            echo "  -> $file"
             failed=1
         fi
     done <<< "$staged_files"
@@ -86,9 +98,9 @@ run_secrets_check() {
         return
     fi
 
-    # 追加行（+で始まる行）のみ抽出。ただし +++ ヘッダ行は除外
+    # 追加行（+で始まる行）のみ抽出。+++ ヘッダ行を明示的に除外
     local added_lines
-    added_lines=$(echo "$diff_output" | grep '^+[^+]' || true)
+    added_lines=$(printf '%s\n' "$diff_output" | grep '^+' | grep -v '^\+\+\+' || true)
 
     if [[ -z "$added_lines" ]]; then
         print_pass "追加行なし"
@@ -97,35 +109,35 @@ run_secrets_check() {
 
     local found=0
 
-    # 秘密鍵ヘッダ
-    if echo "$added_lines" | grep -qE '-----BEGIN .* PRIVATE KEY-----'; then
-        print_fail "秘密鍵が検出されました（PRIVATE KEY）"
-        found=1
-    fi
+    # パターン検査の共通関数
+    # 外部変数: added_lines（入力）、found（マッチ時に 1 を設定）
+    check_pattern() {
+        local label="$1" pattern="$2" case_insensitive="${3:-false}"
+        local -a grep_opts=(-qE)
+        [[ "$case_insensitive" == "true" ]] && grep_opts+=(-i)
+        if printf '%s\n' "$added_lines" | grep "${grep_opts[@]}" -- "$pattern"; then
+            print_fail "$label"
+            found=1
+        fi
+    }
 
+    # 秘密鍵ヘッダ（RSA, EC, DSA, OPENSSH, ENCRYPTED 等に対応）
+    check_pattern "秘密鍵が検出されました（PRIVATE KEY）" '-----BEGIN [A-Z ]+PRIVATE KEY-----'
     # AWS アクセスキー
-    if echo "$added_lines" | grep -qE 'AKIA[0-9A-Z]{16}'; then
-        print_fail "AWS アクセスキーが検出されました"
-        found=1
-    fi
-
-    # GitHub トークン
-    if echo "$added_lines" | grep -qE 'gh[po]_[A-Za-z0-9_]{36,}'; then
-        print_fail "GitHub トークンが検出されました"
-        found=1
-    fi
-
-    # OpenAI / Anthropic API キー
-    if echo "$added_lines" | grep -qE 'sk-[A-Za-z0-9]{20,}'; then
-        print_fail "API キーが検出されました（sk-*）"
-        found=1
-    fi
-
-    # password = / secret_key = に8文字以上の値
-    if echo "$added_lines" | grep -qiE '(password|secret_key)\s*=\s*.{8,}'; then
-        print_fail "パスワード/シークレットキーの代入が検出されました"
-        found=1
-    fi
+    check_pattern "AWS アクセスキーが検出されました" 'AKIA[0-9A-Z]{16}'
+    # GitHub トークン（classic PAT）
+    check_pattern "GitHub トークンが検出されました" 'gh[po]_[A-Za-z0-9_]{36,}'
+    # GitHub fine-grained PAT
+    check_pattern "GitHub fine-grained PAT が検出されました" 'github_pat_[A-Za-z0-9_]{82,}'
+    # OpenAI / Anthropic / Stripe 等の API キー（sk- プレフィックス全般を広めにカバー）
+    check_pattern "API キーが検出されました（sk-*）" 'sk-[A-Za-z0-9]{20,}'
+    # Slack トークン
+    check_pattern "Slack トークンが検出されました" 'xox[baprs]-[A-Za-z0-9\-]{10,}'
+    # Google API キー
+    check_pattern "Google API キーが検出されました" 'AIza[0-9A-Za-z\-_]{35}'
+    # credential 代入の検出（8文字以上の値）
+    check_pattern "パスワード/シークレットキーの代入が検出されました" \
+        '(password|secret_key|api_key|access_token|auth_token|client_secret)\s*[=:]\s*.{8,}' "true"
 
     if [[ "$found" -eq 1 ]]; then
         echo ""
