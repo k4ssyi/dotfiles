@@ -162,4 +162,17 @@ else
 	log_warning "Gitがインストールされていません。先にHomebrewパッケージをインストールしてください"
 fi
 
+# Pre-commit フックの設定
+hook_source="$(pwd)/git/hooks/pre-commit"
+hook_target="$(pwd)/.git/hooks/pre-commit"
+
+if [[ -f "$hook_source" ]]; then
+	log_step "Pre-commit フックのセットアップ中..."
+	create_symlink "$hook_source" "$hook_target" true
+	# 実行権限の確認
+	if [[ "$DRYRUN_MODE" != "true" ]] && [[ ! -x "$hook_source" ]]; then
+		chmod +x "$hook_source"
+	fi
+fi
+
 log_success "Git設定のセットアップが完了しました"
