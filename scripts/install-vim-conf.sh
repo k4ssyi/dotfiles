@@ -23,7 +23,7 @@ if [[ ! -d "$nvim_source" ]]; then
 fi
 
 if [[ ! -d "$vscode_nvim_source" ]]; then
-	handle_error "VSCode Neovim設定ディレクトリが見つかりません: $vscode_nvim_source"
+	log_warning "VSCode Neovim設定ディレクトリが見つかりません（スキップ）: $vscode_nvim_source"
 fi
 
 # 既存設定のバックアップ
@@ -37,8 +37,10 @@ mkdir -p "${HOME}/.config"
 create_symlink "$nvim_source" "${HOME}/.config/nvim" true
 
 # VSCode Neovim設定のセットアップ
-log_step "VSCode Neovim設定のセットアップ中..."
-create_symlink "$vscode_nvim_source" "${HOME}/.config/vscode-nvim" true
+if [[ -d "$vscode_nvim_source" ]]; then
+	log_step "VSCode Neovim設定のセットアップ中..."
+	create_symlink "$vscode_nvim_source" "${HOME}/.config/vscode-nvim" true
+fi
 
 # Cursor エディターの設定（Cursorがインストールされている場合）
 cursor_support_dir="${HOME}/Library/Application Support/Cursor"

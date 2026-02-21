@@ -6,7 +6,13 @@
 # 共通ライブラリの読み込み
 source "$(dirname "$0")/lib/common.sh"
 
+# クリーンアップ用トラップの設定
+setup_cleanup_trap
+
 log_info "Python 2.7 のアンインストールを開始します"
+
+# dotfilesディレクトリからの実行を確認
+ensure_dotfiles_root
 
 # Python 2.7 の存在確認
 PYTHON27_FRAMEWORK="/Library/Frameworks/Python.framework/Versions/2.7"
@@ -28,6 +34,15 @@ fi
 # 削除対象がない場合
 if [[ ${#targets_to_remove[@]} -eq 0 ]]; then
 	log_success "Python 2.7 は既にアンインストールされています"
+	exit 0
+fi
+
+# ドライランモード処理
+if [[ "$DRYRUN_MODE" == "true" ]]; then
+	log_dryrun "Python 2.7 削除対象:"
+	for target in "${targets_to_remove[@]}"; do
+		log_dryrun "  $target"
+	done
 	exit 0
 fi
 

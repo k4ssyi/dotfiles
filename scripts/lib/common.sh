@@ -6,6 +6,9 @@
 # 厳密なエラーハンドリング
 set -euo pipefail
 
+# 安全なファイルパーミッション（ユーザーのumask設定に依存しない）
+umask 022
+
 # ドライランモード設定
 DRYRUN_MODE="${DRYRUN_MODE:-false}"
 
@@ -152,8 +155,8 @@ create_symlink() {
 		fi
 	fi
 
-	# シンボリックリンクの作成
-	ln -sf "$source" "$target"
+	# シンボリックリンクの作成（既存は手前で削除済みのため -f 不要）
+	ln -s "$source" "$target"
 	log_success "シンボリックリンクを作成しました: $target -> $source"
 }
 
@@ -211,23 +214,25 @@ setup_cleanup_trap() {
 
 # アーキテクチャ情報の保存（環境変数方式）
 save_arch_info() {
-	local homebrew_prefix
+	local homebrew_prefix arch
 	homebrew_prefix=$(get_homebrew_prefix)
+	arch=$(uname -m)
 
 	# 環境変数に直接設定（ファイルを介さない安全な方式）
 	export DOTFILES_HOMEBREW_PREFIX="$homebrew_prefix"
-	export DOTFILES_ARCH="$(uname -m)"
+	export DOTFILES_ARCH="$arch"
 
 	# 子プロセスに渡す必要がある場合のみ、安全な一時ファイルを使用
 	DOTFILES_ARCH_INFO_FILE=$(mktemp "${TMPDIR:-/tmp}/dotfiles_arch_XXXXXX.sh")
 	export DOTFILES_ARCH_INFO_FILE
-	cat >"$DOTFILES_ARCH_INFO_FILE" <<EOF
-#!/usr/bin/env bash
-export HOMEBREW_PREFIX="$homebrew_prefix"
-export ARCH="$(uname -m)"
-EOF
+	# printf %q でシェル安全にエスケープし、クォートheredocで展開を防止
+	{
+		echo '#!/usr/bin/env bash'
+		printf 'export HOMEBREW_PREFIX=%q\n' "$homebrew_prefix"
+		printf 'export ARCH=%q\n' "$arch"
+	} >"$DOTFILES_ARCH_INFO_FILE"
 	chmod 600 "$DOTFILES_ARCH_INFO_FILE"
-	log_info "アーキテクチャ情報を保存しました: $(uname -m)"
+	log_info "アーキテクチャ情報を保存しました: $arch"
 }
 
 # バックアップ作成
@@ -249,7 +254,7 @@ create_backup() {
 	if [[ -e "$file_path" ]]; then
 		# ディレクトリ構造を保持して衝突を防止
 		# 例: ~/.config/nvim -> ~/.dotfiles_backup/.config/nvim
-		local relative_path="${file_path#$HOME/}"
+		local relative_path="${file_path#"$HOME"/}"
 		local backup_path="$backup_dir/$relative_path"
 
 		if [[ "$DRYRUN_MODE" == "true" ]]; then

@@ -169,7 +169,7 @@ fi
 # ----------------------------
 
 log_step "フォントをインストール中..."
-brew tap homebrew/cask-fonts
+# homebrew/cask-fonts は2024年に homebrew/cask に統合済み（tap不要）
 if brew install --cask font-hack-nerd-font; then
 	log_success "Hack Nerd Fontのインストールが完了しました"
 else

@@ -16,7 +16,9 @@ log_info "リモートアクセス設定のセットアップを開始します"
 ensure_dotfiles_root
 
 # --- 1. macOSリモートログインの有効化 ---
-if sudo systemsetup -getremotelogin | grep -q "On"; then
+if [[ "$DRYRUN_MODE" == "true" ]]; then
+	log_dryrun "リモートログインの状態確認・有効化"
+elif sudo systemsetup -getremotelogin | grep -q "On"; then
 	log_info "リモートログインは既に有効です"
 else
 	log_warning "リモートログイン（SSH）を有効化します。このマシンへのリモートアクセスが可能になります。"
@@ -43,10 +45,7 @@ if [[ -f "$ssh_config_source" ]]; then
 	chmod 700 "${HOME}/.ssh"
 
 	if [[ -e "$ssh_config_target" && ! -L "$ssh_config_target" ]]; then
-		backup_path="${HOME}/.dotfiles_backup/ssh_config.$(date +%Y%m%d%H%M%S)"
-		mkdir -p "${HOME}/.dotfiles_backup"
-		cp "$ssh_config_target" "$backup_path"
-		log_info "既存のSSHクライアント設定をバックアップしました: $backup_path"
+		create_backup "$ssh_config_target"
 	fi
 
 	create_symlink "$ssh_config_source" "$ssh_config_target" true
@@ -83,12 +82,16 @@ fi
 
 # /etc/ssh/sshd_config.d/ ディレクトリの存在確認
 if [[ ! -d "/etc/ssh/sshd_config.d" ]]; then
-	log_info "/etc/ssh/sshd_config.d/ を作成します"
-	sudo mkdir -p /etc/ssh/sshd_config.d
+	if [[ "$DRYRUN_MODE" == "true" ]]; then
+		log_dryrun "ディレクトリ作成: /etc/ssh/sshd_config.d/"
+	else
+		log_info "/etc/ssh/sshd_config.d/ を作成します"
+		sudo mkdir -p /etc/ssh/sshd_config.d
+	fi
 fi
 
 # /etc/ssh/sshd_configにIncludeディレクティブがあるか確認
-if ! sudo grep -q "^Include /etc/ssh/sshd_config.d/" /etc/ssh/sshd_config; then
+if [[ "$DRYRUN_MODE" != "true" ]] && ! sudo grep -q "^Include /etc/ssh/sshd_config.d/" /etc/ssh/sshd_config; then
 	log_warning "/etc/ssh/sshd_config に Include ディレクティブがありません"
 	log_info "以下を /etc/ssh/sshd_config の先頭に追加してください:"
 	log_info "  Include /etc/ssh/sshd_config.d/*.conf"
@@ -98,9 +101,17 @@ actual_user="${SUDO_USER:-$(whoami)}"
 if [[ "$actual_user" == "root" ]]; then
 	handle_error "root ユーザーでの実行は許可されていません。通常ユーザーで sudo 経由で実行してください"
 fi
+# ユーザー名のバリデーション（sed インジェクション防止）
+if [[ ! "$actual_user" =~ ^[a-zA-Z_][a-zA-Z0-9_.-]*$ ]]; then
+	handle_error "不正なユーザー名が検出されました: $actual_user"
+fi
 
-tmpfile=$(mktemp)
-sed "s/__CURRENT_USER__/$actual_user/" "$sshd_config_source" > "$tmpfile"
+if [[ "$DRYRUN_MODE" == "true" ]]; then
+	log_dryrun "sshd硬化設定を配置: ${sshd_config_target}（AllowUsers=${actual_user}）"
+else
+tmpfile=$(mktemp "${TMPDIR:-/tmp}/sshd_config_XXXXXX.conf")
+chmod 600 "$tmpfile"
+sed "s|__CURRENT_USER__|${actual_user}|" "$sshd_config_source" > "$tmpfile"
 if sudo cp "$tmpfile" "$sshd_config_target"; then
 	rm -f "$tmpfile"
 	sudo chmod 644 "$sshd_config_target"
@@ -124,6 +135,7 @@ else
 	rm -f "$tmpfile"
 	log_warning "sshd設定の配置に失敗しました"
 fi
+fi
 
 # --- 4. SSH鍵ペアの生成 ---
 log_step "SSH鍵ペアを確認中..."
@@ -132,7 +144,9 @@ ssh_key_path="${HOME}/.ssh/id_ed25519_mobile"
 mkdir -p "${HOME}/.ssh"
 chmod 700 "${HOME}/.ssh"
 
-if [[ -f "$ssh_key_path" ]]; then
+if [[ "$DRYRUN_MODE" == "true" ]]; then
+	log_dryrun "SSH鍵ペアの確認・生成: $ssh_key_path"
+elif [[ -f "$ssh_key_path" ]]; then
 	log_info "SSH鍵は既に存在します: $ssh_key_path"
 	chmod 600 "$ssh_key_path"
 	chmod 644 "${ssh_key_path}.pub"
@@ -159,7 +173,9 @@ fi
 
 public_key=$(cat "$public_key_path")
 
-if [[ -f "$authorized_keys" ]] && grep -qF "$public_key" "$authorized_keys"; then
+if [[ "$DRYRUN_MODE" == "true" ]]; then
+	log_dryrun "authorized_keys への公開鍵追加: $public_key_path"
+elif [[ -f "$authorized_keys" ]] && grep -qF "$public_key" "$authorized_keys"; then
 	log_info "公開鍵は既にauthorized_keysに登録済みです"
 else
 	# restrict: 全転送を無効化、pty: tmuxセッションに必要なターミナル割当のみ許可

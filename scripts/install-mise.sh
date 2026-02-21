@@ -11,6 +11,9 @@ setup_cleanup_trap
 
 log_info "mise設定のセットアップを開始します"
 
+# dotfilesディレクトリからの実行を確認
+ensure_dotfiles_root
+
 # miseの存在確認
 if ! command_exists mise; then
 	log_warning "miseがインストールされていません。先にHomebrewパッケージをインストールしてください"

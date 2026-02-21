@@ -7,7 +7,7 @@
 # Usage: ./install.sh [--dry-run|--help]
 
 # ヘルプ表示
-if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
 	cat <<EOF
 Dotfiles セットアップスクリプト
 
@@ -30,7 +30,7 @@ fi
 
 # ドライランモードの設定
 export DRYRUN_MODE=false
-if [[ "$1" == "--dry-run" || "$1" == "-d" ]]; then
+if [[ "${1:-}" == "--dry-run" || "${1:-}" == "-d" ]]; then
 	export DRYRUN_MODE=true
 	shift
 fi
@@ -97,11 +97,12 @@ for i in "${!scripts_to_run[@]}"; do
 		continue
 	fi
 
-	if [[ "$DRYRUN_MODE" == "true" ]]; then
-		log_dryrun "スクリプト実行: $script_path"
-		log_success "$description が完了しました（ドライラン）"
-	elif measure_time "./$script_path"; then
-		log_success "$description が完了しました"
+	if measure_time "./$script_path"; then
+		if [[ "$DRYRUN_MODE" == "true" ]]; then
+			log_success "$description が完了しました（ドライラン）"
+		else
+			log_success "$description が完了しました"
+		fi
 	else
 		log_warning "$description に失敗しました（継続します）"
 		failed_scripts+=("$description")
