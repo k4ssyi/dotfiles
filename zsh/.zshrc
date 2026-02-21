@@ -111,7 +111,7 @@ AUTO_VENV_TRUSTED_DIRS=("$HOME/workspace")
 
 function auto_venv() {
   if [ -e ".venv/bin/activate" ]; then
-      local current_dir="$(pwd)"
+      local current_dir="$(pwd -P)"  # シンボリックリンクを解決
       local trusted=false
       for dir in "${AUTO_VENV_TRUSTED_DIRS[@]}"; do
           if [[ "$current_dir" == "$dir" || "$current_dir" == "$dir/"* ]]; then
@@ -135,7 +135,13 @@ auto_venv
 # tmux自動起動設定
 # ----------------------------
 # tmuxがインストールされていて、かつtmuxセッション内でない場合にのみ自動起動
-if command -v tmux >/dev/null 2>&1 && [ -z "$TMUX" ]; then
+# VSCode/Cursor統合ターミナル・非インタラクティブセッションでは起動しない
+if command -v tmux >/dev/null 2>&1 \
+   && [[ -z "${TMUX:-}" ]] \
+   && [[ -t 0 ]] \
+   && [[ "${TERM_PROGRAM:-}" != "vscode" ]] \
+   && [[ -z "${VSCODE_RESOLVING_ENVIRONMENT:-}" ]] \
+   && [[ -z "${CURSOR_TRACE_ID:-}" ]]; then
   # 既存のtmuxセッションがある場合はアタッチ、ない場合は新規作成
   if tmux has-session 2>/dev/null; then
     exec tmux attach
