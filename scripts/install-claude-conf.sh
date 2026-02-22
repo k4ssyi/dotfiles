@@ -42,6 +42,7 @@ ensure_dotfiles_root
 claude_source_dir="$(pwd)/claude"
 claude_md_source="${claude_source_dir}/CLAUDE.md"
 settings_source="${claude_source_dir}/settings.json"
+mcp_source="${claude_source_dir}/mcp.json"
 scripts_source="${claude_source_dir}/scripts"
 agents_source="${claude_source_dir}/agents"
 skills_source="${claude_source_dir}/skills"
@@ -58,16 +59,19 @@ fi
 log_step "既存Claude設定のバックアップを作成中..."
 create_backup "${claude_target_dir}/CLAUDE.md"
 create_backup "${claude_target_dir}/settings.json"
+create_backup "${HOME}/.mcp.json"
 create_backup "${claude_target_dir}/scripts"
 create_backup "${claude_target_dir}/agents"
 create_backup "${claude_target_dir}/skills"
+create_backup "${claude_target_dir}/memory/knowledge-graph.json"
 
 # ターゲットディレクトリの作成
 if [[ "$DRYRUN_MODE" == "true" ]]; then
 	log_dryrun "ディレクトリ作成: $claude_target_dir"
+	log_dryrun "ディレクトリ作成: ${claude_target_dir}/memory"
 else
-	mkdir -p "$claude_target_dir"
-	log_info "ディレクトリを作成しました: $claude_target_dir"
+	mkdir -p "$claude_target_dir" "${claude_target_dir}/memory"
+	log_info "ディレクトリを作成しました: $claude_target_dir, ${claude_target_dir}/memory"
 fi
 
 # CLAUDE.mdのセットアップ
@@ -84,6 +88,14 @@ if [[ -f "$settings_source" ]]; then
 	create_symlink "$settings_source" "${claude_target_dir}/settings.json" true
 else
 	log_warning "settings.jsonファイルが見つかりません: $settings_source"
+fi
+
+# mcp.jsonのセットアップ（~/.mcp.json はホームディレクトリ直下）
+if [[ -f "$mcp_source" ]]; then
+	log_step "mcp.jsonのセットアップ中..."
+	create_symlink "$mcp_source" "${HOME}/.mcp.json" true
+else
+	log_warning "mcp.jsonファイルが見つかりません: $mcp_source"
 fi
 
 # scriptsディレクトリのセットアップ
@@ -124,6 +136,15 @@ if [[ "$DRYRUN_MODE" != "true" ]]; then
 			log_warning "  $item (存在しません)"
 		fi
 	done
+	# mcp.jsonはホームディレクトリ直下のため個別確認
+	if [[ -L "${HOME}/.mcp.json" ]]; then
+		source_path=$(readlink "${HOME}/.mcp.json")
+		log_success "  mcp.json -> $source_path"
+	elif [[ -e "${HOME}/.mcp.json" ]]; then
+		log_warning "  mcp.json (リンクではありません)"
+	else
+		log_warning "  mcp.json (存在しません)"
+	fi
 fi
 
 log_success "Claude Code設定のセットアップが完了しました"

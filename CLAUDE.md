@@ -15,6 +15,7 @@ macOS向けdotfilesリポジトリ。シェル環境・エディタ・ターミ�
 | `claude/` | Claude Code設定 (-> `~/.claude/` にシンボリックリンク) |
 | `claude/agents/` | カスタムagent定義。`references/`に詳細資料を分離 |
 | `claude/skills/` | Personal scope skills (全プロジェクト共通) |
+| `claude/templates/` | CLAUDE.md テンプレート集（手動コピーで使用） |
 | `.claude/skills/` | Project scope skills (このリポジトリ専用) |
 | `zsh/` | Zsh設定 (`zshrc`, `zprofile` 等) |
 | `nvim/` | Neovim設定 (lazy.nvim) |
@@ -46,10 +47,22 @@ macOS向けdotfilesリポジトリ。シェル環境・エディタ・ターミ�
 
 - `claude/CLAUDE.md` -> `~/.claude/CLAUDE.md` (global指示)
 - `claude/settings.json` -> `~/.claude/settings.json`
+- `claude/mcp.json` -> `~/.mcp.json` (グローバルMCPサーバー設定)
 - `claude/agents/` -> `~/.claude/agents/`
 - `claude/skills/` -> `~/.claude/skills/` (personal scope)
 
 `.claude/skills/` はproject scopeとしてこのリポジトリ内で直接管理する（シンボリックリンク不要）。
+
+`claude/templates/` はプロジェクト用 CLAUDE.md のテンプレート集。`~/.claude/` へはシンボリックリンクされない（手動 `cp` で各プロジェクトへ配置して使用）。
+
+| テンプレート | 用途 |
+|---|---|
+| `frontend.md` | フロントエンドプロジェクト |
+| `backend.md` | バックエンド API プロジェクト |
+| `shell-infra.md` | シェルスクリプト / インフラ構成 |
+| `ui-ux-design.md` | UI/UXデザイン作業 |
+| `writing.md` | 執筆・文書作成 |
+| `monorepo-root.md` | モノレポのルート CLAUDE.md |
 
 ## Neovim設定の編集ガイド
 

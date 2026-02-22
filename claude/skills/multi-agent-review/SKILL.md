@@ -2,17 +2,18 @@
 name: multi-agent-review
 description: >-
   This skill should be used when the user asks to "マルチエージェントレビュー",
-  "multi-agent review", "全方位レビュー", or "5エージェントでレビュー".
-  5つの専門エージェント（architect-reviewer, backend-architect, code-reviewer,
-  typescript-pro, database-architect）による汎用コードレビューを実行し、
-  優先度別にMarkdown形式でサマリーを出力する。任意のプロジェクトで使用可能。
-version: 1.0.0
+  "multi-agent review", "全方位レビュー", or "レビュー".
+  2つの専門エージェント（architect-reviewer, code-reviewer）による並列コードレビューを実行し、
+  優先度別にMarkdown形式でサマリーを出力する。
+  DB関連diffがある場合は database-architect、セキュリティ観点が必要な場合は security-auditor を追加で起動する。
+  任意のプロジェクトで使用可能。
+version: 2.0.0
 allowed-tools: Bash(git diff:*), Bash(git log:*), Task, AskUserQuestion, Read, Grep, Glob
 ---
 
 # Multi-Agent Review
 
-5つの専門ビルトインエージェントによる並列コードレビューを実行し、結果を統合する汎用スキル。
+専門エージェントによる並列コードレビューを実行し、結果を統合する汎用スキル。
 
 ## Workflow
 
@@ -47,15 +48,24 @@ diffが空の場合、ユーザーに通知してレビューを中断する。
 
 ### Step 2: エージェント選択
 
-デフォルトは5つすべてを並列実行。ユーザーが特定の観点を指定した場合、該当エージェントのみ実行する。
+デフォルトは `architect-reviewer` + `code-reviewer` の2エージェントを並列実行。diff内容やユーザー指定に応じて追加エージェントを起動する。
 
-| エージェント | 観点 | トリガーキーワード |
-|-------------|------|-------------------|
-| `architect-reviewer` | SOLID原則、レイヤー分離、依存関係、パターン一貫性 | アーキテクチャ、設計 |
-| `backend-architect` | API設計、破壊的変更、マイグレーション、パフォーマンス | バックエンド、API |
-| `code-reviewer` | セキュリティ、エラーハンドリング、可読性、テスト品質 | セキュリティ、コード品質 |
-| `typescript-pro` | 型定義、型安全性、ジェネリクス、DTOと内部型の整合性 | 型、TypeScript |
-| `database-architect` | スキーマ設計、インデックス、クエリ最適化、データモデリング | データベース、DB |
+| エージェント | 観点 | 起動条件 |
+|-------------|------|----------|
+| `architect-reviewer` | SOLID原則、レイヤー分離、依存関係、パターン一貫性 | **デフォルト** |
+| `code-reviewer` | コード品質、セキュリティ、TypeScript型安全性、API設計 | **デフォルト** |
+| `database-architect` | スキーマ設計、インデックス、クエリ最適化、データモデリング | **条件付き**（後述） |
+
+#### 条件付き: database-architect
+
+以下のいずれかに該当する場合、デフォルト2エージェントに加えて `database-architect` を並列起動する:
+
+- diff に DB 関連ファイルが含まれる（`*.sql`, `*migration*`, `*schema*`, `prisma/`, `drizzle/`, `**/models/**` 等）
+- ユーザーが「データベース」「DB」「スキーマ」を明示した場合
+
+#### 条件付き: security-auditor
+
+ユーザーが「セキュリティ」「監査」「脆弱性」を明示した場合に追加で並列起動する。
 
 ### Step 3: 並列レビューの実行
 
@@ -87,3 +97,11 @@ Taskツールで選択したエージェントを**単一メッセージで並�
 - 複数エージェントが同じ箇所を指摘した場合、検出元を併記して重複を排除する
 - 重要度の高い順（BLOCKER > CRITICAL > MAJOR > MINOR）に並べる
 - 良い点セクションを必ず含める
+
+### Step 5: 指摘事項の検証
+
+統合レポート出力後、MAJOR以上の指摘について以下を実施する。
+
+1. **妥当性の調査**: 指摘が正確か、実際のコード・ドキュメント・ツール仕様を確認して裏付けを取る
+2. **動作検証**: 修正が必要な場合、修正後に実際に動作するか検証する（コマンド実行、ファイル存在確認など）
+3. **結果の整理**: 各指摘について「確認済み / 誤検知 / 要ユーザー判断」を付けて報告する

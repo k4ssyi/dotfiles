@@ -1,6 +1,6 @@
 ---
 name: prompt-engineer
-description: Expert prompt optimization for LLMs and AI systems. Use PROACTIVELY when building AI features, improving agent performance, or crafting system prompts. Masters prompt patterns and techniques.
+description: Expert prompt optimization for LLMs and AI systems. Use this agent when creating or improving agent definitions (.claude/agents/*.md), skill definitions (SKILL.md), CLAUDE.md instructions, or system prompts for AI features.
 tools: Read, Write, Edit
 model: opus
 ---

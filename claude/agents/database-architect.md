@@ -1,7 +1,7 @@
 ---
 name: database-architect
-description: Database architecture and design specialist. Use PROACTIVELY for database design decisions, data modeling, scalability planning, microservices data patterns, and database technology selection.
-tools: Read, Write, Edit, Bash
+description: Database architecture and design specialist. Use this agent when creating or reviewing database schemas, migrations, data models, or selecting database technologies. Also invoked by multi-agent-review skill for data layer review.
+tools: Read, Grep, Glob, Bash
 model: opus
 ---
 
