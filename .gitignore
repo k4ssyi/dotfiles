@@ -24,4 +24,5 @@ ssh/config.local
 
 # Claude Code (project scope)
 .claude/*
+!.claude/rules/
 !.claude/skills/
