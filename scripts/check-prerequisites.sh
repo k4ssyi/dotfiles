@@ -82,24 +82,22 @@ if ! curl -s --head --connect-timeout 5 https://github.com >/dev/null; then
 fi
 log_success "インターネット接続を確認しました"
 
-# 7. Check if App Store is signed in (for mas installs)
-log_step "App Store認証を確認中..."
+# 7. Check if mas (Mac App Store CLI) is available
+log_step "Mac App Store CLI を確認中..."
 if command_exists mas; then
-	if mas account &>/dev/null; then
-		APPLE_ID=$(mas account)
-		log_success "App Storeにサインイン済み: $APPLE_ID"
-	else
-		log_warning "App Storeにサインインしていません"
-		log_info "一部のアプリケーションはインストールがスキップされます"
-		log_info "全アプリのインストール: mas signin your@email.com"
-	fi
+	log_success "mas がインストール済みです"
+	# NOTE: mas account は macOS 12+ で動作しないため、サインイン確認はスキップ。
+	# App Storeアプリのインストールは直接 mas install を試行する。
+	log_info "App Storeアプリは直接インストールを試行します（サインインが必要な場合があります）"
 else
 	log_info "mas (Mac App Store CLI) 未インストール - 後でインストールされます"
 fi
 
 # 8. Check available disk space (require at least 2GB)
 log_step "ディスク空き容量を確認中..."
-AVAILABLE_SPACE=$(df -g . | tail -1 | awk '{print $4}')
+# POSIX互換: df -k はGNU/BSD両方で動作する
+AVAILABLE_KB=$(df -k . | tail -1 | awk '{print $4}')
+AVAILABLE_SPACE=$((AVAILABLE_KB / 1024 / 1024))
 if [[ "$AVAILABLE_SPACE" -lt 2 ]]; then
 	handle_error "ディスク容量不足。2GB以上必要ですが、${AVAILABLE_SPACE}GB しかありません"
 fi

@@ -102,8 +102,8 @@ else
 	brew tap daipeihust/tap
 fi
 
-declare -a core_tools=("git" "vim" "neovim" "tmux" "jq" "wget" "curl" "fzf" "im-select" "shellcheck")
-declare -a file_utils=("ghq" "tree" "coreutils" "lsd" "ripgrep" "fd" "bat")
+declare -a core_tools=("bash" "zsh" "git" "vim" "neovim" "tmux" "make" "jq" "wget" "curl" "fzf" "im-select" "shellcheck")
+declare -a file_utils=("ghq" "tree" "coreutils" "lsd" "ripgrep" "grep" "fd" "bat")
 declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk" "fastfetch")
 declare -a vcs_tools=("tig" "jesseduffield/lazygit/lazygit" "gh" "git-delta")
 declare -a ai_tools=("gemini-cli")
@@ -152,33 +152,25 @@ install_cask_packages "追加開発ツール" "${cask_optional_dev[@]}"
 
 log_step "App Storeアプリケーションをインストール中..."
 
-# 順序保証のためキー配列を別途管理（bash連想配列はイテレーション順序不定）
-declare -A mas_apps=(
-	["LINE"]="539883307"
-	["RunCat"]="1429033973"
-)
-declare -a mas_app_order=("LINE" "RunCat")
+# bash 3.2 互換のため並列配列で名前とIDを対応させる
+declare -a mas_app_names=("LINE" "RunCat")
+declare -a mas_app_ids=("539883307" "1429033973")
 
-if mas account &>/dev/null; then
-	for app_name in "${mas_app_order[@]}"; do
-		app_id="${mas_apps[$app_name]}"
-		if [[ "$DRYRUN_MODE" == "true" ]]; then
-			log_dryrun "mas install $app_id ($app_name)"
+# NOTE: mas account は macOS 12+ で動作しないため、直接インストールを試行する
+for i in "${!mas_app_names[@]}"; do
+	app_name="${mas_app_names[$i]}"
+	app_id="${mas_app_ids[$i]}"
+	if [[ "$DRYRUN_MODE" == "true" ]]; then
+		log_dryrun "mas install $app_id ($app_name)"
+	else
+		log_info "$app_name をインストール中..."
+		if mas install "$app_id"; then
+			log_success "$app_name のインストールが完了しました"
 		else
-			log_info "$app_name をインストール中..."
-			if mas install "$app_id"; then
-				log_success "$app_name のインストールが完了しました"
-			else
-				log_warning "$app_name のインストールに失敗しました"
-			fi
+			log_warning "$app_name のインストールに失敗しました（App Storeへのサインインが必要な場合があります）"
 		fi
-	done
-else
-	log_warning "App Storeにサインインしていないため、App Storeアプリをスキップします"
-	for app_name in "${mas_app_order[@]}"; do
-		log_info "手動インストール: mas install ${mas_apps[$app_name]} ($app_name)"
-	done
-fi
+	fi
+done
 
 # ----------------------------
 # フォント
