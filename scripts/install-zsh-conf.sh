@@ -10,58 +10,52 @@ source "$(dirname "$0")/lib/common.sh"
 # クリーンアップ用トラップの設定
 setup_cleanup_trap
 
-log_info "zsh・Sheldon設定のセットアップを開始します"
+log_step "zsh・Sheldon設定セットアップ"
 
 # dotfilesディレクトリからの実行を確認
 ensure_dotfiles_root
 
-# 既存設定のバックアップ
-log_step "既存設定のバックアップを作成中..."
-create_backup "${HOME}/.zshrc"
-create_backup "${HOME}/.zprofile"
-create_backup "${HOME}/.config/sheldon"
+# Homebrewの初期化
+init_homebrew
 
-# zsh設定ファイルのシンボリックリンク作成
-log_step "zsh設定ファイルのシンボリックリンクを作成中..."
+# ----------------------------
+# zsh設定のシンボリックリンク
+# ----------------------------
+log_step "zsh設定をセットアップ中..."
 
-# .zshrcのリンク作成
-zshrc_source="$(pwd)/zsh/.zshrc"
-if [[ -f "$zshrc_source" ]]; then
-	create_symlink "$zshrc_source" "${HOME}/.zshrc" true
+zsh_source="$(pwd)/zsh"
+if [[ -d "$zsh_source" ]]; then
+	create_symlink "$zsh_source/.zshrc" "$HOME/.zshrc"
+	create_symlink "$zsh_source/.zprofile" "$HOME/.zprofile"
+	log_success "zsh設定のシンボリックリンクを作成しました"
 else
-	handle_error ".zshrcファイルが見つかりません: $zshrc_source"
+	handle_error "zsh設定ディレクトリが見つかりません: $zsh_source"
 fi
 
-# .zprofileのリンク作成（存在する場合のみ）
-zprofile_source="$(pwd)/zsh/.zprofile"
-if [[ -f "$zprofile_source" ]]; then
-	create_symlink "$zprofile_source" "${HOME}/.zprofile" true
-else
-	log_info ".zprofileファイルは存在しないため、スキップします"
-fi
+# ----------------------------
+# Sheldonプラグインマネージャーの設定
+# ----------------------------
+log_step "Sheldonプラグインマネージャーを設定中..."
 
-# Sheldon設定ディレクトリのシンボリックリンク作成
-log_step "Sheldon設定のセットアップ中..."
 sheldon_source="$(pwd)/zsh/sheldon"
 if [[ -d "$sheldon_source" ]]; then
-	mkdir -p ~/.config
-	create_symlink "$sheldon_source" "${HOME}/.config/sheldon" true
+	sheldon_config_dir="$HOME/.config/sheldon"
 
-	# Sheldonがインストールされている場合、プラグインの初期化
 	if command_exists sheldon; then
-		log_step "Sheldonプラグインの初期化中..."
-		if measure_time sheldon lock --update; then
-			log_success "Sheldonプラグインの初期化が完了しました"
+		mkdir -p "$sheldon_config_dir"
+		create_symlink "$sheldon_source/plugins.toml" "$sheldon_config_dir/plugins.toml"
+		log_success "Sheldon設定をセットアップしました"
 
-			# プラグイン一覧の表示
-			log_info "インストール済みプラグイン:"
-			if sheldon list &>/dev/null; then
-				sheldon list | while read -r line; do
-					log_info "  - $line"
-				done
-			fi
+		# Sheldonプラグインのロック（初回セットアップ時）
+		log_step "Sheldonプラグインをロック中..."
+		if [[ "$DRYRUN_MODE" == "true" ]]; then
+			log_dryrun "sheldon lock"
 		else
-			log_warning "Sheldonプラグインの初期化に失敗しましたが、継続します"
+			if sheldon lock; then
+				log_success "Sheldonプラグインのロックが完了しました"
+			else
+				log_warning "Sheldonプラグインのロックに失敗しました。次回のシェル起動時に自動的にインストールされます"
+			fi
 		fi
 	else
 		log_warning "Sheldonがインストールされていません。先にHomebrewパッケージをインストールしてください"
@@ -70,11 +64,57 @@ else
 	handle_error "Sheldon設定ディレクトリが見つかりません: $sheldon_source"
 fi
 
-# zshがデフォルトシェルでない場合の警告
-if [[ "$SHELL" != "$(command -v zsh)" ]]; then
-	log_warning "現在のデフォルトシェルはzshではありません"
-	log_info "zshをデフォルトシェルにするには: chsh -s $(command -v zsh)"
+# Homebrew版zshをログインシェルに設定
+_brew_zsh="$(get_homebrew_prefix)/bin/zsh"
+if [[ -x "$_brew_zsh" ]]; then
+	if [[ "$SHELL" != "$_brew_zsh" ]]; then
+		log_info "現在のログインシェル: $SHELL"
+		log_info "Homebrew版zsh: $_brew_zsh"
+		if [[ "$DRYRUN_MODE" == "true" ]]; then
+			# dryrun時は対話プロンプトをスキップし、実行予定の操作をログ出力
+			if ! grep -qF "$_brew_zsh" /etc/shells; then
+				log_dryrun "echo '$_brew_zsh' | sudo tee -a /etc/shells"
+			fi
+			log_dryrun "chsh -s $_brew_zsh"
+		else
+			read -rp "ログインシェルをHomebrew版zshに切り替えますか？ [y/N] " _answer
+			if [[ "$_answer" =~ ^[Yy]$ ]]; then
+				# /etc/shells に未登録なら追加（chsh に必要）
+				_can_chsh=true
+				if ! grep -qF "$_brew_zsh" /etc/shells; then
+					log_step "Homebrew版zshを /etc/shells に登録中（sudo が必要です）..."
+					if ! echo "$_brew_zsh" | sudo tee -a /etc/shells >/dev/null; then
+						log_warning "/etc/shells への書き込みに失敗しました。ログインシェルの切り替えをスキップします"
+						log_info "手動で切り替える場合: chsh -s $_brew_zsh"
+						_can_chsh=false
+					else
+						log_success "/etc/shells に $_brew_zsh を追加しました"
+					fi
+				fi
+				if [[ "$_can_chsh" == "true" ]]; then
+					log_step "ログインシェルを切り替え中..."
+					if chsh -s "$_brew_zsh"; then
+						log_success "ログインシェルを $_brew_zsh に設定しました"
+					else
+						log_warning "ログインシェルの変更に失敗しました"
+						log_info "手動で切り替える場合: chsh -s $_brew_zsh"
+					fi
+				fi
+				unset _can_chsh
+			else
+				log_info "ログインシェルの切り替えをスキップしました"
+				log_info "手動で切り替える場合: chsh -s $_brew_zsh"
+			fi
+			unset _answer
+		fi
+	else
+		log_info "ログインシェルは既にHomebrew版zshです"
+	fi
+else
+	log_warning "Homebrew版zshが見つかりません。先にHomebrewパッケージをインストールしてください"
+	log_info "インストール後に再実行するか、手動で chsh -s \$(brew --prefix)/bin/zsh を実行してください"
 fi
+unset _brew_zsh
 
 log_success "zsh・Sheldon設定のセットアップが完了しました"
 log_info "設定を反映するには新しいターミナルを開くか、'source ~/.zshrc' を実行してください"

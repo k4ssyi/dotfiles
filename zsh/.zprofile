@@ -11,8 +11,15 @@ if [[ -d "$HOME/Library/Android/sdk" ]]; then
   export PATH="$PATH:$ANDROID_HOME/tools/bin"
 fi
 
-# libpq / openssl（brew shellenv が設定した HOMEBREW_PREFIX を再利用）
+# GNU ツール / ライブラリ（brew shellenv が設定した HOMEBREW_PREFIX を再利用）
 if [[ -n "${HOMEBREW_PREFIX:-}" ]]; then
+  # Homebrew GNU ツールのプレフィックスなしコマンドを優先（grep, make, coreutils）
+  for _gnupkg in coreutils grep make; do
+    _gnubin="${HOMEBREW_PREFIX}/opt/${_gnupkg}/libexec/gnubin"
+    [[ -d "$_gnubin" ]] && export PATH="$_gnubin:$PATH"
+  done
+  unset _gnupkg _gnubin
+
   _libpq_bin="${HOMEBREW_PREFIX}/opt/libpq/bin"
   [[ -d "$_libpq_bin" ]] && export PATH="$_libpq_bin:$PATH"
   unset _libpq_bin

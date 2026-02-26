@@ -29,27 +29,29 @@ select_signing_key() {
 		return
 	fi
 
+	# 注意: この関数は stdout で鍵パスを返すため、
+	# 診断メッセージはすべて stderr へ出力する
 	if [[ ${#ssh_pub_keys[@]} -eq 1 ]]; then
-		log_info "SSH署名鍵を検出しました: ${ssh_pub_keys[0]}"
+		log_info "SSH署名鍵を検出しました: ${ssh_pub_keys[0]}" >&2
 		echo "${ssh_pub_keys[0]}"
 		return
 	fi
 
-	log_info "複数のSSH公開鍵が見つかりました:"
+	log_info "複数のSSH公開鍵が見つかりました:" >&2
 	for i in "${!ssh_pub_keys[@]}"; do
-		log_info "  $((i + 1)). ${ssh_pub_keys[$i]}"
+		log_info "  $((i + 1)). ${ssh_pub_keys[$i]}" >&2
 	done
-	printf "  署名に使用する鍵の番号を選択 [1]: "
-	read -r key_choice
+	printf "  署名に使用する鍵の番号を選択 [1]: " >&2
+	read -r key_choice </dev/tty
 	if [[ ! "${key_choice:-1}" =~ ^[0-9]+$ ]]; then
 		key_choice=1
-		log_warning "無効な入力です。デフォルト(1)を使用します"
+		log_warning "無効な入力です。デフォルト(1)を使用します" >&2
 	fi
 	local key_index=$(( ${key_choice:-1} - 1 ))
 	if [[ $key_index -ge 0 && $key_index -lt ${#ssh_pub_keys[@]} ]]; then
 		echo "${ssh_pub_keys[$key_index]}"
 	else
-		log_warning "無効な選択です。デフォルトを使用: ${ssh_pub_keys[0]}"
+		log_warning "無効な選択です。デフォルトを使用: ${ssh_pub_keys[0]}" >&2
 		echo "${ssh_pub_keys[0]}"
 	fi
 }
