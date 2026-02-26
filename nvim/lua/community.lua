@@ -25,6 +25,13 @@ return {
 
   -- Colorschemes
   { import = "astrocommunity.colorscheme.catppuccin" },
+  {
+    "catppuccin",
+    ---@type CatppuccinOptions
+    opts = {
+      transparent_background = true,
+    },
+  },
   { import = "astrocommunity.color.transparent-nvim" },
 
   -- Git integration
