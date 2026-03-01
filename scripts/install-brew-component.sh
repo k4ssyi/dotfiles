@@ -104,7 +104,7 @@ fi
 
 declare -a core_tools=("bash" "zsh" "git" "vim" "neovim" "tmux" "make" "jq" "wget" "curl" "fzf" "im-select" "shellcheck")
 declare -a file_utils=("ghq" "tree" "coreutils" "lsd" "ripgrep" "grep" "fd" "bat")
-declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk" "fastfetch")
+declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk" "fastfetch" "csvlens")
 declare -a vcs_tools=("tig" "jesseduffield/lazygit/lazygit" "gh" "git-delta")
 declare -a ai_tools=("gemini-cli")
 declare -a network_tools=("nmap")
