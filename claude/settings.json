@@ -35,15 +35,17 @@
 			"Bash(curl * | sh)",
 			"Bash(wget * | bash)",
 			"Bash(wget * | sh)",
-			"Bash(bash <(curl *))",
-			"Bash(bash <(wget *))",
-			"Bash(sh <(curl *))",
-			"Bash(sh <(wget *))",
 			"Bash(gh repo delete *)",
 			"Bash(launchctl *)",
 			"Bash(diskutil erase*)",
 			"Bash(> /dev/sd*)",
-			"Bash(> /dev/disk*)"
+			"Bash(> /dev/disk*)",
+			"Read(*/.ssh/*)",
+			"Bash(cat */.ssh/*)",
+			"Read(*/.env)",
+			"Read(*/.env.*)",
+			"Edit(*/.env)",
+			"Edit(*/.env.*)"
 		],
 		"ask": [],
 		"defaultMode": "acceptEdits"
