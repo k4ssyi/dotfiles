@@ -63,9 +63,12 @@ return {
         "jsonlint",
         "markdownlint",
         "yamllint",
-        "fixjson",
         "jq",
         "flake8",
+      },
+      handlers = {
+        -- biomeのnull-ls自動登録を無効化（biome LSP側で条件付き有効化するため）
+        biome = function() end,
       },
     },
   },
