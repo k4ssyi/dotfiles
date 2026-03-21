@@ -51,6 +51,8 @@ nohup.out
 # === Editor / IDE ===
 
 # Vim / Neovim (Global/Vim.gitignore)
+# Log
+.nvimlog
 # Swap
 [._]*.s[a-v][a-z]
 !*.svg
