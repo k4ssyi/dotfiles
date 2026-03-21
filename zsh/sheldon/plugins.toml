@@ -23,10 +23,6 @@ github = "zsh-users/zsh-autosuggestions"
 [plugins.zsh-autocomplete]
 github = "marlonrichert/zsh-autocomplete"
 
-# History search
-[plugins.history-search-multi-word]
-github = "zdharma-continuum/history-search-multi-word"
-
 # mise version manager (Homebrew installed)
 [plugins.mise]
 inline = 'eval "$(mise activate zsh)"'

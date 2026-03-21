@@ -66,7 +66,6 @@ echo "================================="
 scripts_to_run=(
 	"scripts/setup-brew.sh:Homebrewのセットアップ"
 	"scripts/install-brew-component.sh:Homebrewパッケージのインストール"
-	"scripts/install-alacritty.sh:Alacritty設定"
 	"scripts/install-ghostty.sh:Ghostty設定"
 	"scripts/install-starship.sh:Starship設定"
 	"scripts/uninstall-python27.sh:Python 2.7のクリーンアップ"
