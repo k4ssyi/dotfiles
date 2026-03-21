@@ -38,9 +38,6 @@ return {
           -- スムーススクロールの速度を上げる
           vim.b.neoscroll_performance_mode = true
 
-          -- シンタックスハイライトを簡略化（必要に応じて）
-          vim.opt_local.synmaxcol = 200 -- 長い行のハイライトを制限
-
           -- ステータスラインにパフォーマンスモードを表示
           vim.notify("大きいファイルを検出: パフォーマンス最適化を適用", vim.log.levels.INFO)
         end

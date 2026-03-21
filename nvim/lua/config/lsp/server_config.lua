@@ -48,9 +48,8 @@ return {
     },
   },
 
-  -- Biome LSP設定
+  -- Biome LSP設定（cmdはhandlers.luaで動的に解決）
   biome = {
-    cmd = { "biome", "lsp-proxy" },
     filetypes = {
       "javascript",
       "javascriptreact",

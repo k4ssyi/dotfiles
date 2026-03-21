@@ -41,7 +41,7 @@ local function code_action_sync(client, bufnr, action)
   local res = client.request_sync("textDocument/codeAction", params, 3000, bufnr)
   for _, r in pairs(res and res.result or {}) do
     if r.edit then
-      local enc = (vim.lsp.get_client_by_id(client.id) or {}).offset_encoding or "utf-16"
+      local enc = client.offset_encoding or "utf-16"
       vim.lsp.util.apply_workspace_edit(r.edit, enc)
     end
   end
@@ -52,23 +52,22 @@ local function organize_imports_sync(client, bufnr) code_action_sync(client, buf
 local function fix_all_sync(client, bufnr) code_action_sync(client, bufnr, "source.fixAll") end
 
 local function format_sync(client, bufnr)
-  if client.supports_method "textDocument/formatting" then vim.lsp.buf.format { bufnr = bufnr, timeout_ms = 3000 } end
+  if client.supports_method "textDocument/formatting" then
+    vim.lsp.buf.format { bufnr = bufnr, timeout_ms = 3000, id = client.id }
+  end
 end
 
--- LSPごとに実行したい処理を定義
+-- LSPごとの保存時アクション定義（未登録LSPはスキップ）
 local lsp_actions = {
   biome = function(client, bufnr)
     fix_all_sync(client, bufnr)
     organize_imports_sync(client, bufnr)
     format_sync(client, bufnr)
   end,
-  yamlls = function(client, bufnr) format_sync(client, bufnr) end,
-  vtsls = function(client, bufnr)
-    organize_imports_sync(client, bufnr)
-    format_sync(client, bufnr)
-  end,
-  lua_ls = function(client, bufnr) format_sync(client, bufnr) end,
+  vtsls = function(client, bufnr) organize_imports_sync(client, bufnr) end,
   eslint = function(client, bufnr) fix_all_sync(client, bufnr) end,
+  yamlls = function(client, bufnr) format_sync(client, bufnr) end,
+  lua_ls = function(client, bufnr) format_sync(client, bufnr) end,
 }
 
 vim.api.nvim_create_autocmd("BufWritePre", {
@@ -77,9 +76,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     local bufnr = args.buf
     for _, client in pairs(vim.lsp.get_clients { bufnr = bufnr }) do
       local action = lsp_actions[client.name]
-      if action then
-        action(client, bufnr)
-      end
+      if action then action(client, bufnr) end
     end
   end,
 })
