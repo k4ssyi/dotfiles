@@ -9,6 +9,8 @@ config/lsp/server_config.lua - LSPサーバー個別設定
 
 ]]
 
+local util = require("lspconfig.util")
+
 ---@diagnostic disable: missing-fields
 return {
   vtsls = {
@@ -21,7 +23,7 @@ return {
       "typescriptreact",
       "typescript.tsx",
     },
-    root_dir = require("lspconfig.util").root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
+    root_dir = util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
     settings = {
       vtsls = {
         experimental = {
@@ -48,7 +50,7 @@ return {
     },
   },
 
-  -- Biome LSP設定（cmdはhandlers.luaで動的に解決）
+  -- root_dir + single_file_support=false でbiome.jsonの祖先を持つファイルにのみアタッチ
   biome = {
     filetypes = {
       "javascript",
@@ -58,11 +60,16 @@ return {
       "json",
       "jsonc",
     },
-    root_dir = require("lspconfig.util").root_pattern("biome.json", "biome.jsonc"),
+    root_dir = util.root_pattern("biome.json", "biome.jsonc"),
     single_file_support = false,
+    -- monorepo対応: root_dirからローカルbiomeバイナリを優先解決
+    on_new_config = function(new_config, new_root_dir)
+      local local_biome = new_root_dir .. "/node_modules/.bin/biome"
+      if vim.uv.fs_stat(local_biome) then new_config.cmd = { local_biome, "lsp-proxy" } end
+    end,
   },
 
-  -- ESLint LSP設定
+  -- package.jsonを含めるとbiomeプロジェクトにもアタッチするため、eslint設定ファイルのみ指定
   eslint = {
     filetypes = {
       "javascript",
@@ -72,7 +79,7 @@ return {
       "vue",
       "svelte",
     },
-    root_dir = require("lspconfig.util").root_pattern(
+    root_dir = util.root_pattern(
       ".eslintrc",
       ".eslintrc.js",
       ".eslintrc.cjs",
@@ -83,8 +90,11 @@ return {
       "eslint.config.js",
       "eslint.config.mjs",
       "eslint.config.cjs",
-      "package.json"
+      "eslint.config.ts",
+      "eslint.config.mts",
+      "eslint.config.cts"
     ),
+    single_file_support = false,
     settings = {
       format = false, -- Prettierに任せる
       workingDirectories = { mode = "auto" },

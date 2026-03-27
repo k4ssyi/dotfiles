@@ -36,8 +36,6 @@ return {
     servers = require "config.lsp.servers",
     -- `lspconfig`に渡す言語サーバー設定オプションのカスタマイズ
     config = require "config.lsp.server_config",
-    -- 言語サーバーのカスタムセットアップ方法
-    handlers = require "config.lsp.handlers",
     -- 言語サーバーアタッチ時に追加するバッファローカル自動コマンドの設定
     autocmds = require "config.lsp.autocmds",
     -- 言語サーバーのアタッチ時に設定されるマッピング
