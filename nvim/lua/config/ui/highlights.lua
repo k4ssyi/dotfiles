@@ -12,7 +12,7 @@ config/ui/highlights.lua - ハイライト設定
 
 return {
   init = function()
-    -- catppuccin の telescope integration + transparent_background に委譲
+    -- catppuccin の transparent_background に委譲
     return {}
   end,
   astrodark = { -- astrothemeテーマ適用時の上書き・変更用テーブル

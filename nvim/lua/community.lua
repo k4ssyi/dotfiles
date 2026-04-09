@@ -19,7 +19,7 @@ AstroCommunity - AstroNvim公式コミュニティプラグイン集
 
 ---@type LazySpec
 return {
-  "AstroNvim/astrocommunity",
+  { "AstroNvim/astrocommunity" },
   -- Language packs
   { import = "astrocommunity.pack.lua" },
 

@@ -23,14 +23,12 @@ lazy_setup.lua - AstroNvim/Lazy.nvim初期化・設定ファイル
 require("lazy").setup({
   {
     "AstroNvim/AstroNvim",
-    version = "^4", -- バージョン固定を解除するとnightly版AstroNvimを利用可能
+    version = "^6",
     import = "astronvim.plugins",
-    opts = { -- AstroNvimのグローバルオプション
-      mapleader = " ", -- leaderキーの設定（Lazyセットアップ前に必須）
-      maplocalleader = ",", -- localleaderキーの設定（Lazyセットアップ前に必須）
-      icons_enabled = true, -- アイコン有効化（Nerd Font未導入時はfalse推奨）
-      pin_plugins = nil, -- デフォルトはAstroNvimのバージョン追従時にプラグインをpin
-      update_notifications = true, -- :Lazy update実行時の通知有無
+    opts = {
+      mapleader = " ",
+      maplocalleader = ",",
+      icons_enabled = true,
     },
   },
   { import = "config" },
@@ -42,6 +40,7 @@ require("lazy").setup({
   { import = "plugins.ui.heirline" },
 } --[[@as LazySpec]], {
   -- その他のlazy.nvim設定
+  rocks = { enabled = false },
   install = { colorscheme = { "astrotheme" } },
   ui = { backdrop = 100 },
   performance = {

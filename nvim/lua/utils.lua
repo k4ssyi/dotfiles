@@ -77,7 +77,7 @@ end
 -- @param path string ファイルパス
 -- @return boolean ファイルが存在するかどうか
 function M.file_exists(path)
-  local stat = vim.loop.fs_stat(path)
+  local stat = vim.uv.fs_stat(path)
   return stat and stat.type == "file"
 end
 
