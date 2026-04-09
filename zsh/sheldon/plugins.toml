@@ -23,6 +23,10 @@ github = "zsh-users/zsh-autosuggestions"
 [plugins.zsh-autocomplete]
 github = "marlonrichert/zsh-autocomplete"
 
+# asdf version manager (Homebrew installed)
+[plugins.asdf]
+inline = '. "$(brew --prefix asdf)/libexec/asdf.sh"'
+
 # mise version manager (Homebrew installed)
 [plugins.mise]
 inline = 'eval "$(mise activate zsh)"'

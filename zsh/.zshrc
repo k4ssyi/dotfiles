@@ -1,3 +1,6 @@
+# ファイルディスクリプタ上限の引き上げ（macOSデフォルト256では開発ツールで枯渇する）
+ulimit -n 10240
+
 eval "$(starship init zsh)"
 
 export LANG=ja_JP.UTF-8
