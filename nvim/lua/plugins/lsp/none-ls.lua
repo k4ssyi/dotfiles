@@ -39,6 +39,7 @@ return {
         condition = function(utils)
           return not utils.has_file { "biome.json", "biome.jsonc" }
             and utils.has_file {
+              "package.json",
               ".prettierrc",
               ".prettierrc.json",
               ".prettierrc.json5",

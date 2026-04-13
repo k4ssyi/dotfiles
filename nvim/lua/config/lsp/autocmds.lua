@@ -38,7 +38,7 @@ local function code_action_sync(client, bufnr, action)
     },
     context = { only = { action }, diagnostics = {} },
   }
-  local res = client.request_sync("textDocument/codeAction", params, 3000, bufnr)
+  local res = client:request_sync("textDocument/codeAction", params, 3000, bufnr)
   for _, r in pairs(res and res.result or {}) do
     if r.edit then
       local enc = client.offset_encoding or "utf-16"
@@ -52,7 +52,7 @@ local function organize_imports_sync(client, bufnr) code_action_sync(client, buf
 local function fix_all_sync(client, bufnr) code_action_sync(client, bufnr, "source.fixAll") end
 
 local function format_sync(client, bufnr)
-  if client.supports_method "textDocument/formatting" then
+  if client:supports_method "textDocument/formatting" then
     vim.lsp.buf.format { bufnr = bufnr, timeout_ms = 3000, id = client.id }
   end
 end
@@ -66,6 +66,7 @@ local lsp_actions = {
   end,
   vtsls = function(client, bufnr) organize_imports_sync(client, bufnr) end,
   eslint = function(client, bufnr) fix_all_sync(client, bufnr) end,
+  ["null-ls"] = function(client, bufnr) format_sync(client, bufnr) end,
   yamlls = function(client, bufnr) format_sync(client, bufnr) end,
   lua_ls = function(client, bufnr) format_sync(client, bufnr) end,
 }
