@@ -99,6 +99,6 @@
     ]
   },
   "alwaysThinkingEnabled": true,
-  "voiceEnabled": true,
-  "effortLevel": "high"
+  "effortLevel": "high",
+  "voiceEnabled": true
 }
