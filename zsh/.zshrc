@@ -109,6 +109,7 @@ eval "$(fzf --zsh)"
 typeset -U path  # 重複を自動削除
 # HOMEBREW_PREFIX は .zprofile の brew shellenv で設定済み
 path=(
+    ${HOME}/.asdf/shims
     ${HOMEBREW_PREFIX:-/usr/local}/bin
     $path
 )
