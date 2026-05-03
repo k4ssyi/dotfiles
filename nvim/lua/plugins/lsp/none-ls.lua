@@ -30,29 +30,30 @@ return {
     -- https://github.com/nvimtools/none-ls.nvim/tree/main/lua/null-ls/builtins/formatting
     -- https://github.com/nvimtools/none-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
 
+    local prettier_configs = {
+      ".prettierrc",
+      ".prettierrc.json",
+      ".prettierrc.json5",
+      ".prettierrc.yml",
+      ".prettierrc.yaml",
+      ".prettierrc.js",
+      ".prettierrc.cjs",
+      ".prettierrc.mjs",
+      ".prettierrc.toml",
+      "prettier.config.js",
+      "prettier.config.cjs",
+      "prettier.config.mjs",
+    }
+
     -- Only insert new sources, do not replace the existing ones
     -- (If you wish to replace, use `opts.sources = {}` instead of the `list_insert_unique` function)
     -- Biomeのフォーマットはbiome LSP側に一元化（astrolsp.luaのhandlers.biome参照）
     opts.sources = require("astrocore").list_insert_unique(opts.sources, {
-      -- Biomeがない場合に.prettierrc.*などがあればPrettierを使用
+      -- Biomeがない場合: Prettierを全対象filetypeで使用
       null_ls.builtins.formatting.prettier.with {
         condition = function(utils)
           return not utils.has_file { "biome.json", "biome.jsonc" }
-            and utils.has_file {
-              "package.json",
-              ".prettierrc",
-              ".prettierrc.json",
-              ".prettierrc.json5",
-              ".prettierrc.yml",
-              ".prettierrc.yaml",
-              ".prettierrc.js",
-              ".prettierrc.cjs",
-              ".prettierrc.mjs",
-              ".prettierrc.toml",
-              "prettier.config.js",
-              "prettier.config.cjs",
-              "prettier.config.mjs",
-            }
+            and (utils.has_file { "package.json" } or utils.has_file(prettier_configs))
         end,
         filetypes = {
           "javascript",
@@ -67,7 +68,15 @@ return {
           "css",
           "scss",
           "less",
+          "astro",
         },
+      },
+      -- Biome併用時: .astroファイルのみPrettierでフォーマット
+      null_ls.builtins.formatting.prettier.with {
+        condition = function(utils)
+          return utils.has_file { "biome.json", "biome.jsonc" } and utils.has_file(prettier_configs)
+        end,
+        filetypes = { "astro" },
       },
     })
     return opts

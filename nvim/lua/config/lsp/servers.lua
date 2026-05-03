@@ -10,6 +10,7 @@ config/lsp/servers.lua - LSPサーバー設定
 ]]
 
 return {
+  "astro",
   "vtsls",
   typos_lsp = {
     init_options = {

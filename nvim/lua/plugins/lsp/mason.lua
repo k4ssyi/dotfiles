@@ -30,6 +30,7 @@ return {
         "typos_lsp",
         "bashls",
         "yamlls",
+        "astro",
         "vtsls",
         "docker_compose_language_service",
         "dockerls",

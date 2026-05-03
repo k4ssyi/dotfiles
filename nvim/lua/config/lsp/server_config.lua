@@ -11,6 +11,17 @@ config/lsp/server_config.lua - LSPサーバー個別設定
 
 ---@diagnostic disable: missing-fields
 return {
+  yamlls = {
+    settings = {
+      yaml = {
+        format = {
+          enable = true,
+          printWidth = 100,
+        },
+      },
+    },
+  },
+
   vtsls = {
     cmd = { "vtsls", "--stdio" },
     filetypes = {
@@ -57,6 +68,8 @@ return {
       "typescriptreact",
       "json",
       "jsonc",
+      "astro",
+      "css",
     },
     root_markers = { "biome.json", "biome.jsonc" },
     workspace_required = true,

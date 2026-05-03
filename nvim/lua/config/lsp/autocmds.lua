@@ -52,7 +52,7 @@ local function organize_imports_sync(client, bufnr) code_action_sync(client, buf
 local function fix_all_sync(client, bufnr) code_action_sync(client, bufnr, "source.fixAll") end
 
 local function format_sync(client, bufnr)
-  if client:supports_method "textDocument/formatting" then
+  if client:supports_method("textDocument/formatting", { bufnr = bufnr }) then
     vim.lsp.buf.format { bufnr = bufnr, timeout_ms = 3000, id = client.id }
   end
 end
