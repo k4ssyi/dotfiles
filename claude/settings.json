@@ -80,7 +80,7 @@
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true
   },
-  "outputStyle": "explanatory",
+  "outputStyle": "Explanatory",
   "language": "Japanese",
   "sandbox": {
     "enabled": true,
@@ -99,6 +99,7 @@
     ]
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
-  "voiceEnabled": true
+  "effortLevel": "xhigh",
+  "voice": { "enabled": true },
+  "model": "opus"
 }
