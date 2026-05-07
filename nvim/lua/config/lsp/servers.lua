@@ -12,6 +12,7 @@ config/lsp/servers.lua - LSPサーバー設定
 return {
   "astro",
   "vtsls",
+  "sourcekit",
   typos_lsp = {
     init_options = {
       config = vim.fn.filereadable(vim.fn.getcwd() .. "/typos.toml") == 1 and vim.fn.getcwd() .. "/typos.toml"

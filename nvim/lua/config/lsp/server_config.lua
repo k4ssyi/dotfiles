@@ -22,6 +22,39 @@ return {
     },
   },
 
+  sourcekit = {
+    cmd = {
+      "xcrun",
+      "sourcekit-lsp",
+    },
+    filetypes = { "swift", "objc", "objcpp", "c", "cpp" },
+    root_markers = {
+      "Package.swift",
+      "*.xcodeproj",
+      "*.xcworkspace",
+      "project.yml", -- XcodeGen
+      ".git",
+    },
+  },
+
+  kotlin_language_server = {
+    filetypes = { "kotlin" },
+    root_markers = {
+      "build.gradle.kts",
+      "build.gradle",
+      "settings.gradle.kts",
+      "settings.gradle",
+      ".git",
+    },
+    settings = {
+      kotlin = {
+        compiler = {
+          jvm = { target = "17" },
+        },
+      },
+    },
+  },
+
   vtsls = {
     cmd = { "vtsls", "--stdio" },
     filetypes = {

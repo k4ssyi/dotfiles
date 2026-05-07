@@ -43,6 +43,7 @@ return {
         "eslint",
         "pylsp",
         "tailwindcss",
+        "kotlin_language_server",
       },
       settings = {
         ["pylsp"] = {

@@ -47,6 +47,8 @@ return {
       "vimdoc",
       "xml",
       "yaml",
+      "swift",
+      "kotlin",
     },
   },
 }
