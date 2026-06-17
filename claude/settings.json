@@ -90,26 +90,6 @@
           }
         ]
       }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Bash|Write|Edit|Task|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "input=$(cat); tool_name=$(jq -r '.tool_name' <<< \"$input\"); if command -v osascript >/dev/null 2>&1; then osascript -e \"display notification \\\"$tool_name completed\\\" with title \\\"Claude Code\\\"\"; elif command -v notify-send >/dev/null 2>&1; then notify-send 'Claude Code' \"$tool_name completed\"; fi"
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "input=$(cat); filepath=$(jq -r '.tool_input.file_path // empty' <<< \"$input\"); if [ -n \"$filepath\" ] && [ -f \"$filepath\" ]; then case \"$filepath\" in *.sh|*.bash) if command -v shellcheck >/dev/null 2>&1; then result=$(shellcheck -f gcc \"$filepath\" 2>&1); if [ -n \"$result\" ]; then jq -n --arg ctx \"shellcheck warnings:\\n$(echo \"$result\" | head -20)\" '{hookSpecificOutput:{hookEventName:\"PostToolUse\",additionalContext:$ctx}}'; fi; fi ;; esac; fi; exit 0"
-          }
-        ]
-      }
     ]
   },
   "statusLine": {
