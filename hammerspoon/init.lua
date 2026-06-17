@@ -1,8 +1,8 @@
 hs.loadSpoon("ShiftIt")
 spoon.ShiftIt:bindHotkeys({})
-local TERMINAL_APP = 'Ghostty'
+local TERMINAL_APP = "cmux"
 
-hs.hotkey.bind({"alt"}, "space", function()
+hs.hotkey.bind({ "alt" }, "space", function()
   local terminal = hs.application.find(TERMINAL_APP)
   if terminal and terminal:isFrontmost() then
     terminal:hide()

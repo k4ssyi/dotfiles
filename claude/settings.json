@@ -51,6 +51,46 @@
     "defaultMode": "acceptEdits"
   },
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmux claude-hook session-start"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmux claude-hook prompt-submit"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmux claude-hook stop"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmux claude-hook notification"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Bash|Write|Edit|Task|NotebookEdit",

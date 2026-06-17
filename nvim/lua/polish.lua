@@ -44,14 +44,13 @@ end
 setup_mise_environment()
 
 -- Set up custom filetypes
--- vim.filetype.add {
---   extension = {
---     foo = "fooscript",
---   },
---   filename = {
---     ["Foofile"] = "fooscript",
---   },
---   pattern = {
---     ["~/%.config/foo/.*"] = "fooscript",
---   },
--- }
+vim.filetype.add {
+  filename = {
+    -- cmuxの設定ファイルはJSONC(コメント可)だが拡張子が.json固定のため、
+    -- 明示的にjsoncとして扱いコメントによる構文エラーを防ぐ
+    ["cmux.json"] = "jsonc",
+  },
+  pattern = {
+    [".*/cmux/cmux%.json"] = "jsonc",
+  },
+}

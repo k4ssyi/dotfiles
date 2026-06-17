@@ -146,12 +146,15 @@ auto_venv
 # ----------------------------
 # tmuxがインストールされていて、かつtmuxセッション内でない場合にのみ自動起動
 # VSCode/Cursor統合ターミナル・非インタラクティブセッションでは起動しない
+# cmux内ではtmuxを起動しない: tmuxサーバはデーモン化してcmuxのプロセスツリーから
+# 外れるため、プロセス系譜ベースのcmux CLI認証(IPC socket)が失敗する(Broken pipe)
 if command -v tmux >/dev/null 2>&1 \
    && [[ -z "${TMUX:-}" ]] \
    && [[ -t 0 ]] \
    && [[ "${TERM_PROGRAM:-}" != "vscode" ]] \
    && [[ -z "${VSCODE_RESOLVING_ENVIRONMENT:-}" ]] \
-   && [[ -z "${CURSOR_TRACE_ID:-}" ]]; then
+   && [[ -z "${CURSOR_TRACE_ID:-}" ]] \
+   && [[ -z "${CMUX_PANEL_ID:-}" ]]; then
   # 既存のtmuxセッションがある場合はアタッチ、ない場合は新規作成
   if tmux has-session 2>/dev/null; then
     exec tmux attach

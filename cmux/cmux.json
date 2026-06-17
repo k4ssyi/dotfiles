@@ -1,0 +1,32 @@
+{
+  "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
+  "schemaVersion": 1,
+  // Tmux like keybindings
+  "shortcuts": {
+    "bindings": {
+      // --- ペイン (cmux split pane) ---
+      "splitRight": ["ctrl+b", "\\"],       // tmux: prefix \  左右分割
+      "splitDown": ["ctrl+b", "-"],         // tmux: prefix -  上下分割
+      "focusLeft": ["ctrl+b", "h"],         // tmux: prefix h
+      "focusDown": ["ctrl+b", "j"],         // tmux: prefix j
+      "focusUp": ["ctrl+b", "k"],           // tmux: prefix k
+      "focusRight": ["ctrl+b", "l"],        // tmux: prefix l
+      "toggleSplitZoom": ["ctrl+b", "z"],   // tmux: prefix z  ペインズーム
+      "equalizeSplits": ["ctrl+b", "="],    // ペインサイズ均等化 (リサイズ代替)
+
+      // --- ウィンドウ (cmux surface / タブ) ---
+      "newSurface": ["ctrl+b", "c"],        // tmux: prefix c  新規ウィンドウ
+      "nextSurface": ["ctrl+b", "n"],       // tmux: prefix n  次のウィンドウ
+      "prevSurface": ["ctrl+b", "p"],       // tmux: prefix p  前のウィンドウ
+      "closeTab": ["ctrl+b", "x"],          // tmux: prefix x  閉じる
+
+      // --- セッション (cmux workspace) ---
+      "goToWorkspace": ["ctrl+b", "w"],     // ワークスペース選択 (tmux prefix s 相当を o に割当)
+      "commandPalette": ["ctrl+b", "o"],    // tmux: prefix w  ウィンドウ一覧
+
+      // --- その他 ---
+      "toggleTerminalCopyMode": ["ctrl+b", "["], // tmux: prefix [  コピーモード
+      "reloadConfiguration": ["ctrl+b", "r"]     // tmux: prefix r  設定リロード
+    }
+  }
+}
