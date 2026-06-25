@@ -99,7 +99,16 @@
   "enabledPlugins": {
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "crit@crit-marketplace": true
+  },
+  "extraKnownMarketplaces": {
+    "crit-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "kevindutra/crit"
+      }
+    }
   },
   "outputStyle": "Explanatory",
   "language": "Japanese",

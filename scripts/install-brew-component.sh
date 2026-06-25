@@ -13,13 +13,13 @@ log_info "Homebrewコンポーネントのインストールを開始します"
 
 # アーキテクチャ情報の読み込み（安全な一時ファイル or 環境変数から）
 if [[ -n "${DOTFILES_ARCH_INFO_FILE:-}" && -f "$DOTFILES_ARCH_INFO_FILE" ]]; then
-	# shellcheck source=/dev/null
-	source "$DOTFILES_ARCH_INFO_FILE"
-	log_info "アーキテクチャ情報を読み込みました: ${ARCH:-unknown}"
+  # shellcheck source=/dev/null
+  source "$DOTFILES_ARCH_INFO_FILE"
+  log_info "アーキテクチャ情報を読み込みました: ${ARCH:-unknown}"
 elif [[ -n "${DOTFILES_HOMEBREW_PREFIX:-}" ]]; then
-	export HOMEBREW_PREFIX="$DOTFILES_HOMEBREW_PREFIX"
-	export ARCH="${DOTFILES_ARCH:-$(uname -m)}"
-	log_info "環境変数からアーキテクチャ情報を読み込みました: $ARCH"
+  export HOMEBREW_PREFIX="$DOTFILES_HOMEBREW_PREFIX"
+  export ARCH="${DOTFILES_ARCH:-$(uname -m)}"
+  log_info "環境変数からアーキテクチャ情報を読み込みました: $ARCH"
 fi
 
 # Homebrewの初期化
@@ -27,14 +27,14 @@ init_homebrew
 
 # Homebrewの更新とアップグレード
 if [[ "$DRYRUN_MODE" == "true" ]]; then
-	log_dryrun "brew update && brew upgrade"
+  log_dryrun "brew update && brew upgrade"
 else
-	log_step "Homebrewを更新・アップグレード中..."
-	if brew update && brew upgrade; then
-		log_success "Homebrewの更新・アップグレードが完了しました"
-	else
-		log_warning "Homebrewの更新・アップグレードに失敗しましたが、継続します"
-	fi
+  log_step "Homebrewを更新・アップグレード中..."
+  if brew update && brew upgrade; then
+    log_success "Homebrewの更新・アップグレードが完了しました"
+  else
+    log_warning "Homebrewの更新・アップグレードに失敗しましたが、継続します"
+  fi
 fi
 
 # ----------------------------
@@ -44,52 +44,52 @@ fi
 # formulaパッケージをインストールする共通関数
 # 使い方: install_formula_packages "カテゴリ名" "${array[@]}"
 install_formula_packages() {
-	local label="$1"
-	shift
-	local -a packages=("$@")
+  local label="$1"
+  shift
+  local -a packages=("$@")
 
-	log_step "${label}をインストール中..."
-	local total=${#packages[@]}
-	for i in "${!packages[@]}"; do
-		local package="${packages[$i]}"
-		local package_short="${package##*/}" # tap prefix を除いた実名
-		show_progress $((i + 1)) "$total" "$package"
+  log_step "${label}をインストール中..."
+  local total=${#packages[@]}
+  for i in "${!packages[@]}"; do
+    local package="${packages[$i]}"
+    local package_short="${package##*/}" # tap prefix を除いた実名
+    show_progress $((i + 1)) "$total" "$package"
 
-		if is_brew_package_installed "$package_short"; then
-			log_info "$package は既にインストールされています"
-		elif [[ "$DRYRUN_MODE" == "true" ]]; then
-			log_dryrun "brew install $package"
-		else
-			if brew install "$package"; then
-				log_success "$package のインストールが完了しました"
-			else
-				log_warning "$package のインストールに失敗しました（スキップ）"
-			fi
-		fi
-	done
+    if is_brew_package_installed "$package_short"; then
+      log_info "$package は既にインストールされています"
+    elif [[ "$DRYRUN_MODE" == "true" ]]; then
+      log_dryrun "brew install $package"
+    else
+      if brew install "$package"; then
+        log_success "$package のインストールが完了しました"
+      else
+        log_warning "$package のインストールに失敗しました（スキップ）"
+      fi
+    fi
+  done
 }
 
 # caskパッケージをインストールする共通関数
 # 使い方: install_cask_packages "カテゴリ名" "${array[@]}"
 install_cask_packages() {
-	local label="$1"
-	shift
-	local -a packages=("$@")
+  local label="$1"
+  shift
+  local -a packages=("$@")
 
-	log_info "${label}をインストール中..."
-	for package in "${packages[@]}"; do
-		if is_brew_package_installed "$package" "cask"; then
-			log_info "$package は既にインストールされています"
-		elif [[ "$DRYRUN_MODE" == "true" ]]; then
-			log_dryrun "brew install --cask $package"
-		else
-			if brew install --cask "$package"; then
-				log_success "$package のインストールが完了しました"
-			else
-				log_warning "$package のインストールに失敗しました（スキップ）"
-			fi
-		fi
-	done
+  log_info "${label}をインストール中..."
+  for package in "${packages[@]}"; do
+    if is_brew_package_installed "$package" "cask"; then
+      log_info "$package は既にインストールされています"
+    elif [[ "$DRYRUN_MODE" == "true" ]]; then
+      log_dryrun "brew install --cask $package"
+    else
+      if brew install --cask "$package"; then
+        log_success "$package のインストールが完了しました"
+      else
+        log_warning "$package のインストールに失敗しました（スキップ）"
+      fi
+    fi
+  done
 }
 
 # ----------------------------
@@ -97,9 +97,9 @@ install_cask_packages() {
 # ----------------------------
 
 if [[ "$DRYRUN_MODE" == "true" ]]; then
-	log_dryrun "brew tap daipeihust/tap"
+  log_dryrun "brew tap daipeihust/tap"
 else
-	brew tap daipeihust/tap
+  brew tap daipeihust/tap
 fi
 
 declare -a core_tools=("bash" "zsh" "git" "vim" "neovim" "tmux" "make" "jq" "wget" "curl" "fzf" "im-select" "shellcheck")
@@ -108,7 +108,8 @@ declare -a terminal_tools=("starship" "reattach-to-user-namespace" "gawk" "fastf
 declare -a vcs_tools=("tig" "jesseduffield/lazygit/lazygit" "gh" "git-delta")
 declare -a ai_tools=("gemini-cli")
 declare -a network_tools=("nmap")
-declare -a package_managers=("mas" "gpg" "sheldon" "mise")
+# asdf に委譲するプロジェクトがあるため asdf も併存させる
+declare -a package_managers=("mas" "gpg" "sheldon" "mise" "asdf")
 
 # ----------------------------
 # CLI ツールのインストール
@@ -158,18 +159,18 @@ declare -a mas_app_ids=("539883307" "1429033973")
 
 # NOTE: mas account は macOS 12+ で動作しないため、直接インストールを試行する
 for i in "${!mas_app_names[@]}"; do
-	app_name="${mas_app_names[$i]}"
-	app_id="${mas_app_ids[$i]}"
-	if [[ "$DRYRUN_MODE" == "true" ]]; then
-		log_dryrun "mas install $app_id ($app_name)"
-	else
-		log_info "$app_name をインストール中..."
-		if mas install "$app_id"; then
-			log_success "$app_name のインストールが完了しました"
-		else
-			log_warning "$app_name のインストールに失敗しました（App Storeへのサインインが必要な場合があります）"
-		fi
-	fi
+  app_name="${mas_app_names[$i]}"
+  app_id="${mas_app_ids[$i]}"
+  if [[ "$DRYRUN_MODE" == "true" ]]; then
+    log_dryrun "mas install $app_id ($app_name)"
+  else
+    log_info "$app_name をインストール中..."
+    if mas install "$app_id"; then
+      log_success "$app_name のインストールが完了しました"
+    else
+      log_warning "$app_name のインストールに失敗しました（App Storeへのサインインが必要な場合があります）"
+    fi
+  fi
 done
 
 # ----------------------------
@@ -179,11 +180,11 @@ done
 log_step "フォントをインストール中..."
 # homebrew/cask-fonts は2024年に homebrew/cask に統合済み（tap不要）
 if [[ "$DRYRUN_MODE" == "true" ]]; then
-	log_dryrun "brew install --cask font-hack-nerd-font"
+  log_dryrun "brew install --cask font-hack-nerd-font"
 elif brew install --cask font-hack-nerd-font; then
-	log_success "Hack Nerd Fontのインストールが完了しました"
+  log_success "Hack Nerd Fontのインストールが完了しました"
 else
-	log_warning "Hack Nerd Fontのインストールに失敗しました"
+  log_warning "Hack Nerd Fontのインストールに失敗しました"
 fi
 
 log_success "すべてのHomebrewコンポーネントのインストールが完了しました"
