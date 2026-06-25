@@ -86,6 +86,21 @@ alias reload='source ~/.zshrc'
 alias aider="aider --model gpt-4o --multiline --watch-files --no-auto-commit"
 alias update-all='brew update && brew upgrade; mise upgrade; mas upgrade; sheldon lock --update; ~/.tmux/plugins/tpm/bin/update_plugins all'
 
+# PATH設定の最適化
+# 優先順位は mise > asdf > homebrew。後続の mise activate（Sheldon経由）が
+# PATH 最前列を取るため、ここでは asdf shims → homebrew/bin の順で prepend する。
+# - 汎用プロジェクト: mise が解決
+typeset -U path  # 重複を自動削除
+# HOMEBREW_PREFIX は .zprofile の brew shellenv で設定済み
+# go install で導入したバイナリ（GOPATH/bin = ~/go/bin。mise の shim ではなくここに置かれる）
+path=(
+    ${HOME}/.asdf/shims
+    ${HOMEBREW_PREFIX:-/usr/local}/bin
+    ${HOME}/go/bin
+    $path
+)
+export PATH
+
 # ----------------------------
 # Sheldon plugin manager
 # ----------------------------
@@ -104,16 +119,6 @@ autoload -Uz compinit && compinit
 # FZFキーバインド・補完の有効化（Ctrl+T, Ctrl+R, Alt+C）
 # compinit後に読み込む（fzf --zsh 内部で compdef を使用するため）
 eval "$(fzf --zsh)"
-
-# PATH設定の最適化
-typeset -U path  # 重複を自動削除
-# HOMEBREW_PREFIX は .zprofile の brew shellenv で設定済み
-path=(
-    ${HOME}/.asdf/shims
-    ${HOMEBREW_PREFIX:-/usr/local}/bin
-    $path
-)
-export PATH
 
 # 信頼されたディレクトリ配下でのみ自動activateする
 # $HOME/workspace 配下のみ許可（必要に応じて追加）
